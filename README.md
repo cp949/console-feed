@@ -7,6 +7,8 @@
 ## 설치
 
 ```sh
+pnpm add @cp949/console-feed
+# 또는
 yarn add @cp949/console-feed
 # 또는
 npm install @cp949/console-feed
@@ -133,22 +135,22 @@ Decode(data: any): Message
 Node 20 이상에서 의존성을 설치해야 합니다.
 
 ```bash
-yarn install
-yarn start          # 개발 서버 실행
-yarn test           # 테스트 실행 (Vitest)
-yarn test:watch     # 테스트 watch 모드
-yarn test:ui        # Vitest UI
-yarn build          # 프로덕션 빌드
+pnpm install
+pnpm start          # 개발 서버 실행
+pnpm test           # 테스트 실행 (Vitest)
+pnpm test:watch     # 테스트 watch 모드
+pnpm test:ui        # Vitest UI
+pnpm build          # 프로덕션 빌드
 ```
 
 빌드는 TypeScript 컴파일(`tsc -p tsconfig.build.json --declaration`)을 실행하고 선언 파일을 `lib/` 디렉토리에 복사합니다.
 
 ## 릴리스
 
-1. Node 20에서 `yarn test` 및 `yarn build` 실행하여 검증
-2. `yarn version patch/minor/major`로 버전 업데이트
+1. Node 20에서 `pnpm test` 및 `pnpm build` 실행하여 검증
+2. `pnpm version patch/minor/major`로 버전 업데이트
 3. 변경사항을 커밋하고 브랜치 푸시
-4. `npm publish`로 npm 레지스트리에 게시
+4. `pnpm publish`로 npm 레지스트리에 게시
 
 스코프 패키지는 `publishConfig`를 통해 기본적으로 public 액세스로 설정되어 있습니다.
 
@@ -156,7 +158,7 @@ yarn build          # 프로덕션 빌드
 
 ### 현재 상태 (2025-11-18)
 
-`yarn audit` 결과: 0 vulnerabilities
+`pnpm audit` 결과: 0 vulnerabilities
 
 주요 의존성 버전:
 - TypeScript 5.9.3
@@ -192,9 +194,11 @@ yarn build          # 프로덕션 빌드
 ./scripts/verify-all.sh        # 통합 검증 (테스트, 빌드, 보안 검사)
 ```
 
-### 의존성 관리
+### 패키지 관리
 
-Vitest 4.0.10은 깨끗한 의존성 트리를 가지고 있어 yarn resolutions가 필요하지 않습니다. 모든 간접 의존성이 최신 안전 버전을 사용합니다.
+pnpm을 사용하여 의존성을 관리합니다. pnpm의 엄격한 의존성 관리 정책으로 phantom dependency 문제를 방지하고, 디스크 공간을 효율적으로 사용합니다.
+
+Vitest 4.0.10은 깨끗한 의존성 트리를 가지고 있어 별도의 resolutions가 필요하지 않습니다. 모든 간접 의존성이 최신 안전 버전을 사용합니다.
 
 ## 라이선스
 

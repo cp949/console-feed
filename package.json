@@ -5,10 +5,10 @@
   "types": "lib/index.d.ts",
   "description": "A React component that displays console logs from the current page, an iframe or transported across a server",
   "scripts": {
-    "prepack": "yarn build",
+    "prepack": "pnpm build",
     "build": "tsc -p ./tsconfig.build.json --declaration && for file in src/**/*.d.ts; do dest=\"lib/${file#src/}\"; mkdir -p \"$(dirname \"$dest\")\"; cp \"$file\" \"$dest\"; done",
     "start": "vite demo",
-    "release": "yarn test && yarn build && yarn publish",
+    "release": "pnpm test && pnpm build && pnpm publish",
     "test": "vitest run --reporter=verbose",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
