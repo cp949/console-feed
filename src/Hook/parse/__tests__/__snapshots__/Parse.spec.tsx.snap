@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`asserts values: assertion failed 1`] = `
+exports[`asserts values > assertion failed 1`] = `
 {
   "data": [
     "Assertion failed:",
@@ -11,7 +11,7 @@ exports[`asserts values: assertion failed 1`] = `
 }
 `;
 
-exports[`time non existent label: non existent timer 1`] = `
+exports[`time > non existent label > non existent timer 1`] = `
 {
   "data": [
     "Timer 'nonExistent' does not exist",

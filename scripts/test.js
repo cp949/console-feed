@@ -4,4 +4,4 @@ if (typeof Element !== 'undefined' && !Element.prototype.getRootNode) {
   }
 }
 
-require('@testing-library/jest-dom')
+import '@testing-library/jest-dom/vitest'

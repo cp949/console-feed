@@ -18,7 +18,8 @@ npm install @cp949/console-feed
 
 ### 보안 개선
 - react-inspector 9.0.0 업그레이드로 @babel/runtime 취약점 제거
-- Jest 30.2.0 업그레이드 및 yarn resolutions로 brace-expansion, glob 취약점 해결
+- Jest에서 Vitest로 마이그레이션하여 테스트 의존성 보안 취약점 해결
+- yarn resolutions로 esbuild 취약점 해결
 - Prototype pollution 방어 메커니즘 추가 (`__proto__`, `constructor`, `prototype` 키 차단)
 - isomorphic-dompurify를 통한 DOM purification 적용
 - 직렬화 깊이 제한으로 DoS 공격 방어
@@ -27,7 +28,7 @@ npm install @cp949/console-feed
 - TypeScript 5.9.3 적용 (컴파일 타겟: ES3 → ES6)
 - React 18+ 지원 (React Native 미지원)
 - Node 20+ 기준
-- Testing Library 기반 테스트로 전환
+- Jest → Vitest 4.0.10으로 마이그레이션 (빠른 테스트 실행, 깨끗한 의존성 트리)
 
 ### 기타 개선사항
 - `linkify-html`/`linkify-react`를 통한 링크 처리 개선
@@ -135,7 +136,9 @@ Node 20 이상에서 의존성을 설치해야 합니다.
 ```bash
 yarn install
 yarn start          # 개발 서버 실행
-CI=1 yarn test      # 테스트 실행
+yarn test           # 테스트 실행 (Vitest)
+yarn test:watch     # 테스트 watch 모드
+yarn test:ui        # Vitest UI
 yarn build          # 프로덕션 빌드
 ```
 
@@ -158,9 +161,8 @@ yarn build          # 프로덕션 빌드
 
 주요 의존성 버전:
 - TypeScript 5.9.3
-- Jest 30.2.0
+- Vitest 4.0.10
 - react-inspector 9.0.0
-- jsdom 27.2.0
 
 모든 테스트 통과 (28/28)
 
@@ -170,15 +172,15 @@ yarn build          # 프로덕션 빌드
    - 조치: react-inspector 9.0.0 업그레이드로 의존성 제거
    - 결과: react-inspector 9.x는 @babel/runtime을 사용하지 않음
 
-2. brace-expansion ReDoS (Low, 10건)
-   - 원인: Jest 30.2.0 → babel-plugin-istanbul@7.0.1 → test-exclude@6.0.0 → brace-expansion@1.x
-   - 조치: yarn resolutions로 test-exclude 7.0.1, brace-expansion 2.0.2 강제 적용
-   - 배경: Jest는 최신이지만 하위 의존성인 babel-plugin-istanbul이 구버전 test-exclude 사용
+2. Jest 관련 취약점 (brace-expansion, glob, minimatch - 총 22건)
+   - 원인: Jest → babel-plugin-istanbul → test-exclude 의존성 체인
+   - 조치: Jest에서 Vitest로 마이그레이션하여 근본 해결
+   - 결과: 깨끗한 의존성 트리, 더 빠른 테스트 실행
 
-3. glob/minimatch 취약점 (High, 10건)
-   - 원인: test-exclude@6.0.0 → minimatch@3.x, glob@7.x (ReDoS, CLI injection)
-   - 조치: yarn resolutions로 minimatch 9.0.5, glob 11.1.0 강제 적용
-   - 참고: Jest 최신 버전에도 간접 의존성 체인을 통해 구버전이 유입되므로 resolutions 필수
+3. esbuild 취약점 (Moderate, 2건)
+   - 원인: Vitest → vite → esbuild 의존성 (개발 서버 전용 취약점)
+   - 조치: yarn resolutions로 esbuild 0.25.0+ 강제 적용
+   - 참고: 개발 환경에만 영향
 
 ### 적용된 보안 메커니즘
 
@@ -196,21 +198,19 @@ yarn build          # 프로덕션 빌드
 ./scripts/verify-all.sh        # 통합 검증 (테스트, 빌드, 보안 검사)
 ```
 
-### yarn resolutions 필수 유지
+### yarn resolutions
 
-package.json의 resolutions 필드는 보안 취약점 해결의 핵심입니다. 제거하지 마십시오.
+package.json의 resolutions 필드는 간접 의존성의 보안 취약점을 해결합니다.
 
 ```json
 "resolutions": {
-  "minimatch": "^9.0.5",
   "cross-spawn": "^7.0.6",
-  "test-exclude": "^7.0.1",
-  "brace-expansion": "^2.0.2",
-  "glob": "^11.1.0"
+  "esbuild": "^0.25.0"
 }
 ```
 
-이 설정은 Jest 및 기타 도구의 간접 의존성(transitive dependencies)에 포함된 구버전 패키지를 최신 버전으로 강제 교체합니다. resolutions을 제거하면 22개의 보안 취약점이 다시 발생합니다.
+- `cross-spawn`: 일반적인 보안 취약점 패치
+- `esbuild`: Vitest의 간접 의존성, 개발 서버 전용 취약점 해결
 
 ## 라이선스
 
