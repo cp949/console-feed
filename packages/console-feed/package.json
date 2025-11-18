@@ -11,8 +11,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "clean": "rm -rf lib",
-    "prepublishOnly": "pnpm build && pnpm test",
-    "publish": "pnpm publish"
+    "prepublishOnly": "pnpm build && pnpm test"
   },
   "dependencies": {
     "@emotion/react": "^11.12.1",
