@@ -1,0 +1,80 @@
+{
+  "name": "@cp949/console-feed",
+  "version": "3.6.1",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "description": "A React component that displays console logs from the current page, an iframe or transported across a server",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.build.json --declaration && for file in src/**/*.d.ts; do dest=\"lib/${file#src/}\"; mkdir -p \"$(dirname \"$dest\")\"; cp \"$file\" \"$dest\"; done",
+    "test": "vitest run --reporter=verbose",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "pnpm build && pnpm test",
+    "publish": "pnpm publish"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.12.1",
+    "@emotion/styled": "^11.11.2",
+    "isomorphic-dompurify": "^2.32.0",
+    "linkify-html": "^4.3.2",
+    "linkify-react": "^4.3.2",
+    "linkifyjs": "^4.3.2",
+    "react-inline-center": "1.0.1",
+    "react-inspector": "^9.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^18.2.8",
+    "@types/react-dom": "^18.2.7",
+    "@vitest/ui": "^4.0.10",
+    "lodash": "^4.17.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.10"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "devtools",
+    "inspector",
+    "object",
+    "object-inspector",
+    "react",
+    "react-component",
+    "reactjs",
+    "table",
+    "table-inspector",
+    "table-view",
+    "tableview",
+    "tree",
+    "tree-view",
+    "treeview",
+    "ui",
+    "view"
+  ],
+  "homepage": "https://github.com/cp949/console-feed.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cp949/console-feed.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cp949/console-feed/issues"
+  },
+  "author": "jjfive",
+  "license": "MIT"
+}

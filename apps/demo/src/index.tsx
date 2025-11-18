@@ -1,7 +1,7 @@
 import React from 'react'
 import update from 'immutability-helper'
-import { Hook, Console, Decode } from '../../src'
-import { Message } from '../../src/definitions/Component'
+import { Hook, Console, Decode } from '@cp949/console-feed'
+import { Message } from '@cp949/console-feed/src/definitions/Component'
 
 const iframe = document.createElement('iframe')
 iframe.src = './iframe.html'
