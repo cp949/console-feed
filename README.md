@@ -18,8 +18,7 @@ npm install @cp949/console-feed
 
 ### 보안 개선
 - react-inspector 9.0.0 업그레이드로 @babel/runtime 취약점 제거
-- Jest에서 Vitest로 마이그레이션하여 테스트 의존성 보안 취약점 해결
-- yarn resolutions로 esbuild 취약점 해결
+- Jest → Vitest 4.0.10 마이그레이션으로 테스트 의존성 보안 취약점 근본 해결
 - Prototype pollution 방어 메커니즘 추가 (`__proto__`, `constructor`, `prototype` 키 차단)
 - isomorphic-dompurify를 통한 DOM purification 적용
 - 직렬화 깊이 제한으로 DoS 공격 방어
@@ -174,13 +173,8 @@ yarn build          # 프로덕션 빌드
 
 2. Jest 관련 취약점 (brace-expansion, glob, minimatch - 총 22건)
    - 원인: Jest → babel-plugin-istanbul → test-exclude 의존성 체인
-   - 조치: Jest에서 Vitest로 마이그레이션하여 근본 해결
-   - 결과: 깨끗한 의존성 트리, 더 빠른 테스트 실행
-
-3. esbuild 취약점 (Moderate, 2건)
-   - 원인: Vitest → vite → esbuild 의존성 (개발 서버 전용 취약점)
-   - 조치: yarn resolutions로 esbuild 0.25.0+ 강제 적용
-   - 참고: 개발 환경에만 영향
+   - 조치: Jest → Vitest 4.0.10 마이그레이션으로 근본 해결
+   - 결과: 깨끗한 의존성 트리, yarn resolutions 불필요, 더 빠른 테스트 실행
 
 ### 적용된 보안 메커니즘
 
@@ -198,19 +192,9 @@ yarn build          # 프로덕션 빌드
 ./scripts/verify-all.sh        # 통합 검증 (테스트, 빌드, 보안 검사)
 ```
 
-### yarn resolutions
+### 의존성 관리
 
-package.json의 resolutions 필드는 간접 의존성의 보안 취약점을 해결합니다.
-
-```json
-"resolutions": {
-  "cross-spawn": "^7.0.6",
-  "esbuild": "^0.25.0"
-}
-```
-
-- `cross-spawn`: 일반적인 보안 취약점 패치
-- `esbuild`: Vitest의 간접 의존성, 개발 서버 전용 취약점 해결
+Vitest 4.0.10은 깨끗한 의존성 트리를 가지고 있어 yarn resolutions가 필요하지 않습니다. 모든 간접 의존성이 최신 안전 버전을 사용합니다.
 
 ## 라이선스
 
