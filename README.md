@@ -1,5 +1,7 @@
 # console-feed
 
+[한국어](README.ko.md) | English
+
 A React component that captures and displays browser console output in a user interface. Works with React 18+ apps and is sanitized for both browser and server environments.
 
 ## About This Fork

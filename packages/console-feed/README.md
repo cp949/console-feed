@@ -1,57 +1,59 @@
 # console-feed
 
-브라우저 콘솔 출력을 캡처하여 사용자 인터페이스에 렌더링하는 React 컴포넌트입니다. React 18+ 앱에서 작동하며 브라우저 및 서버 환경에서 사용할 수 있도록 sanitized 처리되어 있습니다.
+[한국어](README.ko.md) | English
 
-이 저장소는 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 개선 및 의존성을 최신 버전으로 적용한 버전입니다.
+A React component that captures and displays browser console output in a user interface. Works with React 18+ apps and is sanitized for both browser and server environments.
 
-## 설치
+This is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security improvements and updated dependencies.
+
+## Installation
 
 ```sh
 pnpm add @cp949/console-feed
-# 또는
+# or
 yarn add @cp949/console-feed
-# 또는
+# or
 npm install @cp949/console-feed
 ```
 
-패키지 정보: https://www.npmjs.com/package/@cp949/console-feed
+Package info: https://www.npmjs.com/package/@cp949/console-feed
 
-## 원본 저장소 대비 변경사항
+## Changes from Original Repository
 
-### 보안 개선
-- react-inspector 9.0.0 업그레이드로 @babel/runtime 취약점 제거
-- Jest → Vitest 4.0.10 마이그레이션으로 테스트 의존성 보안 취약점 근본 해결
-- Prototype pollution 방어 메커니즘 추가 (`__proto__`, `constructor`, `prototype` 키 차단)
-- isomorphic-dompurify를 통한 DOM purification 적용
-- 직렬화 깊이 제한으로 DoS 공격 방어
+### Security Improvements
+- Upgraded react-inspector to 9.0.0 (removed @babel/runtime vulnerabilities)
+- Migrated Jest → Vitest 4.0.10 (fundamentally resolved test dependency vulnerabilities)
+- Added prototype pollution defense (`__proto__`, `constructor`, `prototype` key blocking)
+- Applied DOM purification via isomorphic-dompurify
+- Added DoS attack prevention through serialization depth limits
 
-### 의존성 최신 버전 적용
-- TypeScript 5.9.3 적용 (컴파일 타겟: ES3 → ES6)
-- React 18+ 지원 (React Native 미지원)
-- Node 20+ 기준
-- Jest → Vitest 4.0.10으로 마이그레이션 (빠른 테스트 실행, 깨끗한 의존성 트리)
+### Updated Dependencies
+- Applied TypeScript 5.9.3 (compilation target: ES3 → ES6)
+- React 18+ support (React Native not supported)
+- Node 20+ baseline
+- Migrated Jest → Vitest 4.0.10 (faster test execution, clean dependency tree)
 
-### 프로젝트 구조
-- Turborepo 모노레포 구조로 전환
-- pnpm workspace 기반 의존성 관리
-- 라이브러리(`packages/console-feed`)와 데모 앱(`apps/demo`) 분리
-- Turborepo 캐싱으로 빌드 성능 최적화
+### Project Structure
+- Converted to Turborepo monorepo structure
+- pnpm workspace-based dependency management
+- Separated library (`packages/console-feed`) and demo app (`apps/demo`)
+- Optimized build performance with Turborepo caching
 
-### 기타 개선사항
-- `linkify-html`/`linkify-react`를 통한 링크 처리 개선
-- `@emotion/react` 기반 테마 시스템
-- `@cp949` 스코프 패키지로 재배포
+### Other Improvements
+- Improved link handling via `linkify-html`/`linkify-react`
+- Theme system based on `@emotion/react`
+- Republished as `@cp949` scoped package
 
-## 기능
+## Features
 
-- 컬러 치환 및 클릭 가능한 링크를 지원하는 스타일링된 콘솔 항목
-- DOM 노드, 테이블, 다양한 콘솔 메서드(`log`, `warn`, `debug`, `table` 등) 렌더링
-- 함수, 순환 구조, DOM 참조를 안전하게 변환하는 직렬화 기능
-- 필터링, 검색, 로그 그룹화 기능
+- Styled console entries with color substitution and clickable links
+- Renders DOM nodes, tables, and various console methods (`log`, `warn`, `debug`, `table`, etc.)
+- Serialization that safely converts functions, circular structures, and DOM references
+- Filtering, search, and log grouping capabilities
 
-## 기본 사용법
+## Basic Usage
 
-클래스 컴포넌트:
+Class component:
 
 ```tsx
 import React from 'react'
@@ -74,7 +76,7 @@ class App extends React.Component {
 }
 ```
 
-함수 컴포넌트 (Hooks):
+Function component (Hooks):
 
 ```tsx
 import React, { useState, useEffect } from 'react'
@@ -98,18 +100,18 @@ const LogsContainer = () => {
 
 ## API
 
-### Console 컴포넌트
+### Console Component
 
 Props:
-- `logs`: 로그 메시지 배열
-- `filter`: 로그 필터링 함수
-- `searchKeywords`: 검색 키워드
-- `linkifyOptions`: 링크 처리 옵션
-- `variant`: 테마 (`"dark"` | `"light"`)
+- `logs`: Array of log messages
+- `filter`: Log filtering function
+- `searchKeywords`: Search keywords
+- `linkifyOptions`: Link handling options
+- `variant`: Theme (`"dark"` | `"light"`)
 
-### Hook 함수
+### Hook Function
 
-`window.console` 또는 콘솔과 유사한 객체를 래핑하여 로그를 캡처합니다. `Encode`로 항목을 직렬화하여 콜백으로 전달합니다.
+Wraps `window.console` or a console-like object to capture logs. Serializes entries with `Encode` and passes them to the callback.
 
 ```tsx
 Hook(
@@ -119,148 +121,148 @@ Hook(
 ): HookedConsole
 ```
 
-### Unhook 함수
+### Unhook Function
 
-Hook으로 래핑된 콘솔을 원래 상태로 복원합니다.
+Restores a console wrapped by Hook to its original state.
 
 ```tsx
 Unhook(hookedConsole: HookedConsole): void
 ```
 
-### Encode / Decode 함수
+### Encode / Decode Functions
 
-네트워크 경계를 넘어 로그를 전송할 때 사용합니다.
+Used when transmitting logs across network boundaries.
 
 ```tsx
 Encode<T>(data: any, limit?: number): T
 Decode(data: any): Message
 ```
 
-## 개발
+## Development
 
-이 프로젝트는 Turborepo 모노레포로 구성되어 있습니다.
+This project is structured as a Turborepo monorepo.
 
-### 프로젝트 구조
+### Project Structure
 
 ```
 console-feed/
 ├── apps/
-│   └── demo/              # 데모 앱 (Vite + React)
+│   └── demo/              # Demo app (Vite + React)
 ├── packages/
-│   └── console-feed/      # 라이브러리 코어
-├── turbo.json             # Turborepo 설정
-├── pnpm-workspace.yaml    # pnpm workspace 설정
-└── package.json           # 루트 workspace
+│   └── console-feed/      # Library core
+├── turbo.json             # Turborepo configuration
+├── pnpm-workspace.yaml    # pnpm workspace setup
+└── package.json           # Root workspace
 ```
 
-### 개발 환경 요구사항
+### Development Requirements
 
 - Node 20+
 - pnpm 9+
 
-### 개발 명령어
+### Development Commands
 
 ```bash
-# 의존성 설치
+# Install dependencies
 pnpm install
 
-# 전체 워크스페이스 개발 서버 실행
+# Run development server for entire workspace
 pnpm dev
 
-# 전체 워크스페이스 빌드
+# Build entire workspace
 pnpm build
 
-# 전체 워크스페이스 테스트
+# Test entire workspace
 pnpm test
 
-# 특정 패키지만 실행
-pnpm --filter @cp949/console-feed build    # 라이브러리 빌드
-pnpm --filter demo dev                      # 데모 앱만 실행
-pnpm --filter @cp949/console-feed test     # 라이브러리 테스트
+# Run specific package only
+pnpm --filter @cp949/console-feed build    # Build library
+pnpm --filter demo dev                      # Run demo app only
+pnpm --filter @cp949/console-feed test     # Test library
 ```
 
-### Turborepo 캐싱
+### Turborepo Caching
 
-Turborepo는 빌드 결과를 자동으로 캐싱합니다. 변경되지 않은 패키지는 재빌드를 스킵하여 빌드 시간을 크게 단축합니다.
+Turborepo automatically caches build results. Unchanged packages skip rebuilding, significantly reducing build time.
 
-## 릴리스
+## Release
 
-라이브러리 패키지(`@cp949/console-feed`)만 npm에 배포됩니다. 데모 앱은 `private: true`로 설정되어 있습니다.
+Only the library package (`@cp949/console-feed`) is published to npm. The demo app is set to `private: true`.
 
 ```bash
-# 1. 전체 테스트 및 빌드 검증
+# 1. Verify all tests and builds
 pnpm test
 pnpm build
 
-# 2. packages/console-feed 디렉토리로 이동
+# 2. Navigate to packages/console-feed directory
 cd packages/console-feed
 
-# 3. 버전 업데이트
-pnpm version patch  # 또는 minor, major
+# 3. Update version
+pnpm version patch  # or minor, major
 
-# 4. 변경사항 커밋 및 푸시
+# 4. Commit and push changes
 git add .
 git commit -m "Release vX.X.X"
 git push
 
-# 5. npm에 배포
+# 5. Publish to npm
 pnpm publish
 ```
 
-스코프 패키지는 `publishConfig`를 통해 기본적으로 public 액세스로 설정되어 있습니다.
+Scoped packages are configured with public access by default via `publishConfig`.
 
-## 보안
+## Security
 
-### 현재 상태 (2025-11-18)
+### Current Status (2025-11-18)
 
-`pnpm audit` 결과: 0 vulnerabilities
+`pnpm audit` result: 0 vulnerabilities
 
-주요 의존성 버전:
+Key dependency versions:
 - TypeScript 5.9.3
 - Vitest 4.0.10
 - react-inspector 9.0.0
 
-모든 테스트 통과 (28/28)
+All tests passing (28/28)
 
-### 해결된 취약점
+### Resolved Vulnerabilities
 
-1. @babel/runtime 취약점 (Moderate, 2건)
-   - 조치: react-inspector 9.0.0 업그레이드로 의존성 제거
-   - 결과: react-inspector 9.x는 @babel/runtime을 사용하지 않음
+1. @babel/runtime vulnerabilities (Moderate, 2 issues)
+   - Action: Removed dependency via react-inspector 9.0.0 upgrade
+   - Result: react-inspector 9.x does not use @babel/runtime
 
-2. Jest 관련 취약점 (brace-expansion, glob, minimatch - 총 22건)
-   - 원인: Jest → babel-plugin-istanbul → test-exclude 의존성 체인
-   - 조치: Jest → Vitest 4.0.10 마이그레이션으로 근본 해결
-   - 결과: 깨끗한 의존성 트리, yarn resolutions 불필요, 더 빠른 테스트 실행
+2. Jest-related vulnerabilities (brace-expansion, glob, minimatch - total 22 issues)
+   - Cause: Jest → babel-plugin-istanbul → test-exclude dependency chain
+   - Action: Fundamentally resolved via Jest → Vitest 4.0.10 migration
+   - Result: Clean dependency tree, no need for yarn resolutions, faster test execution
 
-### 적용된 보안 메커니즘
+### Applied Security Mechanisms
 
-- Prototype pollution 방어: `__proto__`, `constructor`, `prototype` 키 접근 차단
-- DOM purification: isomorphic-dompurify를 통한 XSS 방어
-- Encode 제한: 직렬화 깊이 제한으로 DoS 방어
-- Sanitized 파싱: 로그 파싱 시 악의적 입력 필터링
+- Prototype pollution defense: Blocking `__proto__`, `constructor`, `prototype` key access
+- DOM purification: XSS defense via isomorphic-dompurify
+- Encode limits: DoS defense through serialization depth limits
+- Sanitized parsing: Malicious input filtering during log parsing
 
-### 보안 검증
+### Security Verification
 
-검증 스크립트를 통해 자동화된 보안 검사를 수행할 수 있습니다:
+Automated security checks can be performed via verification scripts:
 
 ```bash
 cd packages/console-feed
-./scripts/security-test.sh    # 보안 테스트 실행
-./scripts/verify-all.sh        # 통합 검증 (테스트, 빌드, 보안 검사)
+./scripts/security-test.sh    # Run security tests
+./scripts/verify-all.sh        # Integrated verification (tests, build, security checks)
 ```
 
-### 패키지 관리
+### Package Management
 
-**Turborepo + pnpm workspace**: 모노레포 구조로 라이브러리와 데모 앱의 의존성을 명확하게 분리합니다.
+**Turborepo + pnpm workspace**: Clearly separates library and demo app dependencies in a monorepo structure.
 
-**pnpm 이점**:
-- 엄격한 의존성 관리로 phantom dependency 문제 방지
-- 하드링크 방식으로 디스크 공간 효율적 사용
-- Turborepo와 최적화된 통합
+**pnpm advantages**:
+- Prevents phantom dependency issues through strict dependency management
+- Efficient disk space usage via hard-link approach
+- Optimized integration with Turborepo
 
-**Vitest 4.0.10**: 깨끗한 의존성 트리를 가지고 있어 별도의 resolutions가 필요하지 않습니다.
+**Vitest 4.0.10**: Has a clean dependency tree, eliminating the need for separate resolutions.
 
-## 라이선스
+## License
 
-원본 저장소의 라이선스를 따릅니다.
+Follows the original repository's license.

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "lib",
+    "outDir": "dist",
     "module": "commonjs",
     "target": "es6",
     "ignoreDeprecations": "5.0",
@@ -18,6 +18,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },
-  "exclude": ["node_modules", "lib", "coverage"],
+  "exclude": ["node_modules", "dist", "coverage"],
   "include": ["src"]
 }

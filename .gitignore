@@ -5,7 +5,7 @@ AGENTS.md
 /coverage
 /demo/dist
 /es
-/lib
+/dist
 node_modules
 /umd
 /.idea
@@ -19,4 +19,4 @@ yarn-error.log
 
 # Build outputs
 apps/*/dist
-packages/*/lib
+packages/*/dist

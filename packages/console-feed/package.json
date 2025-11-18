@@ -1,16 +1,16 @@
 {
   "name": "@cp949/console-feed",
   "version": "3.6.3",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "description": "A React component that displays console logs from the current page, an iframe or transported across a server",
   "scripts": {
-    "build": "tsc -p ./tsconfig.build.json --declaration && for file in src/**/*.d.ts; do dest=\"lib/${file#src/}\"; mkdir -p \"$(dirname \"$dest\")\"; cp \"$file\" \"$dest\"; done",
+    "build": "tsc -p ./tsconfig.build.json --declaration && for file in src/**/*.d.ts; do dest=\"dist/${file#src/}\"; mkdir -p \"$(dirname \"$dest\")\"; cp \"$file\" \"$dest\"; done",
     "test": "vitest run --reporter=verbose",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "clean": "rm -rf lib",
+    "clean": "rm -rf dist",
     "prepublishOnly": "pnpm build && pnpm test"
   },
   "dependencies": {
@@ -46,7 +46,7 @@
     "access": "public"
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "keywords": [
     "devtools",
