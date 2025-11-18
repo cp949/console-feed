@@ -1,217 +1,217 @@
-# console-feed [![Sponsors](https://img.shields.io/github/sponsors/samdenty?label=Sponsors)](https://github.com/sponsors/samdenty)
+# console-feed
 
-[Sponsor this project](https://github.com/sponsors/samdenty)
+브라우저 콘솔 출력을 캡처하여 사용자 인터페이스에 렌더링하는 React 컴포넌트입니다. React 18+ 앱에서 작동하며 브라우저 및 서버 환경에서 사용할 수 있도록 sanitized 처리되어 있습니다.
 
-[![npm version](https://img.shields.io/npm/v/console-feed.svg?style=flat-square)](https://www.npmjs.com/package/console-feed)
-[![npm downloads](https://img.shields.io/npm/dm/console-feed.svg?style=flat-square)](https://www.npmjs.com/package/console-feed)
-[![Demo](https://img.shields.io/badge/StackBlitz-Demo-yellow.svg?style=flat-square)](https://stackblitz.com/github/samdenty/console-feed?file=demo%2Fpublic%2Fiframe.html)
+이 저장소는 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 개선 및 의존성을 최신 버전으로 적용한 버전입니다.
 
-A React component that displays console logs from the current page, an iframe or transported across a server.
-
-![Demo](https://user-images.githubusercontent.com/13242392/38513414-1bc32870-3c26-11e8-9a8f-0989d2142b1c.png)
-
-## Alternative to `console-feed`
-
-https://github.com/liriliri/chii supports the embedding the entire Chrome devtools.
-
-https://github.com/tachibana-shin/vue-console-feed is a fork for Vue.JS
-
-## Who's using it
-
-- [Firebase studio](https://studio.firebase.google.com)
-- [Tesla](https://github.com/teslamotors/informed)
-- [CodeSandbox.io](https://codesandbox.io)
-- [Framer](https://www.framer.com)
-- [Plunker](https://plnkr.co)
-- [P5.js Editor](https://editor.p5js.org)
-- [Builder.io](https://builder.io)
-- [Utopia](https://utopia.app/project)
-- [facebook/flipper](https://github.com/facebook/flipper)
-- [Effector playground](https://share.effector.dev/)
-
-## Features
-
-- **Console formatting** - [style and give your logs color](https://stackoverflow.com/questions/22155879/how-do-i-create-formatted-javascript-console-log-messages), and makes links clickable
-- **DOM nodes** - easily inspect & expand HTML elements, with syntax highlighting
-- **`console.table`** - view your logs in a table format
-- **Other console methods**:
-  - `console.time` - view the time in milliseconds it takes to complete events
-  - `console.assert` - assert that a statement is truthy
-  - `console.count` - count how many times something occurs
-- **Inbuilt JSON serialization** - Objects, Functions & DOM elements can be encoded / decoded to and from JSON
-
-## Install
+## 설치
 
 ```sh
-yarn add console-feed
-# or
-npm install console-feed
+yarn add @cp949/console-feed
+# 또는
+npm install @cp949/console-feed
 ```
 
-## Basic usage
+패키지 정보: https://www.npmjs.com/package/@cp949/console-feed
 
-[StackBlitz](https://stackblitz.com/github/samdenty/console-feed?file=demo%2Fpublic%2Fiframe.html)
+## 원본 저장소 대비 변경사항
 
-```js
+### 보안 개선
+- react-inspector 9.0.0 업그레이드로 @babel/runtime 취약점 제거
+- Jest 30.2.0 업그레이드 및 yarn resolutions로 brace-expansion, glob 취약점 해결
+- Prototype pollution 방어 메커니즘 추가 (`__proto__`, `constructor`, `prototype` 키 차단)
+- isomorphic-dompurify를 통한 DOM purification 적용
+- 직렬화 깊이 제한으로 DoS 공격 방어
+
+### 의존성 최신 버전 적용
+- TypeScript 5.9.3 적용 (컴파일 타겟: ES3 → ES6)
+- React 18+ 지원 (React Native 미지원)
+- Node 20+ 기준
+- Testing Library 기반 테스트로 전환
+
+### 기타 개선사항
+- `linkify-html`/`linkify-react`를 통한 링크 처리 개선
+- `@emotion/react` 기반 테마 시스템
+- `@cp949` 스코프 패키지로 재배포
+
+## 기능
+
+- 컬러 치환 및 클릭 가능한 링크를 지원하는 스타일링된 콘솔 항목
+- DOM 노드, 테이블, 다양한 콘솔 메서드(`log`, `warn`, `debug`, `table` 등) 렌더링
+- 함수, 순환 구조, DOM 참조를 안전하게 변환하는 직렬화 기능
+- 필터링, 검색, 로그 그룹화 기능
+
+## 기본 사용법
+
+클래스 컴포넌트:
+
+```tsx
 import React from 'react'
-import { Hook, Console, Decode } from 'console-feed'
+import { Hook, Console, Decode } from '@cp949/console-feed'
 
 class App extends React.Component {
-  state = {
-    logs: [],
-  }
+  state = { logs: [] }
 
   componentDidMount() {
     Hook(window.console, (log) => {
       this.setState(({ logs }) => ({ logs: [...logs, Decode(log)] }))
     })
 
-    console.log(`Hello world!`)
+    console.log('Hello world!')
   }
 
   render() {
-    return (
-      <div style={{ backgroundColor: '#242424' }}>
-        <Console logs={this.state.logs} variant="dark" />
-      </div>
-    )
+    return <Console logs={this.state.logs} variant="dark" />
   }
 }
 ```
 
-OR with hooks:
+함수 컴포넌트 (Hooks):
 
-```js
+```tsx
 import React, { useState, useEffect } from 'react'
-import { Console, Hook, Unhook } from 'console-feed'
+import { Console, Hook, Unhook } from '@cp949/console-feed'
 
 const LogsContainer = () => {
   const [logs, setLogs] = useState([])
 
-  // run once!
   useEffect(() => {
-    const hookedConsole = Hook(
+    const hooked = Hook(
       window.console,
-      (log) => setLogs((currLogs) => [...currLogs, log]),
+      (log) => setLogs((current) => [...current, log]),
       false
     )
-    return () => Unhook(hookedConsole)
+    return () => Unhook(hooked)
   }, [])
 
   return <Console logs={logs} variant="dark" />
 }
-
-export { LogsContainer }
 ```
 
-## Props for `<Console />` component
+## API
 
-### `logs: Log[]`
+### Console 컴포넌트
 
-An array consisting of Log objects. Required
+Props:
+- `logs`: 로그 메시지 배열
+- `filter`: 로그 필터링 함수
+- `searchKeywords`: 검색 키워드
+- `linkifyOptions`: 링크 처리 옵션
+- `variant`: 테마 (`"dark"` | `"light"`)
 
-### `filter?: Methods[]`
+### Hook 함수
 
-Filter the logs, only displaying messages of certain methods.
+`window.console` 또는 콘솔과 유사한 객체를 래핑하여 로그를 캡처합니다. `Encode`로 항목을 직렬화하여 콜백으로 전달합니다.
 
-### `variant?: 'light' | 'dark'`
-
-Sets the font color for the component. Default - `light`
-
-### `styles?: Styles`
-
-Defines the custom styles to use on the component - see [`Styles.d.ts`](https://github.com/samdenty/console-feed/blob/master/src/definitions/Styles.d.ts)
-
-### `searchKeywords?: string`
-
-A string value to filter logs
-
-### `logFilter?: Function`
-
-If you want to use a custom log filter function, you can provide your own implementation
-
-### `components?: ComponentOverrides`
-
-To fully customize layout and rendering of the console feed, you can provide your own React
-components. Currently, only the `Message` component is customizable.
-
-## Log methods
-
-Each log has a method assigned to it. The method is used to determine the style of the message and for the `filter` prop.
-
-```ts
-type Methods =
-  | 'log'
-  | 'debug'
-  | 'info'
-  | 'warn'
-  | 'error'
-  | 'table'
-  | 'clear'
-  | 'time'
-  | 'timeEnd'
-  | 'count'
-  | 'assert'
+```tsx
+Hook(
+  console: Console,
+  callback: (log: EncodedLog) => void,
+  encode?: boolean
+): HookedConsole
 ```
 
-## `Log` object
+### Unhook 함수
 
-A log object consists of the following:
+Hook으로 래핑된 콘솔을 원래 상태로 복원합니다.
 
-```ts
-type Logs = Log[]
+```tsx
+Unhook(hookedConsole: HookedConsole): void
+```
 
-interface Log {
-  // The log method
-  method: Methods
-  // The arguments passed to console API
-  data: any[]
+### Encode / Decode 함수
+
+네트워크 경계를 넘어 로그를 전송할 때 사용합니다.
+
+```tsx
+Encode<T>(data: any, limit?: number): T
+Decode(data: any): Message
+```
+
+## 개발
+
+Node 20 이상에서 의존성을 설치해야 합니다.
+
+```bash
+yarn install
+yarn start          # 개발 서버 실행
+CI=1 yarn test      # 테스트 실행
+yarn build          # 프로덕션 빌드
+```
+
+빌드는 TypeScript 컴파일(`tsc -p tsconfig.build.json --declaration`)을 실행하고 선언 파일을 `lib/` 디렉토리에 복사합니다.
+
+## 릴리스
+
+1. Node 20에서 `yarn test` 및 `yarn build` 실행하여 검증
+2. `yarn version patch/minor/major`로 버전 업데이트
+3. 변경사항을 커밋하고 브랜치 푸시
+4. `npm publish`로 npm 레지스트리에 게시
+
+스코프 패키지는 `publishConfig`를 통해 기본적으로 public 액세스로 설정되어 있습니다.
+
+## 보안
+
+### 현재 상태 (2025-11-18)
+
+`yarn audit` 결과: 0 vulnerabilities
+
+주요 의존성 버전:
+- TypeScript 5.9.3
+- Jest 30.2.0
+- react-inspector 9.0.0
+- jsdom 27.2.0
+
+모든 테스트 통과 (28/28)
+
+### 해결된 취약점
+
+1. @babel/runtime 취약점 (Moderate, 2건)
+   - 조치: react-inspector 9.0.0 업그레이드로 의존성 제거
+   - 결과: react-inspector 9.x는 @babel/runtime을 사용하지 않음
+
+2. brace-expansion ReDoS (Low, 10건)
+   - 원인: Jest 30.2.0 → babel-plugin-istanbul@7.0.1 → test-exclude@6.0.0 → brace-expansion@1.x
+   - 조치: yarn resolutions로 test-exclude 7.0.1, brace-expansion 2.0.2 강제 적용
+   - 배경: Jest는 최신이지만 하위 의존성인 babel-plugin-istanbul이 구버전 test-exclude 사용
+
+3. glob/minimatch 취약점 (High, 10건)
+   - 원인: test-exclude@6.0.0 → minimatch@3.x, glob@7.x (ReDoS, CLI injection)
+   - 조치: yarn resolutions로 minimatch 9.0.5, glob 11.1.0 강제 적용
+   - 참고: Jest 최신 버전에도 간접 의존성 체인을 통해 구버전이 유입되므로 resolutions 필수
+
+### 적용된 보안 메커니즘
+
+- Prototype pollution 방어: `__proto__`, `constructor`, `prototype` 키 접근 차단
+- DOM purification: isomorphic-dompurify를 통한 XSS 방어
+- Encode 제한: 직렬화 깊이 제한으로 DoS 방어
+- Sanitized 파싱: 로그 파싱 시 악의적 입력 필터링
+
+### 보안 검증
+
+검증 스크립트를 통해 자동화된 보안 검사를 수행할 수 있습니다:
+
+```bash
+./scripts/security-test.sh    # 보안 테스트 실행
+./scripts/verify-all.sh        # 통합 검증 (테스트, 빌드, 보안 검사)
+```
+
+### yarn resolutions 필수 유지
+
+package.json의 resolutions 필드는 보안 취약점 해결의 핵심입니다. 제거하지 마십시오.
+
+```json
+"resolutions": {
+  "minimatch": "^9.0.5",
+  "cross-spawn": "^7.0.6",
+  "test-exclude": "^7.0.1",
+  "brace-expansion": "^2.0.2",
+  "glob": "^11.1.0"
 }
 ```
 
-## Serialization
+이 설정은 Jest 및 기타 도구의 간접 의존성(transitive dependencies)에 포함된 구버전 패키지를 최신 버전으로 강제 교체합니다. resolutions을 제거하면 22개의 보안 취약점이 다시 발생합니다.
 
-By default when you use the `Hook()` API, logs are serialized so that they will safely work with `JSON.stringify`. In order to restore a log back to format compatible with the `<Console />` component, you need to call the `Decode()` method.
+## 라이선스
 
-### Disabling serialization
-
-If the `Hook` function and the `<Console />` component are on the same origin, you can disable serialization to increase performance.
-
-```js
-Hook(
-  window.console,
-  (log) => {
-    this.setState(({ logs }) => ({ logs: [...logs, log] }))
-  },
-  false
-)
-```
-
-### Limiting serialization
-
-You can limit the number of keys/elements included when serializing objects/arrays.
-
-```js
-Hook(
-  window.console,
-  (log) => {
-    this.setState(({ logs }) => ({ logs: [...logs, log] }))
-  },
-  true,
-  100 // limit to 100 keys/elements
-)
-```
-
----
-
-## Developing
-
-To run `console-feed` locally, simply run:
-
-```bash
-yarn
-yarn start
-yarn test:watch
-```
-
-Head over to `http://localhost:3000` in your browser, and you'll see the demo page come up. After you make changes you'll need to reload, but the jest tests will automatically restart.
+원본 저장소의 라이선스를 따릅니다.

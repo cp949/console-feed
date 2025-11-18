@@ -1,4 +1,3 @@
-import styled, { CreateStyled } from '@emotion/styled'
-import { Context } from '../../definitions/Component'
+import styled from '@emotion/styled'
 
-export default styled as CreateStyled<Context>
+export default styled

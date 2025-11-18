@@ -17,11 +17,13 @@ import { Encode } from '../Transform'
  * @argument console The Console constructor to Hook
  * @argument callback The callback to be called once a message is logged
  */
+const DEFAULT_LIMIT = 100
+
 export default function Hook(
   console: Console,
   callback: Callback,
   encode = true,
-  limit?: number
+  limit = DEFAULT_LIMIT
 ) {
   const TargetConsole = console as HookedConsole
   const Storage: Storage = {

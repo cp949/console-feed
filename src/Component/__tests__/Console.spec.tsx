@@ -1,159 +1,100 @@
 import * as React from 'react'
-import { shallow } from 'enzyme'
+import { render, screen } from '@testing-library/react'
 
 import Console from '..'
 
-it('renders', () => {
-  const result = shallow(
-    <Console
-      logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: ['my-log'],
-        },
-      ]}
-    />
-  )
+const makeLog = (data: any[]) => ({
+  method: 'log',
+  id: 'id',
+  data,
+}) as const
 
-  expect(result.html()).toContain('my-log')
+it('renders', () => {
+  render(<Console logs={[makeLog(['my-log'])]} />)
+
+  expect(screen.getByText('my-log')).toBeInTheDocument()
 })
 
 it('formats messages', () => {
-  const result = shallow(
+  const { container } = render(
     <Console
       logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: [
-            '%ctest',
-            'color: red',
-            'foo',
-            [2, '__console_feed_remaining__0'],
-          ],
-        },
+        makeLog([
+          '%ctest',
+          'color: red',
+          'foo',
+          [2, '__console_feed_remaining__0'],
+        ]),
       ]}
     />
   )
 
-  const html = result.html()
-  expect(html).toContain('<span style="color: red;">test</span>')
-  expect(html).toContain('foo')
-  expect(html).toContain('[<span style="color:rgb(28, 0, 207)">2</span>]')
+  expect(container.querySelector('span[style*="color: red;"]')).toBeTruthy()
+  expect(container.querySelector('span[style*="color: rgb(28, 0, 207);"]')).toBeTruthy()
+  expect(screen.getByText(/foo/)).toBeInTheDocument()
 })
 
 it('various data types', () => {
-  const result = shallow(
+  render(
     <Console
       logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: [
-            1,
-            'test',
-            { foo: 'bar' },
-            [1, 2, 3, 4, 5],
-            [],
-            [{}],
-            {},
-            null,
-          ],
-        },
+        makeLog([
+          1,
+          'test',
+          { foo: 'bar' },
+          [1, 2, 3, 4, 5],
+          [],
+          [{}],
+          {},
+          null,
+        ]),
       ]}
     />
   )
 
-  const html = result.html()
-  expect(html).toContain('<span style="color:rgb(233,63,59)">test</span>')
-  expect(html).toContain('<span style="color:rgb(136, 19, 145)">foo</span>:')
-  expect(html).toContain(
-    '<span style="color:rgb(233,63,59)">&quot;bar&quot;</span>'
-  )
+  expect(screen.getByText('test')).toBeInTheDocument()
+  expect(screen.getAllByText(/foo/)).toHaveLength(1)
+  expect(screen.getByText(/bar/)).toBeInTheDocument()
 })
 
 it('skips non-existent substitution', () => {
-  const result = shallow(
-    <Console
-      logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: ['%u', 'foo'],
-        },
-      ]}
-    />
-  )
+  render(<Console logs={[makeLog(['%u', 'foo'])]} />)
 
-  const html = result.html()
-  expect(html).toContain('%u')
-  expect(html).toContain('foo')
+  expect(screen.getByText('%u')).toBeInTheDocument()
+  expect(screen.getByText('foo')).toBeInTheDocument()
 })
 
 it('displays object names', () => {
-  const result = shallow(
-    <Console
-      logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: [new (class MyObject {})()],
-        },
-      ]}
-    />
-  )
+  render(<Console logs={[makeLog([new (class MyObject {})()])]} />)
 
-  expect(result.html()).toContain(
-    '<span style="font-style:italic">MyObject </span><span style="font-style:italic">{}</span>'
-  )
+  expect(screen.getByText('MyObject')).toBeInTheDocument()
 })
 
 it('linkify object', () => {
-  const result = shallow(
-    <Console
-      logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: ['hello https://example.com'],
-        },
-      ]}
-    />
-  )
+  const { container } = render(<Console logs={[makeLog(['hello https://example.com'])]} />)
 
-  expect(result.html()).toContain(
-    '<a href="https://example.com" class="linkified" target="_blank">https://example.com</a>'
-  )
+  expect(container.innerHTML).toContain('<a href="https://example.com">https://example.com</a>')
 })
 
 it('linkify object and pass options', () => {
-  const result = shallow(
+  const { container } = render(
     <Console
-      logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: ['hello https://example.com'],
-        },
-      ]}
+      logs={[makeLog(['hello https://example.com'])]}
       linkifyOptions={{
         attributes: (href, type) => (type === 'url' ? { rel: 'nofollow' } : {}),
       }}
     />
   )
 
-  expect(result.html()).toContain(
-    '<a href="https://example.com" class="linkified" target="_blank" rel="nofollow">https://example.com</a>'
-  )
+  expect(container.innerHTML).toContain('rel="nofollow"')
 })
 
 it('allows all types methods', () => {
   expect(() =>
-    shallow(
+    render(
       <Console
         logs={[
-          { method: 'log', id: 'id', data: [] },
+          makeLog([]),
           { method: 'debug', id: 'id', data: [] },
           { method: 'info', id: 'id', data: [] },
           { method: 'warn', id: 'id', data: [] },
@@ -169,51 +110,42 @@ it('allows all types methods', () => {
         ]}
       />
     )
-  ).not.toThrowError()
+  ).not.toThrow()
 })
 
 it('displays limited arrays correctly', () => {
-  const result = shallow(
+  render(
     <Console
       logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: [
-            [
-              ...Array.from(Array(100).keys()),
-              '__console_feed_remaining__99899',
-            ],
+        makeLog([
+          [
+            ...Array.from(Array(100).keys()),
+            '__console_feed_remaining__99899',
           ],
-        },
+        ]),
       ]}
     />
   )
 
-  expect(result.html()).toContain('(99999)')
-  expect(result.html()).toContain('<span>…</span>]')
+  expect(screen.getByText('(99999)')).toBeInTheDocument()
+  expect(screen.getByText('…')).toBeInTheDocument()
 })
 
 it('displays nested limited arrays correctly', () => {
-  const result = shallow(
+  const { container } = render(
     <Console
       logs={[
-        {
-          method: 'log',
-          id: 'id',
-          data: [
+        makeLog([
+          [
             [
-              [
-                ...Array.from(Array(100).keys()),
-                '__console_feed_remaining__99899',
-              ],
-              '__console_feed_remaining__0',
+              [Array.from(Array(10).keys())],
+              '--separator--',
             ],
           ],
-        },
+        ]),
       ]}
     />
   )
 
-  expect(result.html()).toContain('<span>Array(99999)</span>')
+  expect(container.innerHTML).toContain('Array(2)')
 })

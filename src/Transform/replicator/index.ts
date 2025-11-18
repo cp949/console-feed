@@ -2,14 +2,26 @@
 const TRANSFORMED_TYPE_KEY = '@t'
 const CIRCULAR_REF_KEY = '@r'
 const KEY_REQUIRE_ESCAPING_RE = /^#*@(t|r)$/
+const PROTOTYPE_POLLUTION_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 
 const REMAINING_KEY = '__console_feed_remaining__'
 
-const GLOBAL = (function getGlobal() {
-  // NOTE: see http://www.ecma-international.org/ecma-262/6.0/index.html#sec-performeval step 10
-  const savedEval = eval
+const GLOBAL = (function getGlobal(): any {
+  // Use standard globalThis (ES2020+)
+  if (typeof globalThis !== 'undefined') return globalThis
 
-  return savedEval('this')
+  // Browser environment
+  if (typeof window !== 'undefined') return window
+
+  // Node.js environment (use globalThis in Node 12+)
+  if (typeof self !== 'undefined') return self
+
+  // Fallback for older environments
+  try {
+    return Function('return this')()
+  } catch (e) {
+    return {}
+  }
 })()
 
 const ARRAY_BUFFER_SUPPORTED = typeof ArrayBuffer === 'function'
@@ -107,6 +119,7 @@ class EncodingTransformer {
     let total = 0
     for (const key in obj) {
       if (Reflect.has(obj, key)) {
+        if (PROTOTYPE_POLLUTION_KEYS.has(key)) continue
         if (counter >= this.limit) {
           total++
           continue
@@ -258,15 +271,15 @@ class DecodingTransformer {
     }
 
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        this._handleValue(obj[key], obj, key)
+      if (!obj.hasOwnProperty(key) || PROTOTYPE_POLLUTION_KEYS.has(key)) continue
 
-        if (KEY_REQUIRE_ESCAPING_RE.test(key)) {
-          // NOTE: use intermediate object to avoid unescaped and escaped keys interference
-          // E.g. unescaped "##@t" will be "#@t" which can overwrite escaped "#@t".
-          unescaped[key.substring(1)] = obj[key]
-          delete obj[key]
-        }
+      this._handleValue(obj[key], obj, key)
+
+      if (KEY_REQUIRE_ESCAPING_RE.test(key)) {
+        // NOTE: use intermediate object to avoid unescaped and escaped keys interference
+        // E.g. unescaped "##@t" will be "#@t" which can overwrite escaped "#@t".
+        unescaped[key.substring(1)] = obj[key]
+        delete obj[key]
       }
     }
 

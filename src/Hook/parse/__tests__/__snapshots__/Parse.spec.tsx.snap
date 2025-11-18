@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`asserts values: assertion failed 1`] = `
-Object {
-  "data": Array [
+{
+  "data": [
     "Assertion failed:",
     "console.assert",
   ],
@@ -12,8 +12,8 @@ Object {
 `;
 
 exports[`time non existent label: non existent timer 1`] = `
-Object {
-  "data": Array [
+{
+  "data": [
     "Timer 'nonExistent' does not exist",
   ],
   "id": "timer-fail",

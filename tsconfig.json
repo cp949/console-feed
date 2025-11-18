@@ -2,18 +2,22 @@
   "compilerOptions": {
     "outDir": "lib",
     "module": "commonjs",
-    "target": "es3",
+    "target": "es6",
     "ignoreDeprecations": "5.0",
     "lib": ["es6", "dom", "ES2020.BigInt"],
+    "allowJs": true,
     "inlineSourceMap": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "moduleResolution": "node",
     "rootDir": ".",
     "forceConsistentCasingInFileNames": true,
-    "types": ["jest"],
+    "types": ["jest", "@testing-library/jest-dom"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
-  }
+  },
+  "exclude": ["node_modules", "lib", "coverage"],
+  "include": ["src"]
 }

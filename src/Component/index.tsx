@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ThemeProvider } from 'emotion-theming'
+import { ThemeProvider } from '@emotion/react'
 import { Props } from '../definitions/Component'
 import Styles from './theme/default'
 
@@ -113,7 +113,7 @@ class Console extends React.PureComponent<Props, any> {
             return filtered ? null : (
               <Message
                 log={log}
-                key={log.id || `${log.method}-${i}`}
+                key={`${log.id || `${log.method}-${i}`}-${i}`}
                 linkifyOptions={this.props.linkifyOptions}
                 components={this.props.components}
               />
