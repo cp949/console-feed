@@ -1,0 +1,36 @@
+/* 테마 CSS 변수 정의 */
+
+:root {
+  /* Light Theme (기본) */
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #fff;
+  --bg-header: #242424;
+  --bg-console: #fff;
+  --text-primary: #242424;
+  --text-secondary: #666;
+  --text-inverse: #fff;
+  --border-color: #e0e0e0;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --nav-button-hover: #f5f5f5;
+  --nav-button-active-bg: #242424;
+  --nav-button-active-color: #fff;
+  --accent-color: #4caf50;
+}
+
+[data-theme='dark'] {
+  /* Dark Theme */
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-header: #000;
+  --bg-console: #242424;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-inverse: #fff;
+  --border-color: #404040;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --nav-button-hover: #3a3a3a;
+  --nav-button-active-bg: #000;
+  --nav-button-active-color: #fff;
+  --accent-color: #4caf50;
+}
+

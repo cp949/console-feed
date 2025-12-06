@@ -4,7 +4,7 @@ import Parse from '..'
 it('asserts values', () => {
   expect(Parse('assert', [2 > 1], 'assert-true')).toBe(false)
   expect(Parse('assert', [1 > 2], 'assert-false')).toMatchSnapshot(
-    'assertion failed'
+    'assertion failed',
   )
 })
 
@@ -37,7 +37,7 @@ describe('time', () => {
     setTimeout(() => {
       const result = Parse('timeEnd', ['timer-test'], 'timer-result')
       expect(
-        result && +result.data[0].replace(/[^0-9]/g, '') > 100
+        result && +result.data[0].replace(/[^0-9]/g, '') > 100,
       ).toBeTruthy()
     }, 100)
   })

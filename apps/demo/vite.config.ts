@@ -7,7 +7,10 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@cp949/console-feed': path.resolve(__dirname, '../../packages/console-feed/src'),
+      '@cp949/console-feed': path.resolve(
+        __dirname,
+        '../../packages/console-feed/src',
+      ),
     },
   },
 })

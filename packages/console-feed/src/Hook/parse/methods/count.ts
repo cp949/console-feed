@@ -8,6 +8,6 @@ export function increment(label: string): any {
 
   return {
     method: 'log',
-    data: [`${label}: ${times}`]
+    data: [`${label}: ${times}`],
   }
 }

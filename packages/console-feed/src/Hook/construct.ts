@@ -1,7 +1,7 @@
 const construct = (name: string): any => ({
   constructor: {
-    name
-  }
+    name,
+  },
 })
 
 export default construct

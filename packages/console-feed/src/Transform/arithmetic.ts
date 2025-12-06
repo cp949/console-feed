@@ -21,8 +21,8 @@ export default {
     return value === Infinity
       ? Arithmetic.infinity
       : value === -Infinity
-      ? Arithmetic.minusInfinity
-      : Arithmetic.minusZero
+        ? Arithmetic.minusInfinity
+        : Arithmetic.minusZero
   },
   fromSerializable(data: Arithmetic) {
     if (data === Arithmetic.infinity) return Infinity

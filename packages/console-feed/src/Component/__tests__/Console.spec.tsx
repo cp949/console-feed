@@ -3,11 +3,12 @@ import { render, screen } from '@testing-library/react'
 
 import Console from '..'
 
-const makeLog = (data: any[]) => ({
-  method: 'log',
-  id: 'id',
-  data,
-}) as const
+const makeLog = (data: any[]) =>
+  ({
+    method: 'log',
+    id: 'id',
+    data,
+  }) as const
 
 it('renders', () => {
   render(<Console logs={[makeLog(['my-log'])]} />)
@@ -26,11 +27,13 @@ it('formats messages', () => {
           [2, '__console_feed_remaining__0'],
         ]),
       ]}
-    />
+    />,
   )
 
   expect(container.querySelector('span[style*="color: red;"]')).toBeTruthy()
-  expect(container.querySelector('span[style*="color: rgb(28, 0, 207);"]')).toBeTruthy()
+  expect(
+    container.querySelector('span[style*="color: rgb(28, 0, 207);"]'),
+  ).toBeTruthy()
   expect(screen.getByText(/foo/)).toBeInTheDocument()
 })
 
@@ -49,7 +52,7 @@ it('various data types', () => {
           null,
         ]),
       ]}
-    />
+    />,
   )
 
   expect(screen.getByText('test')).toBeInTheDocument()
@@ -71,9 +74,13 @@ it('displays object names', () => {
 })
 
 it('linkify object', () => {
-  const { container } = render(<Console logs={[makeLog(['hello https://example.com'])]} />)
+  const { container } = render(
+    <Console logs={[makeLog(['hello https://example.com'])]} />,
+  )
 
-  expect(container.innerHTML).toContain('<a href="https://example.com">https://example.com</a>')
+  expect(container.innerHTML).toContain(
+    '<a href="https://example.com">https://example.com</a>',
+  )
 })
 
 it('linkify object and pass options', () => {
@@ -83,7 +90,7 @@ it('linkify object and pass options', () => {
       linkifyOptions={{
         attributes: (href, type) => (type === 'url' ? { rel: 'nofollow' } : {}),
       }}
-    />
+    />,
   )
 
   expect(container.innerHTML).toContain('rel="nofollow"')
@@ -108,8 +115,8 @@ it('allows all types methods', () => {
           { method: 'result', id: 'id', data: [] },
           { method: 'command', id: 'id', data: [] },
         ]}
-      />
-    )
+      />,
+    ),
   ).not.toThrow()
 })
 
@@ -118,13 +125,10 @@ it('displays limited arrays correctly', () => {
     <Console
       logs={[
         makeLog([
-          [
-            ...Array.from(Array(100).keys()),
-            '__console_feed_remaining__99899',
-          ],
+          [...Array.from(Array(100).keys()), '__console_feed_remaining__99899'],
         ]),
       ]}
-    />
+    />,
   )
 
   expect(screen.getByText('(99999)')).toBeInTheDocument()
@@ -134,17 +138,8 @@ it('displays limited arrays correctly', () => {
 it('displays nested limited arrays correctly', () => {
   const { container } = render(
     <Console
-      logs={[
-        makeLog([
-          [
-            [
-              [Array.from(Array(10).keys())],
-              '--separator--',
-            ],
-          ],
-        ]),
-      ]}
-    />
+      logs={[makeLog([[[[Array.from(Array(10).keys())], '--separator--']]])]}
+    />,
   )
 
   expect(container.innerHTML).toContain('Array(2)')

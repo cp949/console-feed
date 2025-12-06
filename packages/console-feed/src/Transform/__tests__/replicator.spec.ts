@@ -3,7 +3,7 @@ import { Decode, Encode } from '../index'
 describe('Prototype pollution prevention', () => {
   it('filters __proto__, constructor, prototype keys', () => {
     const malicious = {
-      '__proto__': { isAdmin: true },
+      __proto__: { isAdmin: true },
       constructor: { prototype: { isAdmin: true } },
       prototype: { hacked: true },
       safe: 'value',

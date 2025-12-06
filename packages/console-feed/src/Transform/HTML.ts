@@ -47,10 +47,10 @@ export default {
       for (let attribute of Object.keys(data.attributes)) {
         try {
           element.setAttribute(attribute, data.attributes[attribute])
-        } catch (e) {}
+        } catch {}
       }
       return element
-    } catch (e) {
+    } catch {
       return data
     }
   },

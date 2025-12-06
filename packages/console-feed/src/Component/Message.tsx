@@ -26,7 +26,7 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
 
   theme = (theme: Theme) => ({
     ...theme,
-    method: this.props.log.method,
+    method: this.props.log.method || 'log',
   })
 
   render() {

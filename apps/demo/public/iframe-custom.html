@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Log Example</title>
+</head>
+<body>
+  <script>
+    // 커스텀 로그 함수 정의
+    // 이 함수는 postMessage를 통해 메인 윈도우로 로그를 전송합니다.
+    function myLog(...args) {
+      window.parent.postMessage(
+        {
+          type: 'customLog',
+          method: 'log',
+          data: args,
+        },
+        window.location.origin
+      )
+    }
+
+    function myWarn(...args) {
+      window.parent.postMessage(
+        {
+          type: 'customLog',
+          method: 'warn',
+          data: args,
+        },
+        window.location.origin
+      )
+    }
+
+    function myError(...args) {
+      window.parent.postMessage(
+        {
+          type: 'customLog',
+          method: 'error',
+          data: args,
+        },
+        window.location.origin
+      )
+    }
+
+    // 예제 실행
+    setTimeout(() => {
+      myLog('커스텀 로그 함수 예제가 시작되었습니다.')
+      myLog('이 메시지는 myLog() 함수를 통해 전송됩니다.')
+      myWarn('경고 메시지 (myWarn 사용)')
+      myError('에러 메시지 (myError 사용)')
+      myLog('객체 예제:', { name: 'custom-log', version: '1.0.0' })
+      myLog('배열 예제:', [1, 2, 3, 4, 5])
+      myLog('URL 예제: https://github.com/cp949/console-feed')
+    }, 500)
+  </script>
+</body>
+</html>
+

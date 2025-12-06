@@ -2,7 +2,11 @@
 const TRANSFORMED_TYPE_KEY = '@t'
 const CIRCULAR_REF_KEY = '@r'
 const KEY_REQUIRE_ESCAPING_RE = /^#*@(t|r)$/
-const PROTOTYPE_POLLUTION_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
+const PROTOTYPE_POLLUTION_KEYS = new Set([
+  '__proto__',
+  'constructor',
+  'prototype',
+])
 
 const REMAINING_KEY = '__console_feed_remaining__'
 
@@ -19,7 +23,7 @@ const GLOBAL = (function getGlobal(): any {
   // Fallback for older environments
   try {
     return Function('return this')()
-  } catch (e) {
+  } catch {
     return {}
   }
 })()
@@ -195,7 +199,7 @@ class EncodingTransformer {
         return this._handleValue(
           () => (e instanceof Error ? e : new Error(e)),
           parent,
-          key
+          key,
         )
       } catch {
         return null
@@ -238,7 +242,7 @@ class EncodingTransformer {
       if (descr.refIdx > 0) {
         references[descr.refIdx] = descr.parent[descr.key]
         descr.parent[descr.key] = EncodingTransformer._createRefMark(
-          descr.refIdx
+          descr.refIdx,
         )
       }
     }
@@ -271,7 +275,8 @@ class DecodingTransformer {
     }
 
     for (const key in obj) {
-      if (!obj.hasOwnProperty(key) || PROTOTYPE_POLLUTION_KEYS.has(key)) continue
+      if (!obj.hasOwnProperty(key) || PROTOTYPE_POLLUTION_KEYS.has(key))
+        continue
 
       this._handleValue(obj[key], obj, key)
 
@@ -311,7 +316,7 @@ class DecodingTransformer {
     const references = this.references
 
     Object.defineProperty(parent, key, {
-      // @ts-ignore
+      // @ts-expect-error - void 0 assignment for undefined
       val: void 0,
       configurable: true,
       enumerable: true,
@@ -568,8 +573,7 @@ const builtInTransforms = [
 
       const kvArr = []
 
-      // @ts-ignore
-      for (let j = 0; j < val.length; j += 2) kvArr.push([val[i], val[i + 1]])
+      for (let j = 0; j < val.length; j += 2) kvArr.push([val[j], val[j + 1]])
 
       return kvArr
     },
@@ -627,7 +631,7 @@ class Replicator {
     for (const transform of transforms) {
       if (this.transformsMap[transform.type])
         throw new Error(
-          `Transform with type "${transform.type}" was already added.`
+          `Transform with type "${transform.type}" was already added.`,
         )
 
       this.transforms.push(transform)

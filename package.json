@@ -7,15 +7,29 @@
     "test": "turbo run test",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "clean": "./clean.sh",
-    "publish": "cd packages/console-feed && pnpm publish"
+    "publish": "cd packages/console-feed && pnpm publish",
+    "test:compat": "bash packages/console-feed/scripts/test-react-compat.sh both",
+    "test:react18": "bash packages/console-feed/scripts/test-react-compat.sh 18",
+    "test:react19": "bash packages/console-feed/scripts/test-react-compat.sh 19"
   },
   "devDependencies": {
-    "turbo": "^2.6.1"
+    "@eslint/js": "^9.39.1",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
+    "prettier": "^3.7.4",
+    "turbo": "^2.6.3"
   },
   "engines": {
     "node": ">=20",
     "pnpm": ">=9"
   },
-  "packageManager": "pnpm@10.22.0"
+  "packageManager": "pnpm@10.24.0"
 }

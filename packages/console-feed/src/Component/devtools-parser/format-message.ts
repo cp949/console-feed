@@ -15,7 +15,7 @@ function createAppend(s: string) {
 export default function formatWithSubstitutionString(
   format: any,
   parameters: any,
-  formattedResult: any
+  formattedResult: any,
 ) {
   const formatters: any = {}
 
@@ -64,7 +64,7 @@ export default function formatWithSubstitutionString(
       '-webkit-font',
       '-webkit-margin',
       '-webkit-padding',
-      '-webkit-text'
+      '-webkit-text',
     ]
     for (let i = 0; i < prefixes.length; i++) {
       if (property.startsWith(prefixes[i])) return true
@@ -113,6 +113,6 @@ export default function formatWithSubstitutionString(
     parameters,
     formatters,
     formattedResult,
-    append
+    append,
   )
 }

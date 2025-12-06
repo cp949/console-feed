@@ -41,7 +41,7 @@ const getArrayLength = (array: Array<any>) => {
     return array.length
   } else {
     const remaining = parseInt(
-      array[array.length - 1].toString().split(REMAINING_KEY)[1]
+      array[array.length - 1].toString().split(REMAINING_KEY)[1],
     )
 
     return array.length - 1 + remaining

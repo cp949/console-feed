@@ -8,7 +8,6 @@ import {
 import Methods from '../definitions/Methods'
 
 import Parse from './parse'
-import Unhook from '../Unhook'
 import { Encode } from '../Transform'
 // import Construct from './construct'
 
@@ -23,7 +22,7 @@ export default function Hook(
   console: Console,
   callback: Callback,
   encode = true,
-  limit = DEFAULT_LIMIT
+  limit = DEFAULT_LIMIT,
 ) {
   const TargetConsole = console as HookedConsole
   const Storage: Storage = {

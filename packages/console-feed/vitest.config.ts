@@ -15,10 +15,10 @@ export default defineConfig({
         'coverage',
         '**/*.d.ts',
         '**/*.spec.{ts,tsx,js}',
-        '**/scripts/**'
-      ]
+        '**/scripts/**',
+      ],
     },
     testTimeout: 10000,
-    hookTimeout: 10000
-  }
+    hookTimeout: 10000,
+  },
 })

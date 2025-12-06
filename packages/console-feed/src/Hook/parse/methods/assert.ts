@@ -6,6 +6,6 @@ export function test(expression: any, ...messages: any[]): any {
 
   return {
     method: 'error',
-    data: [`Assertion failed:`, ...messages]
+    data: [`Assertion failed:`, ...messages],
   }
 }

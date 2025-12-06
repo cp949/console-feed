@@ -1,0 +1,22 @@
+/* 예제 컴포넌트 공통 스타일 */
+
+.consoleContainer {
+  background-color: var(--bg-console);
+  padding: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.infoBox {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.infoText {
+  margin: 0;
+  color: var(--text-secondary);
+}
+

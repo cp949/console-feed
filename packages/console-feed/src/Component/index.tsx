@@ -68,17 +68,16 @@ class Console extends React.PureComponent<Props, any> {
         : (log) => {
             try {
               return regex.test(customStringify(log))
-            } catch (e) {
+            } catch {
               return true
             }
           }
 
-      // @ts-ignore
+      // @ts-expect-error - filter function type compatibility
       logs = logs.filter(filterFun)
     }
 
     if (logGrouping) {
-      // @ts-ignore
       logs = logs.reduce((acc, log) => {
         const prevLog = acc[acc.length - 1]
 

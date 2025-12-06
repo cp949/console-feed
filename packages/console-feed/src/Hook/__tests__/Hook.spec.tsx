@@ -70,7 +70,7 @@ it('disables encoding with a flag', async () => {
     (log) => {
       console.logs.push(log)
     },
-    false
+    false,
   )
   const input = {
     function: function myFunc() {},
@@ -92,7 +92,7 @@ it('correctly limits a long array', async () => {
       console.logs.push(log)
     },
     true,
-    100
+    100,
   )
   const result = await Log('log', Array.from(Array(99999).keys()))
   expect(result[0].data[0].length).toEqual(101)
@@ -106,7 +106,7 @@ it('correctly limits a long object', async () => {
       console.logs.push(log)
     },
     true,
-    100
+    100,
   )
   const result = await Log('log', { ...Array.from(Array(99999).keys()) })
   expect(Object.keys(result[0].data[0]).length).toEqual(101)

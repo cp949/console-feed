@@ -32,7 +32,7 @@ export default {
     let obj = { ...body }
 
     if (typeof data.proto === 'string') {
-      // @ts-ignore
+      // @ts-expect-error - constructor assignment for Map transformation
       obj.constructor = {
         name: data.proto,
       }

@@ -1,0 +1,91 @@
+name: React Compatibility Tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test-react-compatibility:
+    name: Test React ${{ matrix.react-version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        react-version: ['18', '19']
+        include:
+          - react-version: '18'
+            react: '^18.3.1'
+            react-dom: '^18.3.1'
+            types-react: '^18.0.0'
+            types-react-dom: '^18.0.0'
+          - react-version: '19'
+            react: '^19.2.1'
+            react-dom: '^19.2.1'
+            types-react: '^19.0.0'
+            types-react-dom: '^19.0.0'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install React ${{ matrix.react-version }}
+        working-directory: packages/console-feed
+        run: |
+          pnpm add -D \
+            react@${{ matrix.react }} \
+            react-dom@${{ matrix.react-dom }} \
+            @types/react@${{ matrix.types-react }} \
+            @types/react-dom@${{ matrix.types-react-dom }}
+
+      - name: Verify React version
+        working-directory: packages/console-feed
+        run: |
+          echo "Installed React version:"
+          pnpm list react react-dom
+
+      - name: Build
+        working-directory: packages/console-feed
+        run: pnpm build
+
+      - name: Run tests
+        working-directory: packages/console-feed
+        run: pnpm test
+
+      - name: Build demo (React ${{ matrix.react-version }} only)
+        if: matrix.react-version == '19'
+        working-directory: apps/demo
+        run: pnpm build
+
+  test-summary:
+    name: React Compatibility Summary
+    needs: test-react-compatibility
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.test-react-compatibility.result }}" == "success" ]; then
+            echo "✅ All React compatibility tests passed!"
+            echo "Tested: React 18 & React 19"
+          else
+            echo "❌ Some tests failed"
+            exit 1
+          fi

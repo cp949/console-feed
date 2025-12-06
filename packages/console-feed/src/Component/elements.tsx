@@ -7,11 +7,13 @@ import styled from './theme'
  */
 const Themed = (
   style: string,
-  method: string,
-  styles: { [name: string]: string }
+  method: string | undefined,
+  styles: { [name: string]: string },
 ) =>
-  styles[`LOG_${method.toUpperCase()}_${style.toUpperCase()}`] ||
-  styles[`LOG_${style.toUpperCase()}`]
+  method
+    ? styles[`LOG_${method.toUpperCase()}_${style.toUpperCase()}`] ||
+      styles[`LOG_${style.toUpperCase()}`]
+    : styles[`LOG_${style.toUpperCase()}`]
 
 /**
  * console-feed
@@ -32,7 +34,7 @@ export const Message = styled('div')(({ theme: { styles, method } }) => ({
   borderTop: `1px solid ${Themed('border', method, styles)}`,
   borderBottom: `1px solid ${Themed('border', method, styles)}`,
   marginTop: -1,
-  marginBottom: +/^warn|error$/.test(method),
+  marginBottom: method ? +/^warn|error$/.test(method) : 0,
   padding: styles.PADDING,
   boxSizing: 'border-box',
   '& *': {
@@ -87,7 +89,7 @@ export const AmountIcon = styled('div')(({ theme: { styles, method } }) => ({
 /**
  * timestamp
  */
-export const Timestamp = styled('div')(({ theme: { styles, method } }) => ({
+export const Timestamp = styled('div')((_theme) => ({
   marginLeft: 5,
   color: 'dimgray',
 }))
@@ -95,7 +97,7 @@ export const Timestamp = styled('div')(({ theme: { styles, method } }) => ({
 /**
  * console-content
  */
-export const Content = styled('div')(({ theme: { styles } }) => ({
+export const Content = styled('div')((_theme) => ({
   clear: 'right',
   position: 'relative',
   marginLeft: 15,

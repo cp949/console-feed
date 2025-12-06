@@ -19,7 +19,7 @@ export default {
       body = func
         .toString()
         .substring(body.indexOf('{') + 1, body.lastIndexOf('}'))
-    } catch (e) {}
+    } catch {}
 
     return {
       name: func.name,
@@ -46,14 +46,14 @@ export default {
       }
 
       if (typeof data.proto === 'string') {
-        // @ts-ignore
+        // @ts-expect-error - constructor assignment for function transformation
         tempFunc.constructor = {
           name: data.proto,
         }
       }
 
       return tempFunc
-    } catch (e) {
+    } catch {
       return data
     }
   },

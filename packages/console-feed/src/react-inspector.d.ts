@@ -1,5 +1,5 @@
 declare module 'react-inspector' {
-  import { FC, ComponentProps } from 'react'
+  import { FC } from 'react'
 
   export interface Theme {
     BASE_FONT_FAMILY: string

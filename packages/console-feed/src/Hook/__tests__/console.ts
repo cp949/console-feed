@@ -8,10 +8,10 @@ interface Console extends HookedConsole {
 declare const console: Console
 console.logs = []
 ;['log', 'warn', 'info', 'error', 'debug', 'assert', 'time', 'timeEnd'].forEach(
-  method => {
+  (method) => {
     console[`$${method}`] = console[method]
     console[method] = () => {}
-  }
+  },
 )
 
 export default console

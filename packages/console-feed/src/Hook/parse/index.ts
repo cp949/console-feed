@@ -14,7 +14,7 @@ import * as Assert from './methods/assert'
 function Parse(
   method: Methods,
   data: any[],
-  staticID?: string
+  staticID?: string,
 ): Payload | false {
   // Create an ID
   const id = staticID || GUID()
@@ -24,7 +24,7 @@ function Parse(
     case 'clear': {
       return {
         method,
-        id
+        id,
       }
     }
 
@@ -34,7 +34,7 @@ function Parse(
 
       return {
         ...Count.increment(label),
-        id
+        id,
       }
     }
 
@@ -50,7 +50,7 @@ function Parse(
 
       return {
         ...Timing.stop(label),
-        id
+        id,
       }
     }
 
@@ -62,7 +62,7 @@ function Parse(
         if (assertion) {
           return {
             ...assertion,
-            id
+            id,
           }
         }
       }
@@ -71,10 +71,10 @@ function Parse(
     }
 
     case 'error': {
-      const errors = data.map(error => {
+      const errors = data.map((error) => {
         try {
           return error.stack || error
-        } catch (e) {
+        } catch {
           return error
         }
       })
@@ -82,7 +82,7 @@ function Parse(
       return {
         method,
         id,
-        data: errors
+        data: errors,
       }
     }
 
@@ -90,7 +90,7 @@ function Parse(
       return {
         method,
         id,
-        data
+        data,
       }
     }
   }

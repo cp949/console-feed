@@ -2,96 +2,79 @@
 
 [한국어](README.ko.md) | English
 
-A React component that captures and displays browser console output in a user interface. Works with React 18+ apps and is sanitized for both browser and server environments.
+A React component that captures and displays browser console output in a user interface. Supports React 18 and 19.
 
-This is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security improvements and updated dependencies.
+This is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security vulnerability fixes.
 
 ## Installation
 
 ```sh
-pnpm add @cp949/console-feed
-# or
-yarn add @cp949/console-feed
-# or
 npm install @cp949/console-feed
 ```
 
 Package info: https://www.npmjs.com/package/@cp949/console-feed
 
-## Changes from Original Repository
+## Changes
 
-### Security Improvements
-- Upgraded react-inspector to 9.0.0 (removed @babel/runtime vulnerabilities)
-- Migrated Jest → Vitest 4.0.10 (fundamentally resolved test dependency vulnerabilities)
-- Added prototype pollution defense (`__proto__`, `constructor`, `prototype` key blocking)
-- Applied DOM purification via isomorphic-dompurify
-- Added DoS attack prevention through serialization depth limits
+### Security Vulnerability Fixes
 
-### Updated Dependencies
-- Applied TypeScript 5.9.3 (compilation target: ES3 → ES6)
-- React 18+ support (React Native not supported)
+- react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
+- Jest → Vitest 4.0.10 migration: resolved 22 dependency chain vulnerabilities
+- Prototype pollution defense: `__proto__`, `constructor`, `prototype` key filtering
+- DOM sanitization: isomorphic-dompurify applied
+- Serialization depth limits added
+
+### Dependency Updates
+
+- TypeScript 5.9.3
+- React 18, 19 support
 - Node 20+ baseline
-- Migrated Jest → Vitest 4.0.10 (faster test execution, clean dependency tree)
-
-### Project Structure
-- Converted to Turborepo monorepo structure
-- pnpm workspace-based dependency management
-- Separated library (`packages/console-feed`) and demo app (`apps/demo`)
-- Optimized build performance with Turborepo caching
-
-### Other Improvements
-- Improved link handling via `linkify-html`/`linkify-react`
-- Theme system based on `@emotion/react`
-- Republished as `@cp949` scoped package
+- Vitest 4.0.10
 
 ## Features
 
-- Styled console entries with color substitution and clickable links
-- Renders DOM nodes, tables, and various console methods (`log`, `warn`, `debug`, `table`, etc.)
-- Serialization that safely converts functions, circular structures, and DOM references
-- Filtering, search, and log grouping capabilities
+- Styled console entries (color substitution, clickable links)
+- Renders DOM nodes, tables, various console methods
+- Serialization (functions, circular structures, DOM references)
+- Filtering and search
+- Error stack trace display
+- Performance measurement (`console.time`/`timeEnd` support)
+- Dark/light theme support
 
 ## Basic Usage
-
-Class component:
-
-```tsx
-import React from 'react'
-import { Hook, Console, Decode } from '@cp949/console-feed'
-
-class App extends React.Component {
-  state = { logs: [] }
-
-  componentDidMount() {
-    Hook(window.console, (log) => {
-      this.setState(({ logs }) => ({ logs: [...logs, Decode(log)] }))
-    })
-
-    console.log('Hello world!')
-  }
-
-  render() {
-    return <Console logs={this.state.logs} variant="dark" />
-  }
-}
-```
 
 Function component (Hooks):
 
 ```tsx
 import React, { useState, useEffect } from 'react'
-import { Console, Hook, Unhook } from '@cp949/console-feed'
+import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
+import type { Message } from '@cp949/console-feed/src/definitions/Component'
 
 const LogsContainer = () => {
-  const [logs, setLogs] = useState([])
+  const [logs, setLogs] = useState<Message[]>([])
 
   useEffect(() => {
-    const hooked = Hook(
+    const hookedConsole = Hook(
       window.console,
-      (log) => setLogs((current) => [...current, log]),
-      false
+      (encoded, message) => {
+        // When encode is true: encoded is a serialized message, so Decode is required
+        // When encode is false: encoded is a parsed message, but using Decode is safe
+        const decoded = Decode(encoded)
+        const logMessage: Message = {
+          ...decoded,
+          id: `log-${Date.now()}-${Math.random()}`,
+          data: decoded.data || [],
+        }
+        setLogs((prevLogs) => [...prevLogs, logMessage])
+      },
+      true, // encode: true - serialization for network transfer
+      100, // limit: 100 - serialization depth limit
     )
-    return () => Unhook(hooked)
+
+    // Cleanup: Unhook when component unmounts
+    return () => {
+      Unhook(hookedConsole)
+    }
   }, [])
 
   return <Console logs={logs} variant="dark" />
@@ -102,32 +85,65 @@ const LogsContainer = () => {
 
 ### Console Component
 
-Props:
-- `logs`: Array of log messages
-- `filter`: Log filtering function
-- `searchKeywords`: Search keywords
-- `linkifyOptions`: Link handling options
-- `variant`: Theme (`"dark"` | `"light"`)
+A React component that displays log messages.
+
+**Props:**
+
+- `logs`: Array of log messages (`Message[]`) - **Required**
+- `variant?`: Theme (`"dark"` | `"light"`, default: `"dark"`)
+- `styles?`: Custom style object
+- `filter?`: Method filter array (`Methods[]`) - Display only specified methods
+- `searchKeywords?`: Search keyword string - Regex search in log content
+- `logFilter?`: Log filtering function - Custom filtering logic when used with `searchKeywords`
+- `logGrouping?`: Enable log grouping (default: `true`) - Group identical logs and display with `amount`
+- `linkifyOptions?`: linkifyjs options object - URL link handling options
+- `components?`: Component override object - Replace with custom components
 
 ### Hook Function
 
-Wraps `window.console` or a console-like object to capture logs. Serializes entries with `Encode` and passes them to the callback.
+Wraps `window.console` or a console-like object to capture logs.
 
 ```tsx
 Hook(
   console: Console,
-  callback: (log: EncodedLog) => void,
-  encode?: boolean
+  callback: (encoded: Message, message: Payload) => void,
+  encode?: boolean,  // Default: true
+  limit?: number     // Default: 100 (serialization depth limit)
 ): HookedConsole
 ```
 
+**Parameters:**
+
+- `console`: Console object to hook
+- `callback`: Callback function called when a log is captured
+  - `encoded`: Log message (first argument)
+    - When `encode` is `true`: Serialized message (suitable for network transfer/storage)
+    - When `encode` is `false`: Parsed message (not serialized, for use in the same memory space)
+  - `message`: Parsed message (second argument, always non-serialized parsed result)
+- `encode`: Whether to serialize logs (default: `true`)
+  - `true`: Serialize parsed messages for network transfer or localStorage storage
+  - `false`: Use parsed messages without serialization (more efficient when used in the same memory space)
+- `limit`: Serialization depth limit (default: `100`, only applies when `encode` is `true`)
+
+**Return Value:**
+
+- `HookedConsole`: Hooked Console object (can be passed to Unhook)
+
 ### Unhook Function
 
-Restores a console wrapped by Hook to its original state.
+Restores a console wrapped by Hook to its original state. Must be called when the component unmounts.
 
 ```tsx
-Unhook(hookedConsole: HookedConsole): void
+Unhook(hookedConsole: HookedConsole): boolean
 ```
+
+**Parameters:**
+
+- `hookedConsole`: Console object wrapped by Hook
+
+**Return Value:**
+
+- `boolean`: Success status (`true`: success, `false`: failure)
 
 ### Encode / Decode Functions
 
@@ -138,9 +154,161 @@ Encode<T>(data: any, limit?: number): T
 Decode(data: any): Message
 ```
 
-## Development
+**Encode:**
 
-This project is structured as a Turborepo monorepo.
+- Converts log objects into JSON-serializable format
+- Safely converts functions, circular references, DOM nodes, etc.
+- `limit`: Serialization depth limit (default: 100)
+- **Return Value**: Flat object structure that can be serialized to JSON
+  - Complex types (functions, DOM nodes, etc.) from the original object are converted with special type markers
+  - Can be safely serialized with `JSON.stringify()`
+  - Suitable for network transfer, localStorage storage, etc.
+
+**Decode:**
+
+- Deserializes serialized logs into `Message` objects
+- Returns a complete log object including the `method` property
+- **Important**:
+  - When `encode` is `true`: The first argument (`encoded`) of the callback is a serialized message, so `Decode` must be called
+  - When `encode` is `false`: The first argument (`encoded`) of the callback is a parsed message, but calling `Decode` is recommended for safe usage
+
+**Usage Example:**
+
+```tsx
+import { Encode, Decode } from '@cp949/console-feed'
+
+// 1. Create log message
+const logMessage = {
+  method: 'log' as const,
+  data: [
+    'Hello World',
+    { name: 'console-feed', version: '3.6.5' },
+    [1, 2, 3],
+  ],
+  timestamp: new Date().toISOString(),
+}
+
+// 2. Encode: Serialize for network transfer
+const encoded = Encode(logMessage, 100)
+// encoded is an object that can be serialized with JSON.stringify()
+// Example: { method: 'log', data: [...], timestamp: '...' }
+
+// 3. Simulate network transfer (convert to JSON)
+const jsonString = JSON.stringify(encoded)
+// Can be stored in localStorage or sent over network
+
+// 4. Parse JSON on receiving side
+const received = JSON.parse(jsonString)
+
+// 5. Decode: Deserialize to restore original form
+const decoded = Decode(received)
+// decoded is a complete log object of type Message
+// { method: 'log', data: [...], timestamp: '...' }
+
+// 6. Pass to Console component
+<Console logs={[decoded]} variant="dark" />
+```
+
+**Real-world Usage Scenario:**
+
+```tsx
+// Send log to server
+const sendLogToServer = (log: Message) => {
+  const encoded = Encode(log, 100)
+  fetch('/api/logs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(encoded), // Can be safely serialized
+  })
+}
+
+// Display logs received from server
+const receiveLogFromServer = async () => {
+  const response = await fetch('/api/logs')
+  const encodedLogs = await response.json()
+
+  const decodedLogs = encodedLogs.map((encoded: any) => Decode(encoded))
+  setLogs(decodedLogs)
+}
+```
+
+## Capturing Logs from iframe
+
+You can display console methods like `console.log()`, `console.error()` executed inside an iframe in the main window's console-feed.
+
+**Simple Method:**
+
+After the iframe loads, hook the iframe's `contentWindow.console`.
+
+```tsx
+import React, { useState, useEffect, useRef } from 'react'
+import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
+import type { Message } from '@cp949/console-feed/src/definitions/Component'
+import type { HookedConsole } from '@cp949/console-feed/src/definitions/Console'
+
+const IframeLogsContainer = () => {
+  const [logs, setLogs] = useState<Message[]>([])
+  const iframeRef = useRef<HTMLIFrameElement | null>(null)
+
+  useEffect(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+
+    let hookedConsole: HookedConsole | null = null
+
+    // Wait for iframe to load
+    const handleLoad = () => {
+      if (!iframe.contentWindow) {
+        console.error('iframe contentWindow is not available')
+        return
+      }
+
+      // Hook iframe's console
+      const iframeConsole = iframe.contentWindow.console
+      hookedConsole = Hook(
+        iframeConsole,
+        (encoded, message) => {
+          // encode is true, so use Decode to decode the log (required!)
+          const decoded = Decode(encoded)
+          const logMessage: Message = {
+            ...decoded,
+            id: `log-${Date.now()}-${Math.random()}`,
+            data: decoded.data || [],
+          }
+          setLogs((prevLogs) => [...prevLogs, logMessage])
+        },
+        true, // encode: true
+        100, // limit: 100
+      )
+    }
+
+    iframe.addEventListener('load', handleLoad)
+
+    // Cleanup: Clean up when component unmounts
+    return () => {
+      if (hookedConsole && iframe.contentWindow) {
+        Unhook(hookedConsole)
+      }
+      iframe.removeEventListener('load', handleLoad)
+    }
+  }, [])
+
+  return (
+    <div>
+      <iframe ref={iframeRef} src="./your-iframe.html" />
+      <Console logs={logs} variant="dark" />
+    </div>
+  )
+}
+```
+
+**Notes:**
+
+- Console must be hooked after the iframe loads (`load` event)
+- The iframe and main window must be same-origin to access `contentWindow.console`
+- Must call `Unhook` when the component unmounts to clean up
+
+## Development
 
 ### Project Structure
 
@@ -181,13 +349,24 @@ pnpm --filter demo dev                      # Run demo app only
 pnpm --filter @cp949/console-feed test     # Test library
 ```
 
-### Turborepo Caching
+### React 18/19 Compatibility Testing
 
-Turborepo automatically caches build results. Unchanged packages skip rebuilding, significantly reducing build time.
+```bash
+# Test both React 18 and 19
+pnpm test:compat
+
+# Test React 18 only
+pnpm test:react18
+
+# Test React 19 only
+pnpm test:react19
+```
+
+Script: `packages/console-feed/scripts/test-react-compat.sh`
 
 ## Release
 
-Only the library package (`@cp949/console-feed`) is published to npm. The demo app is set to `private: true`.
+Only the library package (`@cp949/console-feed`) is published to npm.
 
 ```bash
 # 1. Verify all tests and builds
@@ -209,60 +388,34 @@ git push
 pnpm publish
 ```
 
-Scoped packages are configured with public access by default via `publishConfig`.
-
 ## Security
 
-### Current Status (2025-11-18)
+- `pnpm audit`: 0 vulnerabilities
+- Tests: 28/28 passing
 
-`pnpm audit` result: 0 vulnerabilities
+Resolved vulnerabilities:
 
-Key dependency versions:
-- TypeScript 5.9.3
-- Vitest 4.0.10
-- react-inspector 9.0.0
+- @babel/runtime (Moderate, 2 issues): removed via react-inspector 9.0.0 upgrade
+- Jest dependencies (22 issues): eliminated via Vitest 4.0.10 migration
 
-All tests passing (28/28)
+Security mechanisms:
 
-### Resolved Vulnerabilities
+- Prototype pollution defense
+- DOM sanitization (isomorphic-dompurify)
+- Serialization depth limits
+- Input filtering
 
-1. @babel/runtime vulnerabilities (Moderate, 2 issues)
-   - Action: Removed dependency via react-inspector 9.0.0 upgrade
-   - Result: react-inspector 9.x does not use @babel/runtime
-
-2. Jest-related vulnerabilities (brace-expansion, glob, minimatch - total 22 issues)
-   - Cause: Jest → babel-plugin-istanbul → test-exclude dependency chain
-   - Action: Fundamentally resolved via Jest → Vitest 4.0.10 migration
-   - Result: Clean dependency tree, no need for yarn resolutions, faster test execution
-
-### Applied Security Mechanisms
-
-- Prototype pollution defense: Blocking `__proto__`, `constructor`, `prototype` key access
-- DOM purification: XSS defense via isomorphic-dompurify
-- Encode limits: DoS defense through serialization depth limits
-- Sanitized parsing: Malicious input filtering during log parsing
-
-### Security Verification
-
-Automated security checks can be performed via verification scripts:
+Verification scripts:
 
 ```bash
+# Run from packages/console-feed directory
 cd packages/console-feed
-./scripts/security-test.sh    # Run security tests
-./scripts/verify-all.sh        # Integrated verification (tests, build, security checks)
+./scripts/security-test.sh
+./scripts/verify-all.sh
 ```
 
-### Package Management
-
-**Turborepo + pnpm workspace**: Clearly separates library and demo app dependencies in a monorepo structure.
-
-**pnpm advantages**:
-- Prevents phantom dependency issues through strict dependency management
-- Efficient disk space usage via hard-link approach
-- Optimized integration with Turborepo
-
-**Vitest 4.0.10**: Has a clean dependency tree, eliminating the need for separate resolutions.
+**Note**: The above scripts are from the original repository and may not be used in the current project.
 
 ## License
 
-Follows the original repository's license.
+MIT
