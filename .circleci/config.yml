@@ -19,21 +19,25 @@ jobs:
     steps:
       - checkout
 
+      # Setup pnpm
+      - run: npm install -g pnpm@10.24.0
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-{{ checksum "pnpm-lock.yaml" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: yarn install
+      - run: pnpm install
 
-      - run: yarn build
+      - run: pnpm build
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - .pnpm-store
+          key: v1-dependencies-{{ checksum "pnpm-lock.yaml" }}
 
       # run tests!
-      - run: yarn test
+      - run: pnpm test
