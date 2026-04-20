@@ -106,7 +106,7 @@ pnpm test:react19
 - **패키지 관리**: pnpm workspace
 - **언어**: TypeScript 5.9.3
 - **테스트**: Vitest 4.0.10
-- **코드 품질**: ESLint 9, Prettier
+- **코드 품질**: Biome
 - **React 지원**: 18, 19
 
 ## 주요 변경사항 (원본 대비)
@@ -123,7 +123,7 @@ pnpm test:react19
 
 - Turborepo 도입으로 빌드/테스트 파이프라인 최적화
 - pnpm workspace로 의존성 관리 효율화
-- ESLint 9 Flat Config 마이그레이션
+- Biome 기반 lint/format 워크플로우
 - React 18/19 호환성 자동 테스트
 
 ## 보안 상태

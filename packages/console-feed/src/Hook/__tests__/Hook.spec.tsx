@@ -41,7 +41,9 @@ it('correctly encodes a HTMLElement', async () => {
 
 it('correctly encodes Functions', async () => {
   // prettier-ignore
-  const result = await Log('error', function myFunc() { /* body */ })
+  const result = await Log('error', function myFunc() {
+    /* body */
+  })
 
   const decoded = Decode(result)
   expect(decoded.method).toEqual('error')
