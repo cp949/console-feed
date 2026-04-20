@@ -6,6 +6,8 @@
 
 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
 
+현재 배포 준비된 버전은 `3.6.6`입니다.
+
 ## 설치
 
 ```sh
@@ -182,7 +184,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.6.5' },
+    { name: 'console-feed', version: '3.6.6' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),

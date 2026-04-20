@@ -10,6 +10,8 @@ This repository is a monorepo that manages the `@cp949/console-feed` library and
 
 This repository is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security vulnerability fixes.
 
+Current package release prepared in this repository: `@cp949/console-feed@3.6.6`
+
 ## Project Structure
 
 ```
@@ -130,6 +132,7 @@ pnpm test:react19
 
 - `pnpm audit`: 0 vulnerabilities
 - Tests: 28/28 passing
+- Audit notes: [docs/audit/20260420/README.md](docs/audit/20260420/README.md)
 
 Resolved vulnerabilities:
 
