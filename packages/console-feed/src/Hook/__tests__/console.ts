@@ -5,13 +5,14 @@ interface Console extends HookedConsole {
   $log: Function
 }
 
-declare const console: Console
-console.logs = []
+const hookedConsole = globalThis.console as Console
+
+hookedConsole.logs = []
 ;['log', 'warn', 'info', 'error', 'debug', 'assert', 'time', 'timeEnd'].forEach(
   (method) => {
-    console[`$${method}`] = console[method]
-    console[method] = () => {}
+    hookedConsole[`$${method}`] = hookedConsole[method]
+    hookedConsole[method] = () => {}
   },
 )
 
-export default console
+export default hookedConsole

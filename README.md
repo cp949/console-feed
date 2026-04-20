@@ -105,7 +105,7 @@ pnpm test:react19
 - **Build System**: Turborepo
 - **Package Manager**: pnpm workspace
 - **Language**: TypeScript 5.9.3
-- **Testing**: Vitest 4.0.10
+- **Testing**: Vitest 4.1.4
 - **Code Quality**: Biome
 - **React Support**: 18, 19
 
@@ -114,7 +114,7 @@ pnpm test:react19
 ### Security Vulnerability Fixes
 
 - react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
-- Jest → Vitest 4.0.10 migration: resolved 22 dependency chain vulnerabilities
+- Jest → Vitest 4.1.4 migration: resolved 22 dependency chain vulnerabilities
 - Prototype pollution defense: `__proto__`, `constructor`, `prototype` key filtering
 - DOM sanitization: isomorphic-dompurify applied
 - Serialization depth limits added
@@ -134,7 +134,7 @@ pnpm test:react19
 Resolved vulnerabilities:
 
 - @babel/runtime (Moderate, 2 issues): removed via react-inspector 9.0.0 upgrade
-- Jest dependencies (22 issues): eliminated via Vitest 4.0.10 migration
+- Jest dependencies (22 issues): eliminated via Vitest 4.1.4 migration
 
 ## Release Process
 

@@ -1,4 +1,3 @@
-import * as _ from 'lodash'
 import Parse from '..'
 
 it('asserts values', () => {
@@ -12,9 +11,9 @@ describe('count', () => {
   it('counts with label', () => {
     let final
 
-    _.times(10, () => {
+    for (let i = 0; i < 10; i += 1) {
       final = Parse('count', ['count-10'])
-    })
+    }
 
     expect(final && final.data[0]).toBe('count-10: 10')
   })
@@ -22,9 +21,9 @@ describe('count', () => {
   it('counts with default label', () => {
     let final
 
-    _.times(10, () => {
+    for (let i = 0; i < 10; i += 1) {
       final = Parse('count', [])
-    })
+    }
 
     expect(final && final.data[0]).toBe('default: 10')
   })

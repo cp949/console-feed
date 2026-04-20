@@ -1,6 +1,6 @@
 {
   "name": "@cp949/console-feed",
-  "version": "3.6.5",
+  "version": "3.6.6",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "description": "A React component that displays console logs from the current page, an iframe or transported across a server",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "isomorphic-dompurify": "^2.33.0",
+    "isomorphic-dompurify": "^3.9.0",
     "linkify-html": "^4.3.2",
     "linkify-react": "^4.3.2",
     "linkifyjs": "^4.3.2",
@@ -33,10 +33,9 @@
     "@testing-library/react": "^16.3.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vitest/ui": "^4.0.15",
-    "lodash": "^4.17.21",
+    "@vitest/ui": "^4.1.4",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15"
+    "vitest": "^4.1.4"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
