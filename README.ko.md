@@ -10,7 +10,7 @@
 
 이 저장소는 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
 
-이 저장소에서 배포 준비된 현재 패키지 버전은 `@cp949/console-feed@3.6.6`입니다.
+이 저장소에서 배포 준비된 현재 패키지 버전은 `@cp949/console-feed@3.6.7`입니다.
 
 ## 프로젝트 구조
 

@@ -10,7 +10,7 @@ This repository is a monorepo that manages the `@cp949/console-feed` library and
 
 This repository is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security vulnerability fixes.
 
-Current package release prepared in this repository: `@cp949/console-feed@3.6.6`
+Current package release prepared in this repository: `@cp949/console-feed@3.6.7`
 
 ## Project Structure
 
