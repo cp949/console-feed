@@ -3,6 +3,29 @@
   "version": "3.6.6",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./component": {
+      "types": "./dist/Component/index.d.ts",
+      "default": "./dist/Component/index.js"
+    },
+    "./hook": {
+      "types": "./dist/Hook/index.d.ts",
+      "default": "./dist/Hook/index.js"
+    },
+    "./unhook": {
+      "types": "./dist/Unhook/index.d.ts",
+      "default": "./dist/Unhook/index.js"
+    },
+    "./transform": {
+      "types": "./dist/Transform/index.d.ts",
+      "default": "./dist/Transform/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "description": "A React component that displays console logs from the current page, an iframe or transported across a server",
   "scripts": {
     "build": "tsc -p ./tsconfig.build.json --declaration && for file in src/**/*.d.ts; do dest=\"dist/${file#src/}\"; mkdir -p \"$(dirname \"$dest\")\"; cp \"$file\" \"$dest\"; done",

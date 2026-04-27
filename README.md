@@ -47,6 +47,14 @@ Install the package:
 npm install @cp949/console-feed
 ```
 
+The package root keeps the existing public API. Non-UI utilities are also available through stable subpaths:
+
+```tsx
+import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
+import HookOnly from '@cp949/console-feed/hook'
+import { Decode as DecodeOnly } from '@cp949/console-feed/transform'
+```
+
 See the [package README](packages/console-feed/README.md) for usage documentation.
 
 ### For Developers
@@ -131,7 +139,7 @@ pnpm test:react19
 ## Security Status
 
 - `pnpm audit`: 0 vulnerabilities
-- Tests: 28/28 passing
+- Tests: 29/29 passing
 - Audit notes: [docs/audit/20260420/README.md](docs/audit/20260420/README.md)
 
 Resolved vulnerabilities:

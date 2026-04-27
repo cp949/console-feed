@@ -47,6 +47,14 @@ console-feed/
 npm install @cp949/console-feed
 ```
 
+패키지 root는 기존 public API를 유지합니다. UI가 필요 없는 유틸리티는 안정적인 subpath에서도 사용할 수 있습니다:
+
+```tsx
+import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
+import HookOnly from '@cp949/console-feed/hook'
+import { Decode as DecodeOnly } from '@cp949/console-feed/transform'
+```
+
 사용 방법은 [패키지 README](packages/console-feed/README.ko.md)를 참조하세요.
 
 ### 개발자
@@ -131,7 +139,7 @@ pnpm test:react19
 ## 보안 상태
 
 - `pnpm audit`: 취약점 0개
-- 테스트: 28/28 통과
+- 테스트: 29/29 통과
 - 감사 기록: [docs/audit/20260420/README.md](docs/audit/20260420/README.md)
 
 해결된 취약점:

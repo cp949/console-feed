@@ -16,6 +16,23 @@ npm install @cp949/console-feed
 
 Package info: https://www.npmjs.com/package/@cp949/console-feed
 
+## Import Paths
+
+The package root keeps the existing public API for compatibility:
+
+```tsx
+import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
+import type { Message, HookedConsole, Methods } from '@cp949/console-feed'
+```
+
+Non-UI utilities can also be imported from stable subpaths:
+
+```tsx
+import Hook from '@cp949/console-feed/hook'
+import Unhook from '@cp949/console-feed/unhook'
+import { Decode, Encode } from '@cp949/console-feed/transform'
+```
+
 ## Changes
 
 ### Security Vulnerability Fixes
@@ -392,7 +409,7 @@ pnpm publish
 ## Security
 
 - `pnpm audit`: 0 vulnerabilities
-- Tests: 28/28 passing
+- Tests: 29/29 passing
 
 Resolved vulnerabilities:
 

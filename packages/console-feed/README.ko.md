@@ -16,6 +16,23 @@ npm install @cp949/console-feed
 
 패키지 정보: https://www.npmjs.com/package/@cp949/console-feed
 
+## Import 경로
+
+패키지 root는 호환성을 위해 기존 public API를 그대로 유지합니다:
+
+```tsx
+import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
+import type { Message, HookedConsole, Methods } from '@cp949/console-feed'
+```
+
+UI가 필요 없는 유틸리티는 안정적인 subpath에서도 import할 수 있습니다:
+
+```tsx
+import Hook from '@cp949/console-feed/hook'
+import Unhook from '@cp949/console-feed/unhook'
+import { Decode, Encode } from '@cp949/console-feed/transform'
+```
+
 ## 변경사항
 
 ### 보안 취약점 수정
@@ -392,7 +409,7 @@ pnpm publish
 ## 보안
 
 - `pnpm audit`: 취약점 0개
-- 테스트: 28/28 통과
+- 테스트: 29/29 통과
 
 해결된 취약점:
 
