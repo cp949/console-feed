@@ -6,7 +6,7 @@
 
 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
 
-현재 배포 준비된 버전은 `3.6.7`입니다.
+현재 배포 준비된 버전은 `3.6.8`입니다.
 
 ## 설치
 
@@ -42,6 +42,12 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 - Prototype pollution 방어: `__proto__`, `constructor`, `prototype` 키 필터링
 - DOM 정화: 서버 DOM 의존성 없이 DOMPurify 적용
 - 직렬화 깊이 제한 추가
+
+### 빌드 / 배포 형태
+
+- `tsup` 기반의 ESM + CJS 듀얼 빌드 (기존 `tsc` CJS 단일 빌드 대체)
+- `exports` map의 root 및 모든 공개 subpath (`./component`, `./hook`, `./unhook`, `./transform`)에 `import` / `require` 조건 분기 추가
+- default 전용 subpath (`./hook`, `./unhook`, `./component`)은 `require('@cp949/console-feed/hook')`와 `import Hook from '@cp949/console-feed/hook'` 모두 함수 자체로 풀리도록 산출 — Next/Webpack 환경에서 `Hook`이 `{ default: fn }`로 들어오던 interop 문제를 해소
 
 ### 의존성 업데이트
 
@@ -201,7 +207,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.6.7' },
+    { name: 'console-feed', version: '3.6.8' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),
@@ -397,13 +403,16 @@ cd packages/console-feed
 # 3. 버전 업데이트
 pnpm version patch  # 또는 minor, major
 
-# 4. 변경사항 커밋 및 푸시
+# 4. 배포 전에 tarball 내용 확인
+pnpm publish:dry-run
+
+# 5. 변경사항 커밋 및 푸시
 git add .
 git commit -m "Release vX.X.X"
 git push
 
-# 5. npm에 배포
-pnpm publish
+# 6. npm에 배포
+pnpm publish:npm
 ```
 
 ## 보안

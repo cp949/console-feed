@@ -6,7 +6,7 @@ A React component that captures and displays browser console output in a user in
 
 This is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security vulnerability fixes.
 
-Current prepared release: `3.6.7`
+Current prepared release: `3.6.8`
 
 ## Installation
 
@@ -42,6 +42,12 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 - Prototype pollution defense: `__proto__`, `constructor`, `prototype` key filtering
 - DOM sanitization: DOMPurify applied without server-side DOM dependencies
 - Serialization depth limits added
+
+### Build / Distribution
+
+- Dual ESM + CJS build via `tsup` (replaces the previous `tsc`-only CJS build)
+- `exports` map now branches on `import` / `require` for the root and every public subpath (`./component`, `./hook`, `./unhook`, `./transform`)
+- Default-only subpaths (`./hook`, `./unhook`, `./component`) are emitted so that `require('@cp949/console-feed/hook')` and `import Hook from '@cp949/console-feed/hook'` both resolve to the function directly — fixes Next/Webpack interop where `Hook` was being received as `{ default: fn }`
 
 ### Dependency Updates
 
@@ -201,7 +207,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.6.7' },
+    { name: 'console-feed', version: '3.6.8' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),
@@ -397,13 +403,16 @@ cd packages/console-feed
 # 3. Update version
 pnpm version patch  # or minor, major
 
-# 4. Commit and push changes
+# 4. Inspect the tarball before publishing
+pnpm publish:dry-run
+
+# 5. Commit and push changes
 git add .
 git commit -m "Release vX.X.X"
 git push
 
-# 5. Publish to npm
-pnpm publish
+# 6. Publish to npm
+pnpm publish:npm
 ```
 
 ## Security

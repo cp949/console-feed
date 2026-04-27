@@ -10,23 +10,28 @@ describe('package exports', () => {
     expect(packageJson.exports).toEqual({
       '.': {
         types: './dist/index.d.ts',
-        default: './dist/index.js',
+        import: './dist/index.mjs',
+        require: './dist/index.js',
       },
       './component': {
         types: './dist/Component/index.d.ts',
-        default: './dist/Component/index.js',
+        import: './dist/Component/index.mjs',
+        require: './dist/Component/index.js',
       },
       './hook': {
         types: './dist/Hook/index.d.ts',
-        default: './dist/Hook/index.js',
+        import: './dist/Hook/index.mjs',
+        require: './dist/Hook/index.js',
       },
       './unhook': {
         types: './dist/Unhook/index.d.ts',
-        default: './dist/Unhook/index.js',
+        import: './dist/Unhook/index.mjs',
+        require: './dist/Unhook/index.js',
       },
       './transform': {
         types: './dist/Transform/index.d.ts',
-        default: './dist/Transform/index.js',
+        import: './dist/Transform/index.mjs',
+        require: './dist/Transform/index.js',
       },
       './package.json': './package.json',
     })
