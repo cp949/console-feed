@@ -118,7 +118,7 @@ pnpm test:react19
 - react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
 - Jest → Vitest 4.1.4 migration: resolved 22 dependency chain vulnerabilities
 - Prototype pollution defense: `__proto__`, `constructor`, `prototype` key filtering
-- DOM sanitization: isomorphic-dompurify applied
+- DOM sanitization: DOMPurify applied without server-side DOM dependencies
 - Serialization depth limits added
 
 ### Development Environment Improvements

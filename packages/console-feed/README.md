@@ -23,7 +23,7 @@ Package info: https://www.npmjs.com/package/@cp949/console-feed
 - react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
 - Jest → Vitest 4.1.4 migration: resolved 22 dependency chain vulnerabilities
 - Prototype pollution defense: `__proto__`, `constructor`, `prototype` key filtering
-- DOM sanitization: isomorphic-dompurify applied
+- DOM sanitization: DOMPurify applied without server-side DOM dependencies
 - Serialization depth limits added
 
 ### Dependency Updates
@@ -403,7 +403,7 @@ Resolved vulnerabilities:
 Security mechanisms:
 
 - Prototype pollution defense
-- DOM sanitization (isomorphic-dompurify)
+- DOM sanitization (DOMPurify)
 - Serialization depth limits
 - Input filtering
 

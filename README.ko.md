@@ -118,7 +118,7 @@ pnpm test:react19
 - react-inspector 9.0.0 업그레이드: @babel/runtime 취약점 제거
 - Jest → Vitest 4.1.4 마이그레이션: 22개 의존성 체인 취약점 해결
 - Prototype pollution 방어: `__proto__`, `constructor`, `prototype` 키 필터링
-- DOM 정화: isomorphic-dompurify 적용
+- DOM 정화: 서버 DOM 의존성 없이 DOMPurify 적용
 - 직렬화 깊이 제한 추가
 
 ### 개발 환경 개선

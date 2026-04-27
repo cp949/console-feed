@@ -1,5 +1,5 @@
 import * as React from 'react'
-import DOMPurify from 'isomorphic-dompurify'
+import DOMPurify from 'dompurify'
 import { Root } from '../react-inspector/elements'
 
 import Format from '../devtools-parser'
