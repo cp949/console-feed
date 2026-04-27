@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { MessageProps, Theme } from '../definitions/Component'
 import { ThemeProvider } from '@emotion/react'
-import InlineCenter from 'react-inline-center'
 
 import {
   Message,
@@ -39,13 +38,19 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
         <MessageComponent log={log} node={node} data-method={log.method}>
           <IconContainer>
             {/* Align icon to adjacent text, and let the icon can be different size than the text */}
-            <InlineCenter>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               {log.amount > 1 ? (
                 <AmountIcon>{log.amount}</AmountIcon>
               ) : (
                 <Icon />
               )}
-            </InlineCenter>
+            </div>
           </IconContainer>
           {log.timestamp ? <Timestamp>{log.timestamp}</Timestamp> : <span />}
           <Content>{node}</Content>
