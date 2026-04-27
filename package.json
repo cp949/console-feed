@@ -11,7 +11,7 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "clean": "./clean.sh",
-    "publish": "cd packages/console-feed && pnpm publish",
+    "publish": "cd packages/console-feed && pnpm publish:npm",
     "test:compat": "bash packages/console-feed/scripts/test-react-compat.sh both",
     "test:react18": "bash packages/console-feed/scripts/test-react-compat.sh 18",
     "test:react19": "bash packages/console-feed/scripts/test-react-compat.sh 19"
