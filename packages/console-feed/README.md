@@ -35,6 +35,8 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 
 ## Changes
 
+전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
+
 ### Security Vulnerability Fixes
 
 - react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
