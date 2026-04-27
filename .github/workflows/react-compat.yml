@@ -47,12 +47,20 @@ jobs:
 
       - name: Install React ${{ matrix.react-version }}
         working-directory: packages/console-feed
+        # peerDependencies(@emotion/*, react-inspector)는 monorepo 안의 다른 패키지
+        # (apps/demo가 React 19로 핀)가 hoist 시켜둔 React 19 매칭에 묶여 있다.
+        # packages/console-feed에 React 18만 add 하면 emotion/react-inspector의 peer는
+        # React 19에 묶인 채라 다중 React 인스턴스가 발생한다. 그래서 emotion/react-inspector도
+        # 함께 dev install로 add해서 매트릭스용 React 매칭 인스턴스가 별도로 만들어지도록 강제.
         run: |
           pnpm add -D \
             react@${{ matrix.react }} \
             react-dom@${{ matrix.react-dom }} \
             @types/react@${{ matrix.types-react }} \
-            @types/react-dom@${{ matrix.types-react-dom }}
+            @types/react-dom@${{ matrix.types-react-dom }} \
+            @emotion/react \
+            @emotion/styled \
+            react-inspector
 
       - name: Verify React version
         working-directory: packages/console-feed

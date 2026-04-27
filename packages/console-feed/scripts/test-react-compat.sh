@@ -45,12 +45,21 @@ test_react_version() {
   cd "$PACKAGE_DIR"
 
   # React 버전 설치
+  # peerDependencies(@emotion/*, react-inspector)는 monorepo 안의 다른 패키지(apps/demo)가
+  # React 19로 hoist시켜 두기 때문에, packages/console-feed에 React 18을 그냥 add 하면
+  # peer 매칭이 React 19에 묶인 채 남아 다중 React 인스턴스가 발생한다. 그래서 emotion/
+  # react-inspector도 함께 dev install로 add해서 packages/console-feed용 React 18 매칭
+  # 인스턴스가 따로 만들어지도록 강제한다. cleanup 시 package.json 백업으로 복원되므로
+  # 영구 변경 아님.
   echo -e "${YELLOW}React ${version} 의존성 설치 중...${NC}"
   pnpm add -D \
     "react@${react_version}" \
     "react-dom@${react_dom_version}" \
     "@types/react@${types_react}" \
     "@types/react-dom@${types_react_dom}" \
+    "@emotion/react" \
+    "@emotion/styled" \
+    "react-inspector" \
     --silent
 
   # 설치된 버전 확인
