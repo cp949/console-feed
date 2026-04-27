@@ -16,7 +16,8 @@
     "types": ["vitest/globals", "@testing-library/jest-dom"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "strict": true
   },
   "exclude": ["node_modules", "dist", "coverage"],
   "include": ["src"]

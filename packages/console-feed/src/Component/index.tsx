@@ -7,7 +7,7 @@ import { Root } from './elements'
 import Message from './Message'
 
 // https://stackoverflow.com/a/48254637/4089357
-const customStringify = function (v) {
+const customStringify = function (v: any) {
   const cache = new Set()
   return JSON.stringify(v, function (key, value) {
     if (typeof value === 'object' && value !== null) {
@@ -37,7 +37,7 @@ class Console extends React.PureComponent<Props, any> {
     prevVariant: this.props.variant,
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props: any, state: any) {
     if (
       props.variant !== state.prevVariant ||
       JSON.stringify(props.styles) !== JSON.stringify(props.prevStyles)
@@ -65,7 +65,7 @@ class Console extends React.PureComponent<Props, any> {
 
       const filterFun = logFilter
         ? logFilter
-        : (log) => {
+        : (log: any) => {
             try {
               return regex.test(customStringify(log))
             } catch {
@@ -78,7 +78,7 @@ class Console extends React.PureComponent<Props, any> {
     }
 
     if (logGrouping) {
-      logs = logs.reduce((acc, log) => {
+      logs = logs.reduce((acc: any[], log: any) => {
         const prevLog = acc[acc.length - 1]
 
         if (
@@ -86,7 +86,7 @@ class Console extends React.PureComponent<Props, any> {
           prevLog.amount &&
           prevLog.method === log.method &&
           prevLog.data.length === log.data.length &&
-          prevLog.data.every((value, i) => log.data[i] === value)
+          prevLog.data.every((value: any, i: number) => log.data[i] === value)
         ) {
           prevLog.amount += 1
 

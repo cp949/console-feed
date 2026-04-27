@@ -10,8 +10,8 @@ const hookedConsole = globalThis.console as Console
 hookedConsole.logs = []
 ;['log', 'warn', 'info', 'error', 'debug', 'assert', 'time', 'timeEnd'].forEach(
   (method) => {
-    hookedConsole[`$${method}`] = hookedConsole[method]
-    hookedConsole[method] = () => {}
+    ;(hookedConsole as any)[`$${method}`] = (hookedConsole as any)[method]
+    ;(hookedConsole as any)[method] = () => {}
   },
 )
 

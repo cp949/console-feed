@@ -20,12 +20,14 @@ interface Props {
 const REMAINING_KEY = '__console_feed_remaining__'
 
 // copied from react-inspector
-function intersperse(arr, sep) {
+function intersperse(arr: any[], sep: any) {
   if (arr.length === 0) {
     return []
   }
 
-  return arr.slice(1).reduce((xs, x) => xs.concat([sep, x]), [arr[0]])
+  return arr
+    .slice(1)
+    .reduce((xs: any[], x: any) => xs.concat([sep, x]), [arr[0]])
 }
 
 const getArrayLength = (array: Array<any>) => {
@@ -48,10 +50,10 @@ const getArrayLength = (array: Array<any>) => {
   }
 }
 
-const CustomObjectRootLabel = ({ name, data }) => {
+const CustomObjectRootLabel = ({ name, data }: { name: any; data: any }) => {
   let rootData = data
   if (typeof data === 'object' && !Array.isArray(data) && data !== null) {
-    const object = {}
+    const object: Record<string, any> = {}
     for (const propertyName in data) {
       if (data.hasOwnProperty(propertyName)) {
         let propertyValue = data[propertyName]
@@ -78,7 +80,15 @@ const CustomObjectRootLabel = ({ name, data }) => {
   }
 }
 
-const CustomObjectLabel = ({ name, data, isNonenumerable = false }) =>
+const CustomObjectLabel = ({
+  name,
+  data,
+  isNonenumerable = false,
+}: {
+  name: any
+  data: any
+  isNonenumerable?: boolean
+}) =>
   name === REMAINING_KEY ? (
     data > 0 ? (
       <span>{data} more...</span>
@@ -99,7 +109,7 @@ const CustomObjectLabel = ({ name, data, isNonenumerable = false }) =>
 class CustomInspector extends React.PureComponent<Props, any> {
   render() {
     const { data, theme } = this.props
-    const { styles, method } = theme
+    const { styles, method } = theme!
 
     const dom = data instanceof HTMLElement
     const table = method === 'table'
@@ -131,7 +141,7 @@ class CustomInspector extends React.PureComponent<Props, any> {
   }
 
   getCustomNode(data: any) {
-    const { styles } = this.props.theme
+    const { styles } = this.props.theme!
     const constructor = data?.constructor?.name
 
     if (constructor === 'Function')
@@ -177,7 +187,7 @@ class CustomInspector extends React.PureComponent<Props, any> {
 
       const previewArray = data
         .slice(0, maxProperties)
-        .map((element, index) => {
+        .map((element: any, index: number) => {
           if (Array.isArray(element)) {
             return (
               <ObjectValue

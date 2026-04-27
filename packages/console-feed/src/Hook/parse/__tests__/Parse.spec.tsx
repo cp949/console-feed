@@ -15,7 +15,7 @@ describe('count', () => {
       final = Parse('count', ['count-10'])
     }
 
-    expect(final && final.data[0]).toBe('count-10: 10')
+    expect(final && final.data![0]).toBe('count-10: 10')
   })
 
   it('counts with default label', () => {
@@ -25,7 +25,7 @@ describe('count', () => {
       final = Parse('count', [])
     }
 
-    expect(final && final.data[0]).toBe('default: 10')
+    expect(final && final.data![0]).toBe('default: 10')
   })
 })
 
@@ -36,7 +36,7 @@ describe('time', () => {
     setTimeout(() => {
       const result = Parse('timeEnd', ['timer-test'], 'timer-result')
       expect(
-        result && +result.data[0].replace(/[^0-9]/g, '') > 100,
+        result && +result.data![0].replace(/[^0-9]/g, '') > 100,
       ).toBeTruthy()
     }, 100)
   })
@@ -52,12 +52,14 @@ describe('time', () => {
     Parse('time', [])
 
     const result = Parse('timeEnd', [], 'timer-result')
-    expect(result && result.data[0].match(/^default: \d+\.\d+ms$/)).toBeTruthy()
+    expect(
+      result && result.data![0].match(/^default: \d+\.\d+ms$/),
+    ).toBeTruthy()
   })
 })
 
 it('records errors', () => {
   const result = Parse('error', [new Error('one')], 'errors')
 
-  expect(result && result.data[0]).toContain('Error: one')
+  expect(result && result.data![0]).toContain('Error: one')
 })

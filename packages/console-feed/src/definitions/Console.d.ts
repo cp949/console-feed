@@ -9,7 +9,7 @@ export interface Storage {
 }
 
 export interface HookedConsole extends Console {
-  feed: Storage
+  feed?: Storage
 }
 
 export type Methods = _Methods

@@ -171,7 +171,7 @@ export function format(
 
   var result = initialValue
   var tokens = tokenizedFormat || tokenizeFormatString(format, formatters)
-  var usedSubstitutionIndexes = {}
+  var usedSubstitutionIndexes: Record<string, boolean> = {}
 
   for (var i = 0; i < tokens.length; ++i) {
     var token = tokens[i]

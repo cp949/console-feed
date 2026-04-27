@@ -13,7 +13,7 @@ interface Storage {
 }
 
 function objectifyAttributes(element: any) {
-  const data = {}
+  const data: Record<string, string> = {}
   for (let attribute of element.attributes) {
     data[attribute.name] = attribute.value
   }

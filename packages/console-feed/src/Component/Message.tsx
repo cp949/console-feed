@@ -19,7 +19,7 @@ import ErrorPanel from './message-parsers/Error'
 const reSubstitutions = /(%[coOs])|(%(([0-9]*[.])?[0-9]+)?[dif])/g
 
 class ConsoleMessage extends React.Component<MessageProps, any> {
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: MessageProps) {
     return this.props.log.amount !== nextProps.log.amount
   }
 
@@ -45,7 +45,7 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
                 justifyContent: 'center',
               }}
             >
-              {log.amount > 1 ? (
+              {log.amount && log.amount > 1 ? (
                 <AmountIcon>{log.amount}</AmountIcon>
               ) : (
                 <Icon />

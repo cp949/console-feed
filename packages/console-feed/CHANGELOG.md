@@ -7,6 +7,19 @@
 
 ## [Unreleased]
 
+### Changed
+
+- TypeScript strict 단계 1: `noImplicitAny` 활성화. 49건의 암묵적 `any`를 명시적으로 표기하고 `tsconfig.json`에 옵션 항구화. 런타임 동작 변경 없음.
+- TypeScript strict 단계 2: `strictNullChecks` 활성화. 11건의 null/undefined 위반을 옵셔널 체이닝·non-null 단언·옵셔널 프로퍼티 표기로 정리하고 `tsconfig.json`에 옵션 항구화. `HookedConsole.feed`를 옵셔널로 표시(`Unhook`의 `delete` 피연산자 요구사항). 런타임 동작 변경 없음.
+- TypeScript strict 단계 3 (최종): `strictFunctionTypes`·`alwaysStrict`·`strictBindCallApply`·`strictPropertyInitialization`·`noImplicitThis`·`useUnknownInCatchVariables` 일괄 활성화. 위반은 `Transform/replicator/index.ts`의 catch 핸들러 1건뿐(`new Error(e)` → `new Error(String(e))`). `tsconfig.json`의 개별 옵션을 모두 제거하고 `"strict": true` 한 줄로 통합. 런타임 동작 변경 없음.
+- `package-exports.spec.js` → `package-exports.spec.ts` 확장자 통일. `require()` 대신 JSON 모듈 import 사용 (`moduleResolution: bundler` 활용).
+- README/README.ko 의 "Security" 섹션에서 모순된 검증 스크립트 안내 제거하고, 실제로 동작하는 `pnpm test` / `pnpm test:dist` / `pnpm audit` 안내로 대체.
+
+### Removed
+
+- 루트 `package.json`의 `pnpm.overrides.yaml` 제거. `pnpm why yaml` 결과 의존 트리에 `yaml` 자체가 존재하지 않아 override가 무의미.
+- 좀비 `scripts/security-test.sh` / `scripts/verify-all.sh` 삭제. yarn + 사라진 `lib/` 디렉토리 전제로 작성되어 현 환경에서 동작 불가. 검증은 워크스페이스 스크립트로 일원화.
+
 ## [3.7.0] - 2026-04-27
 
 > ⚠️ **Breaking 가능성 있음** — `@emotion/react`, `@emotion/styled`, `react-inspector`가 `peerDependencies`로 이전되었습니다. 소비처는 이 패키지들을 명시적으로 설치해야 합니다.

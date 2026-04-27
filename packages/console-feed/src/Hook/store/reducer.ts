@@ -1,6 +1,9 @@
 import { Action } from '../../definitions/Store'
 
-export const initialState = {
+export const initialState: {
+  timings: Record<string, { start: number; end?: number; time?: number }>
+  count: Record<string, number>
+} = {
   timings: {},
   count: {},
 }

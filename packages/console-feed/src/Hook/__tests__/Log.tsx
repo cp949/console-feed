@@ -4,7 +4,7 @@ import { Message } from '../../definitions/Console'
 function Log(type: string, ...data: any[]): Promise<Message> {
   return new Promise((resolve, reject) => {
     const length = console.logs.length
-    console[type](...data)
+    ;(console as any)[type](...data)
 
     setTimeout(() => {
       if (console.logs.length !== length) {

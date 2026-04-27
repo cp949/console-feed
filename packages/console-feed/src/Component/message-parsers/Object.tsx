@@ -29,7 +29,7 @@ class ObjectTree extends React.PureComponent<Props, any> {
               <span>"</span>
               <span
                 style={{
-                  color: theme.styles.OBJECT_VALUE_STRING_COLOR,
+                  color: theme?.styles.OBJECT_VALUE_STRING_COLOR,
                 }}
               >
                 {message}

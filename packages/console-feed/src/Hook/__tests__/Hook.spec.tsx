@@ -51,7 +51,7 @@ it('correctly encodes Functions', async () => {
 })
 
 it('correctly encodes nested values', async () => {
-  const input = {
+  const input: any = {
     function: function myFunc() {},
     document: document.documentElement,
     nested: [[[new Promise(() => {})]]],
@@ -74,7 +74,7 @@ it('disables encoding with a flag', async () => {
     },
     false,
   )
-  const input = {
+  const input: any = {
     function: function myFunc() {},
     document: document.documentElement,
     nested: [[[new Promise(() => {})]]],
@@ -96,7 +96,7 @@ it('correctly limits a long array', async () => {
     true,
     100,
   )
-  const result = await Log('log', Array.from(Array(99999).keys()))
+  const result: any = await Log('log', Array.from(Array(99999).keys()))
   expect(result[0].data[0].length).toEqual(101)
   expect(result[0].data[0].pop()).toEqual('__console_feed_remaining__99899')
 })
@@ -110,7 +110,7 @@ it('correctly limits a long object', async () => {
     true,
     100,
   )
-  const result = await Log('log', { ...Array.from(Array(99999).keys()) })
+  const result: any = await Log('log', { ...Array.from(Array(99999).keys()) })
   expect(Object.keys(result[0].data[0]).length).toEqual(101)
   expect(result[0].data[0]['__console_feed_remaining__']).toEqual(99899)
 })

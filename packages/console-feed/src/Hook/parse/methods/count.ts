@@ -4,7 +4,7 @@ import { count } from '../../store/actions'
 
 export function increment(label: string): any {
   dispatch(count(label))
-  const times = state.count[label]
+  const times = (state.count as Record<string, number>)[label]
 
   return {
     method: 'log',

@@ -35,10 +35,10 @@ export default function Hook(
 
   // Override console methods
   for (let method of Methods) {
-    const NativeMethod = TargetConsole[method]
+    const NativeMethod = (TargetConsole as any)[method]
 
     // Override
-    TargetConsole[method] = function () {
+    ;(TargetConsole as any)[method] = function () {
       // Pass back to native method
       NativeMethod.apply(this, arguments)
 

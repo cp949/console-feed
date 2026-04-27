@@ -45,7 +45,7 @@ export default function formatWithSubstitutionString(
     for (let i = 0; i < buffer.style.length; i++) {
       const property = buffer.style[i]
       if (isWhitelistedProperty(property))
-        currentStyle[property] = buffer.style[property]
+        currentStyle[property] = (buffer.style as any)[property]
     }
   }
 

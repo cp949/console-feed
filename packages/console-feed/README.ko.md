@@ -434,16 +434,13 @@ pnpm publish:npm
 - 직렬화 깊이 제한
 - 입력 필터링
 
-검증 스크립트:
+로컬에서 직접 검증:
 
 ```bash
-# packages/console-feed 디렉토리에서 실행
-cd packages/console-feed
-./scripts/security-test.sh
-./scripts/verify-all.sh
+pnpm --filter @cp949/console-feed test
+pnpm --filter @cp949/console-feed test:dist
+pnpm audit
 ```
-
-**참고**: 위 스크립트들은 원본 저장소에서 가져온 것으로, 현재 프로젝트에서는 사용하지 않을 수 있습니다.
 
 ## 라이선스
 

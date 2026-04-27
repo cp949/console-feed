@@ -4,7 +4,7 @@ enum Arithmetic {
   minusZero,
 }
 
-function isMinusZero(value) {
+function isMinusZero(value: number) {
   return 1 / value === -Infinity
 }
 
@@ -17,7 +17,7 @@ export default {
       (value === Infinity || value === -Infinity || isMinusZero(value))
     )
   },
-  toSerializable(value): Arithmetic {
+  toSerializable(value: number): Arithmetic {
     return value === Infinity
       ? Arithmetic.infinity
       : value === -Infinity

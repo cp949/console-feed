@@ -1,11 +1,6 @@
-const fs = require('fs')
-const path = require('path')
+import packageJson from '../../package.json'
 
 describe('package exports', () => {
-  const packageJson = JSON.parse(
-    fs.readFileSync(path.resolve(__dirname, '../../package.json'), 'utf8'),
-  )
-
   it('exposes the root package and stable public subpaths from dist', () => {
     expect(packageJson.exports).toEqual({
       '.': {

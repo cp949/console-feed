@@ -434,16 +434,13 @@ Security mechanisms:
 - Serialization depth limits
 - Input filtering
 
-Verification scripts:
+To verify locally:
 
 ```bash
-# Run from packages/console-feed directory
-cd packages/console-feed
-./scripts/security-test.sh
-./scripts/verify-all.sh
+pnpm --filter @cp949/console-feed test
+pnpm --filter @cp949/console-feed test:dist
+pnpm audit
 ```
-
-**Note**: The above scripts are from the original repository and may not be used in the current project.
 
 ## License
 

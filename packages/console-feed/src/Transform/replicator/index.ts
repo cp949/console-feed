@@ -173,7 +173,7 @@ class EncodingTransformer {
     return null
   }
 
-  _handleValue(getVal: () => any, parent: any, key: any) {
+  _handleValue(getVal: () => any, parent: any, key: any): any {
     try {
       const val = getVal()
       const type = typeof val
@@ -197,7 +197,7 @@ class EncodingTransformer {
     } catch (e) {
       try {
         return this._handleValue(
-          () => (e instanceof Error ? e : new Error(e)),
+          () => (e instanceof Error ? e : new Error(String(e))),
           parent,
           key,
         )
@@ -213,7 +213,7 @@ class EncodingTransformer {
     }
 
     const map = new Map()
-    this.transforms.forEach((transform) => {
+    this.transforms.forEach((transform: any) => {
       if (transform.lookup) {
         map.set(transform.lookup, transform)
       }
@@ -396,7 +396,7 @@ const builtInTransforms = [
       return ''
     },
 
-    fromSerializable() {
+    fromSerializable(): undefined {
       return void 0
     },
   },

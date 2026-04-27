@@ -14,9 +14,9 @@ export default {
     return obj && obj.constructor && obj.constructor.name === 'Map'
   },
   toSerializable(map: any): Storage {
-    let body = {}
+    let body: Record<string, any> = {}
 
-    map.forEach(function (value, key) {
+    map.forEach(function (value: any, key: any) {
       const k = typeof key == 'object' ? JSON.stringify(key) : key
       body[k] = value
     })
