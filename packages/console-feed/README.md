@@ -37,7 +37,19 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 
 전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
 
-### Security Vulnerability Fixes
+### 3.7.0
+
+- `@emotion/react`, `@emotion/styled`, `react-inspector` moved to `peerDependencies` — consumers must install these packages explicitly.
+- TypeScript `strict` mode enabled — `tsconfig.json` consolidated to `"strict": true`. `HookedConsole.feed` is now an optional property (`feed?`); runtime behavior unchanged but consumers compiling under strict may need an optional guard when accessing `console.feed` directly.
+- `react-inline-center` dependency removed — replaced by inline flex styles at the single call site.
+
+### 3.6.8 — Build / Distribution
+
+- Dual ESM + CJS build via `tsup` (replaces the previous `tsc`-only CJS build)
+- `exports` map now branches on `import` / `require` for the root and every public subpath (`./component`, `./hook`, `./unhook`, `./transform`)
+- Default-only subpaths (`./hook`, `./unhook`, `./component`) are emitted so that `require('@cp949/console-feed/hook')` and `import Hook from '@cp949/console-feed/hook'` both resolve to the function directly — fixes Next/Webpack interop where `Hook` was being received as `{ default: fn }`
+
+### Earlier — Security Vulnerability Fixes
 
 - react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
 - Jest → Vitest 4.1.4 migration: resolved 22 dependency chain vulnerabilities
@@ -45,13 +57,7 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 - DOM sanitization: DOMPurify applied without server-side DOM dependencies
 - Serialization depth limits added
 
-### Build / Distribution
-
-- Dual ESM + CJS build via `tsup` (replaces the previous `tsc`-only CJS build)
-- `exports` map now branches on `import` / `require` for the root and every public subpath (`./component`, `./hook`, `./unhook`, `./transform`)
-- Default-only subpaths (`./hook`, `./unhook`, `./component`) are emitted so that `require('@cp949/console-feed/hook')` and `import Hook from '@cp949/console-feed/hook'` both resolve to the function directly — fixes Next/Webpack interop where `Hook` was being received as `{ default: fn }`
-
-### Dependency Updates
+### Current Stack
 
 - TypeScript 5.9.3
 - React 18, 19 support

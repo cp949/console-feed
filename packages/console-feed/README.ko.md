@@ -37,7 +37,19 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 
 전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
 
-### 보안 취약점 수정
+### 3.7.0
+
+- `@emotion/react`, `@emotion/styled`, `react-inspector`를 `peerDependencies`로 이전 — 소비처가 이 패키지들을 직접 설치해야 합니다.
+- TypeScript `strict` 모드 활성화 — `tsconfig.json`을 `"strict": true` 한 줄로 통합. `HookedConsole.feed`가 옵셔널 프로퍼티(`feed?`)로 표기됨; 런타임 동작은 동일하지만 strict로 컴파일하는 소비처가 `console.feed`에 직접 접근하는 경우 옵셔널 가드가 필요할 수 있습니다.
+- `react-inline-center` 의존 제거 — `Message.tsx`의 단일 사용처를 인라인 flex 스타일로 대체.
+
+### 3.6.8 — 빌드 / 배포 형태
+
+- `tsup` 기반의 ESM + CJS 듀얼 빌드 (기존 `tsc` CJS 단일 빌드 대체)
+- `exports` map의 root 및 모든 공개 subpath (`./component`, `./hook`, `./unhook`, `./transform`)에 `import` / `require` 조건 분기 추가
+- default 전용 subpath (`./hook`, `./unhook`, `./component`)은 `require('@cp949/console-feed/hook')`와 `import Hook from '@cp949/console-feed/hook'` 모두 함수 자체로 풀리도록 산출 — Next/Webpack 환경에서 `Hook`이 `{ default: fn }`로 들어오던 interop 문제를 해소
+
+### 이전 — 보안 취약점 수정
 
 - react-inspector 9.0.0 업그레이드: @babel/runtime 취약점 제거
 - Jest → Vitest 4.1.4 마이그레이션: 22개 의존성 체인 취약점 해결
@@ -45,13 +57,7 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 - DOM 정화: 서버 DOM 의존성 없이 DOMPurify 적용
 - 직렬화 깊이 제한 추가
 
-### 빌드 / 배포 형태
-
-- `tsup` 기반의 ESM + CJS 듀얼 빌드 (기존 `tsc` CJS 단일 빌드 대체)
-- `exports` map의 root 및 모든 공개 subpath (`./component`, `./hook`, `./unhook`, `./transform`)에 `import` / `require` 조건 분기 추가
-- default 전용 subpath (`./hook`, `./unhook`, `./component`)은 `require('@cp949/console-feed/hook')`와 `import Hook from '@cp949/console-feed/hook'` 모두 함수 자체로 풀리도록 산출 — Next/Webpack 환경에서 `Hook`이 `{ default: fn }`로 들어오던 interop 문제를 해소
-
-### 의존성 업데이트
+### 현재 스택
 
 - TypeScript 5.9.3
 - React 18, 19 지원
