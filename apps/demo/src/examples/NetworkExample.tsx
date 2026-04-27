@@ -1,5 +1,5 @@
 import { Console, Decode, Encode } from '@cp949/console-feed'
-import type { Message } from '@cp949/console-feed/src/definitions/Component'
+import type { Message } from '@cp949/console-feed'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
 import commonStyles from './ExampleCommon.module.css'

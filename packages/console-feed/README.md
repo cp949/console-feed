@@ -50,7 +50,7 @@ Function component (Hooks):
 ```tsx
 import React, { useState, useEffect } from 'react'
 import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
-import type { Message } from '@cp949/console-feed/src/definitions/Component'
+import type { Message } from '@cp949/console-feed'
 
 const LogsContainer = () => {
   const [logs, setLogs] = useState<Message[]>([])
@@ -245,8 +245,7 @@ After the iframe loads, hook the iframe's `contentWindow.console`.
 ```tsx
 import React, { useState, useEffect, useRef } from 'react'
 import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
-import type { Message } from '@cp949/console-feed/src/definitions/Component'
-import type { HookedConsole } from '@cp949/console-feed/src/definitions/Console'
+import type { Message, HookedConsole } from '@cp949/console-feed'
 
 const IframeLogsContainer = () => {
   const [logs, setLogs] = useState<Message[]>([])

@@ -1,7 +1,5 @@
 import { Console, Decode, Hook, Unhook } from '@cp949/console-feed'
-import type { Message } from '@cp949/console-feed/src/definitions/Component'
-import type { HookedConsole } from '@cp949/console-feed/src/definitions/Console'
-import type { Methods } from '@cp949/console-feed/src/definitions/Methods'
+import type { Message, HookedConsole, Methods } from '@cp949/console-feed'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
 import commonStyles from './ExampleCommon.module.css'

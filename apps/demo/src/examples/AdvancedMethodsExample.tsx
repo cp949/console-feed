@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Hook, Console, Decode, Unhook } from '@cp949/console-feed'
-import type { Message } from '@cp949/console-feed/src/definitions/Component'
-import type { HookedConsole } from '@cp949/console-feed/src/definitions/Console'
+import type { Message, HookedConsole } from '@cp949/console-feed'
 import { useTheme } from '../contexts/ThemeContext'
 import commonStyles from './ExampleCommon.module.css'
 
