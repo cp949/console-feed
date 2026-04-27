@@ -2,8 +2,8 @@
   "name": "@cp949/console-feed",
   "version": "3.6.8",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -34,7 +34,7 @@
   },
   "description": "A React component that displays console logs from the current page, an iframe or transported across a server",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.dts.json && node scripts/copy-dts.mjs",
     "test": "vitest run --reporter=verbose",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",

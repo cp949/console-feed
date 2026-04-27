@@ -1,22 +1,22 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "commonjs",
-    "target": "es6",
-    "ignoreDeprecations": "5.0",
-    "lib": ["es6", "dom", "ES2020.BigInt"],
+    "module": "esnext",
+    "target": "es2020",
+    "lib": ["es2020", "dom"],
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "rootDir": ".",
     "allowJs": true,
     "inlineSourceMap": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
-    "moduleResolution": "node",
-    "rootDir": ".",
     "forceConsistentCasingInFileNames": true,
     "types": ["vitest/globals", "@testing-library/jest-dom"],
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "isolatedModules": true
   },
   "exclude": ["node_modules", "dist", "coverage"],
   "include": ["src"]

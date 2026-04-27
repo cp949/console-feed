@@ -9,7 +9,7 @@ export default defineConfig({
     'Transform/index': 'src/Transform/index.ts',
   },
   format: ['esm', 'cjs'],
-  dts: true,
+  dts: false,
   sourcemap: true,
   clean: true,
   splitting: false,
