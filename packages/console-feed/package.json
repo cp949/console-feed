@@ -38,6 +38,8 @@
     "format": "biome format --write src",
     "format:check": "biome format src",
     "clean": "rm -rf dist",
+    "publish:dry-run": "npm pack --dry-run",
+    "publish:npm": "npm publish --access public",
     "prepublishOnly": "pnpm build && pnpm test"
   },
   "dependencies": {
@@ -94,7 +96,7 @@
   "homepage": "https://github.com/cp949/console-feed.git",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cp949/console-feed.git"
+    "url": "git+https://github.com/cp949/console-feed.git"
   },
   "bugs": {
     "url": "https://github.com/cp949/console-feed/issues"
