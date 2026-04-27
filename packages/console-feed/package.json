@@ -36,6 +36,7 @@
   "scripts": {
     "build": "tsup && tsc -p tsconfig.dts.json && node scripts/copy-dts.mjs",
     "test": "vitest run --reporter=verbose",
+    "test:dist": "node scripts/verify-dist-shapes.mjs",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
@@ -46,7 +47,7 @@
     "clean": "rm -rf dist",
     "publish:dry-run": "npm pack --dry-run",
     "publish:npm": "npm publish --access public",
-    "prepublishOnly": "pnpm build && pnpm test"
+    "prepublishOnly": "pnpm build && pnpm test && pnpm test:dist"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -103,7 +104,8 @@
   "homepage": "https://github.com/cp949/console-feed.git",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cp949/console-feed.git"
+    "url": "git+https://github.com/cp949/console-feed.git",
+    "directory": "packages/console-feed"
   },
   "bugs": {
     "url": "https://github.com/cp949/console-feed/issues"

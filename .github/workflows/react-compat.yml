@@ -68,6 +68,23 @@ jobs:
         working-directory: packages/console-feed
         run: pnpm test
 
+      - name: Verify dist runtime shapes
+        working-directory: packages/console-feed
+        run: pnpm test:dist
+
+      - name: Lint
+        if: matrix.react-version == '19'
+        run: pnpm lint
+
+      - name: Format check
+        if: matrix.react-version == '19'
+        run: pnpm format:check
+
+      - name: Type check
+        if: matrix.react-version == '19'
+        working-directory: packages/console-feed
+        run: pnpm exec tsc --noEmit
+
       - name: Build demo (React ${{ matrix.react-version }} only)
         if: matrix.react-version == '19'
         working-directory: apps/demo
