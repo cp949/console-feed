@@ -6,7 +6,7 @@
 
 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
 
-현재 배포 준비된 버전은 `3.7.0`입니다.
+현재 배포 준비된 버전은 `3.7.1`입니다.
 
 ## 설치
 
@@ -36,6 +36,10 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 ## 변경사항
 
 전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
+
+### 3.7.1
+
+- 패치 릴리스. 라이브러리 코드(`dist/`)는 3.7.0과 동일 — `test:compat` 검증 도구 fix와 README 갱신만 포함. 자세한 내용은 [CHANGELOG.md](./CHANGELOG.md) 참조.
 
 ### 3.7.0
 
@@ -215,7 +219,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.7.0' },
+    { name: 'console-feed', version: '3.7.1' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),

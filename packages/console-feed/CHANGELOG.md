@@ -7,6 +7,22 @@
 
 ## [Unreleased]
 
+## [3.7.1] - 2026-04-28
+
+3.7.0 publish 직후 발견된 검증 도구 결함과 문서 stale 상태를 정정하는 패치 릴리스. 라이브러리 코드(`dist/`)는 3.7.0과 동일.
+
+### Added
+
+- `packages/console-feed`에서 직접 `pnpm test:compat` / `pnpm test:react18` / `pnpm test:react19` 실행 가능. 기존엔 루트 `package.json`에만 정의되어 패키지 디렉토리에서 실행 시 `Command not found`로 실패했음.
+
+### Fixed
+
+- `pnpm test:compat`의 React 18 매트릭스가 모든 컴포넌트 테스트에서 "Objects are not valid as a React child" 에러로 실패하던 문제 수정. 원인: monorepo 안의 `apps/demo`(React 19 핀)가 `@emotion/*`·`react-inspector`를 자체 dependencies로 갖고 있어 pnpm이 이들을 React 19 단일 인스턴스로 hoist시키는 상태에서, swap 시 React만 18로 갈아치우면 emotion/react-inspector의 peer 매칭은 React 19에 묶인 채 잔존 → 다중 React 인스턴스. 수정: swap 명령에서 `@emotion/react`·`@emotion/styled`·`react-inspector`도 함께 dev install로 add해 React 18 매칭 별도 인스턴스가 만들어지도록 강제 (`scripts/test-react-compat.sh`, `.github/workflows/react-compat.yml`). **라이브러리 사용자에게는 영향 없음 — 검증 도구만 fix**.
+
+### Changed
+
+- README / README.ko 의 "Changes / 변경사항" 섹션 갱신 — 3.7.0 핵심 변경(emotion peerDeps 이전, TypeScript strict 모드 활성화, react-inline-center 제거)을 명시. 기존 항목 헤더에 시점 표시(3.6.8 / 이전), 의존성 섹션은 "현재 스택 / Current Stack"으로 헤더 변경.
+
 ## [3.7.0] - 2026-04-28
 
 > ⚠️ **Breaking 가능성 있음**
@@ -57,7 +73,8 @@ npm install @emotion/react @emotion/styled react-inspector
 
 - 직전 배포된 안정 버전. 자세한 이력은 git log를 참조하세요.
 
-[Unreleased]: https://github.com/cp949/console-feed/compare/v3.7.0...HEAD
+[Unreleased]: https://github.com/cp949/console-feed/compare/v3.7.1...HEAD
+[3.7.1]: https://github.com/cp949/console-feed/compare/v3.7.0...v3.7.1
 [3.7.0]: https://github.com/cp949/console-feed/compare/v3.6.8...v3.7.0
 [3.6.8]: https://github.com/cp949/console-feed/compare/v3.6.7...v3.6.8
 [3.6.7]: https://github.com/cp949/console-feed/releases/tag/v3.6.7

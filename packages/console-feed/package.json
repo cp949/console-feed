@@ -1,6 +1,6 @@
 {
   "name": "@cp949/console-feed",
-  "version": "3.7.0",
+  "version": "3.7.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
