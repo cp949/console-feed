@@ -6,7 +6,7 @@ A React component that captures and displays browser console output in a user in
 
 This is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security vulnerability fixes.
 
-Current prepared release: `3.6.8`
+Current prepared release: `3.7.0`
 
 ## Installation
 
@@ -209,7 +209,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.6.8' },
+    { name: 'console-feed', version: '3.7.0' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),
