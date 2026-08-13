@@ -60,17 +60,17 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 ### Earlier — Security Vulnerability Fixes
 
 - react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
-- Jest → Vitest 4.1.4 migration: resolved 22 dependency chain vulnerabilities
+- Jest → Vitest ^4 migration: resolved 22 dependency chain vulnerabilities
 - Prototype pollution defense: `__proto__`, `constructor`, `prototype` key filtering
 - DOM sanitization: DOMPurify applied without server-side DOM dependencies
 - Serialization depth limits added
 
 ### Current Stack
 
-- TypeScript 5.9.3
+- TypeScript ^5
 - React 18, 19 support
 - Node 20+ baseline
-- Vitest 4.1.4
+- Vitest ^4
 
 ## Features
 
@@ -439,7 +439,7 @@ pnpm publish:npm
 Resolved vulnerabilities:
 
 - @babel/runtime (Moderate, 2 issues): removed via react-inspector 9.0.0 upgrade
-- Jest dependencies (22 issues): eliminated via Vitest 4.1.4 migration
+- Jest dependencies (22 issues): eliminated via Vitest ^4 migration
 
 Security mechanisms:
 

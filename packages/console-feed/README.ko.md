@@ -60,17 +60,17 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 ### 이전 — 보안 취약점 수정
 
 - react-inspector 9.0.0 업그레이드: @babel/runtime 취약점 제거
-- Jest → Vitest 4.1.4 마이그레이션: 22개 의존성 체인 취약점 해결
+- Jest → Vitest ^4 마이그레이션: 22개 의존성 체인 취약점 해결
 - Prototype pollution 방어: `__proto__`, `constructor`, `prototype` 키 필터링
 - DOM 정화: 서버 DOM 의존성 없이 DOMPurify 적용
 - 직렬화 깊이 제한 추가
 
 ### 현재 스택
 
-- TypeScript 5.9.3
+- TypeScript ^5
 - React 18, 19 지원
 - Node 20+ 기준
-- Vitest 4.1.4
+- Vitest ^4
 
 ## 기능
 
@@ -439,7 +439,7 @@ pnpm publish:npm
 해결된 취약점:
 
 - @babel/runtime (중간, 2건): react-inspector 9.0.0 업그레이드로 제거
-- Jest 의존성 (22건): Vitest 4.1.4 마이그레이션으로 제거
+- Jest 의존성 (22건): Vitest ^4 마이그레이션으로 제거
 
 보안 메커니즘:
 

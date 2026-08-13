@@ -10,8 +10,6 @@
 
 이 저장소는 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
 
-이 저장소에서 배포 준비된 현재 패키지 버전은 `@cp949/console-feed@3.6.7`입니다.
-
 ## 프로젝트 구조
 
 ```
@@ -114,8 +112,8 @@ pnpm test:react19
 
 - **빌드 시스템**: Turborepo
 - **패키지 관리**: pnpm workspace
-- **언어**: TypeScript 5.9.3
-- **테스트**: Vitest 4.1.4
+- **언어**: TypeScript ^5
+- **테스트**: Vitest ^4
 - **코드 품질**: Biome
 - **React 지원**: 18, 19
 
@@ -124,7 +122,7 @@ pnpm test:react19
 ### 보안 취약점 수정
 
 - react-inspector 9.0.0 업그레이드: @babel/runtime 취약점 제거
-- Jest → Vitest 4.1.4 마이그레이션: 22개 의존성 체인 취약점 해결
+- Jest → Vitest ^4 마이그레이션: 22개 의존성 체인 취약점 해결
 - Prototype pollution 방어: `__proto__`, `constructor`, `prototype` 키 필터링
 - DOM 정화: 서버 DOM 의존성 없이 DOMPurify 적용
 - 직렬화 깊이 제한 추가
@@ -145,7 +143,7 @@ pnpm test:react19
 해결된 취약점:
 
 - @babel/runtime (중간, 2건): react-inspector 9.0.0 업그레이드로 제거
-- Jest 의존성 (22건): Vitest 4.1.4 마이그레이션으로 제거
+- Jest 의존성 (22건): Vitest ^4 마이그레이션으로 제거
 
 ## 릴리스 프로세스
 
