@@ -6,7 +6,7 @@ A React component that captures and displays browser console output in a user in
 
 This is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security vulnerability fixes.
 
-Current prepared release: `3.7.1`
+Current prepared release: `3.7.2`
 
 ## Installation
 
@@ -36,6 +36,10 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 ## Changes
 
 전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
+
+### 3.7.2
+
+- Patch release. Fixes a low-severity `esbuild` vulnerability (GHSA-g7r4-m6w7-qqqr) left unresolved by prior dependency updates, plus routine dependency bumps (`dompurify`, `linkify-*`, testing libraries). No public API change. See [CHANGELOG.md](./CHANGELOG.md) for details.
 
 ### 3.7.1
 
@@ -219,7 +223,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.7.1' },
+    { name: 'console-feed', version: '3.7.2' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),

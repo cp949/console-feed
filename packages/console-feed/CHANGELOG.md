@@ -7,6 +7,23 @@
 
 ## [Unreleased]
 
+## [3.7.2] - 2026-08-14
+
+`pnpm audit` low 취약점(esbuild) 정정과 의존성 갱신. 라이브러리 공개 API 변경 없음.
+
+### Fixed
+
+- `esbuild` 취약점(GHSA-g7r4-m6w7-qqqr, low — Windows dev 서버에서 임의 파일 읽기 허용) 해결. `vite@8.2.1`의 peerDependency 범위(`^0.27.0 || ^0.28.0`)가 취약 버전(0.27.x)도 허용해 pnpm이 0.27.7로 고정 해석하던 문제. 루트 `package.json`에 `pnpm.overrides.esbuild: "^0.28.2"` 추가로 패치 버전을 강제.
+
+### Changed
+
+- `dompurify` `^3.4.1` → `^3.4.13`, `linkify-html`/`linkify-react`/`linkifyjs` `^4.3.2` → `^4.3.3` (런타임 dependencies).
+- `@testing-library/jest-dom` `^6.9.1` → `^7.0.1`, `@testing-library/react` `^16.3.0` → `^16.3.2`, `@types/react` `^19.0.0` → `^19.2.18`, `@types/react-dom` `^19.0.0` → `^19.2.4`, `@vitest/ui`/`vitest` `^4.1.4` → `^4.1.10` (devDependencies).
+- `apps/demo`: `react`/`react-dom` `^19.2.5` → `^19.2.8`, `vite` `^8.0.9` → `^8.2.1`, `@vitejs/plugin-react` `^6.0.1` → `^6.0.5`, `@types/react`/`@types/react-dom` 갱신.
+- 루트 `@biomejs/biome` `^2.4.12` → `^2.5.8`, `turbo` `^2.9.6` → `^2.10.9`.
+
+검증: `pnpm test` 29/29, `pnpm test:dist` 통과, `pnpm build`, `pnpm lint`, `pnpm audit` 0 vulnerabilities, `pnpm publish:dry-run` (66 files, 216.4 KB).
+
 ## [3.7.1] - 2026-04-28
 
 3.7.0 publish 직후 발견된 검증 도구 결함과 문서 stale 상태를 정정하는 패치 릴리스. 라이브러리 코드(`dist/`)는 3.7.0과 동일.
@@ -73,7 +90,8 @@ npm install @emotion/react @emotion/styled react-inspector
 
 - 직전 배포된 안정 버전. 자세한 이력은 git log를 참조하세요.
 
-[Unreleased]: https://github.com/cp949/console-feed/compare/v3.7.1...HEAD
+[Unreleased]: https://github.com/cp949/console-feed/compare/v3.7.2...HEAD
+[3.7.2]: https://github.com/cp949/console-feed/compare/v3.7.1...v3.7.2
 [3.7.1]: https://github.com/cp949/console-feed/compare/v3.7.0...v3.7.1
 [3.7.0]: https://github.com/cp949/console-feed/compare/v3.6.8...v3.7.0
 [3.6.8]: https://github.com/cp949/console-feed/compare/v3.6.7...v3.6.8

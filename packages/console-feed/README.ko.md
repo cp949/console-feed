@@ -6,7 +6,7 @@
 
 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
 
-현재 배포 준비된 버전은 `3.7.1`입니다.
+현재 배포 준비된 버전은 `3.7.2`입니다.
 
 ## 설치
 
@@ -36,6 +36,10 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 ## 변경사항
 
 전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
+
+### 3.7.2
+
+- 패치 릴리스. 이전 의존성 업데이트로도 해결되지 않았던 `esbuild` low 취약점(GHSA-g7r4-m6w7-qqqr) 수정과 일상적 의존성 갱신(`dompurify`, `linkify-*`, 테스트 라이브러리 등) 포함. 공개 API 변경 없음. 자세한 내용은 [CHANGELOG.md](./CHANGELOG.md) 참조.
 
 ### 3.7.1
 
@@ -219,7 +223,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.7.1' },
+    { name: 'console-feed', version: '3.7.2' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),
