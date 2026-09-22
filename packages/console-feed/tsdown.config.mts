@@ -14,7 +14,7 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   platform: 'neutral',
-  target: 'es2020',
+  target: 'chrome75',
   outDir: 'dist',
   tsconfig: './tsconfig.build.json',
   deps: {

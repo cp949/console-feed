@@ -34,12 +34,12 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.24.0
+          version: 11.27.1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '^22.18.0'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -71,6 +71,9 @@ jobs:
       - name: Build
         working-directory: packages/console-feed
         run: pnpm build
+
+      - name: Audit Chrome 75 package output
+        run: pnpm --filter @cp949/console-feed check:chrome75
 
       - name: Run tests
         working-directory: packages/console-feed

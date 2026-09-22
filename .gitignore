@@ -1,12 +1,12 @@
 _works/
 .worktrees/
+docs/superpowers/
+
 .claude
 CLAUDE.md
 AGENTS.md
 /coverage
-/demo/dist
 /es
-/dist
 node_modules
 /umd
 /.idea
@@ -19,5 +19,4 @@ yarn-error.log
 .turbo
 
 # Build outputs
-apps/*/dist
-packages/*/dist
+dist/

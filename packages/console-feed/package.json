@@ -35,6 +35,7 @@
   "description": "A React component that displays console logs from the current page, an iframe or transported across a server",
   "scripts": {
     "build": "tsdown && tsc -p tsconfig.dts.json && node scripts/copy-dts.mjs",
+    "check:chrome75": "node scripts/check-chrome75.mjs",
     "test": "vitest run --reporter=verbose",
     "test:dist": "node scripts/verify-dist-shapes.mjs",
     "test:watch": "vitest",
@@ -72,6 +73,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitest/ui": "^5.0.1",
+    "eslint-plugin-es-x": "10.0.0",
     "tsdown": "^0.23.0",
     "typescript": "^6.0.3",
     "vitest": "^5.0.1"
