@@ -33,6 +33,18 @@ import Unhook from '@cp949/console-feed/unhook'
 import { Decode, Encode } from '@cp949/console-feed/transform'
 ```
 
+## Chrome 75 Library Artifacts
+
+The library artifacts target Chrome 75. The package neither injects global polyfills nor requires consumers to install `core-js`.
+
+`pnpm --filter @cp949/console-feed check:chrome75` is a static audit of the built package output. `node fixtures/chrome75-consumer/scripts/build-packed.mjs` checks an installed tarball in a standalone consumer. Run the exact-browser smoke on Linux with Docker:
+
+```bash
+bash scripts/test-chrome75.sh
+```
+
+The recorded exact smoke uses Docker on Linux and Node 24 with Chromium/HeadlessChrome `75.0.3770.90`; the packed consumer completed capture, decode, render, restoration, and style checks, with no fixture or CDP errors. The historical image downloads its snapshot over HTTPS and verifies the pinned Chromium deb SHA-1; `trusted=yes` applies only to that snapshot source. Podman and Node 22 have no equivalent execution record. This smoke verifies only the computed style checks in the fixture; broader CSS behavior, other browser engines, and other operating systems remain unverified.
+
 ## Changes
 
 전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
@@ -365,8 +377,8 @@ console-feed/
 
 ### Development Requirements
 
-- Node 20+
-- pnpm 9+
+- Node `^22.18.0` (CI baseline)
+- pnpm `11.27.1`
 
 ### Development Commands
 

@@ -59,8 +59,8 @@ import { Decode as DecodeOnly } from '@cp949/console-feed/transform'
 
 **요구사항:**
 
-- Node 20+
-- pnpm 9+
+- Node `^22.18.0` (CI 기준)
+- pnpm `11.27.1`
 
 **설정:**
 
@@ -107,6 +107,18 @@ pnpm test:react18
 # React 19만 테스트
 pnpm test:react19
 ```
+
+### Chrome 75 라이브러리 산출물
+
+라이브러리 산출물은 Chrome 75를 대상으로 합니다. 패키지는 전역 polyfill을 주입하지 않으며 소비자에게 `core-js` 설치를 요구하지 않습니다.
+
+`pnpm --filter @cp949/console-feed check:chrome75`는 빌드한 패키지 산출물을 정적으로 검사합니다. `node fixtures/chrome75-consumer/scripts/build-packed.mjs`는 독립 소비자에서 설치형 tarball을 검사합니다. Linux Docker에서 실제 브라우저 smoke를 실행하려면 다음 명령을 사용합니다.
+
+```bash
+bash scripts/test-chrome75.sh
+```
+
+기록된 정확한 smoke는 Linux Docker와 Node 24에서 Chromium/HeadlessChrome `75.0.3770.90`으로 실행했습니다. 설치형 소비자는 캡처·decode·render·복원·스타일 검사를 모두 완료했고 fixture/CDP 오류가 없었습니다. historical image는 HTTPS로 snapshot을 내려받고 고정 Chromium deb SHA-1을 검증하며, `trusted=yes`는 이 snapshot source에만 적용합니다. Podman과 Node 22 실행 증거는 없습니다. 이 smoke는 fixture의 계산 스타일 검사 항목만 확인하며, 그 밖의 전반적인 CSS 동작, 다른 브라우저 엔진, 다른 운영체제는 검증하지 않았습니다.
 
 ## 개발 스택
 
