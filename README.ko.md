@@ -113,7 +113,7 @@ pnpm test:react19
 - **빌드 시스템**: Turborepo
 - **패키지 관리**: pnpm workspace
 - **언어**: TypeScript ^6.0.3
-- **테스트**: Vitest ^4.1.11
+- **테스트**: Vitest ^5.0.1
 - **코드 품질**: ESLint와 Prettier
 - **React 지원**: 18, 19
 

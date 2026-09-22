@@ -113,7 +113,7 @@ pnpm test:react19
 - **Build System**: Turborepo
 - **Package Manager**: pnpm workspace
 - **Language**: TypeScript ^6.0.3
-- **Testing**: Vitest ^4.1.11
+- **Testing**: Vitest ^5.0.1
 - **Code Quality**: ESLint and Prettier
 - **React Support**: 18, 19
 

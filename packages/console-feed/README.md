@@ -70,7 +70,7 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 - TypeScript ^6.0.3
 - React 18, 19 support
 - Node 20+ baseline
-- Vitest ^4.1.11
+- Vitest ^5.0.1
 
 ## Features
 
