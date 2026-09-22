@@ -24,10 +24,5 @@
     "node": "^22.18.0 || ^24.11.0 || >=26.0.0",
     "pnpm": ">=9"
   },
-  "packageManager": "pnpm@10.24.0",
-  "pnpm": {
-    "overrides": {
-      "esbuild": "^0.28.2"
-    }
-  }
+  "packageManager": "pnpm@11.27.1"
 }
