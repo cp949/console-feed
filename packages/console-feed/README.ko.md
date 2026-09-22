@@ -6,8 +6,6 @@
 
 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
 
-현재 배포 준비된 버전은 `3.7.2`입니다.
-
 ## 설치
 
 ```sh
@@ -44,45 +42,6 @@ bash scripts/test-chrome75.sh
 ```
 
 기록된 정확한 smoke는 Linux Docker와 Node 24에서 Chromium/HeadlessChrome `75.0.3770.90`으로 실행했습니다. 설치형 소비자는 캡처·decode·render·복원·스타일 검사를 모두 완료했고 fixture/CDP 오류가 없었습니다. historical image는 HTTPS로 snapshot을 내려받고 고정 Chromium deb SHA-1을 검증하며, `trusted=yes`는 이 snapshot source에만 적용합니다. Podman과 Node 22 실행 증거는 없습니다. 이 smoke는 fixture의 계산 스타일 검사 항목만 확인하며, 그 밖의 전반적인 CSS 동작, 다른 브라우저 엔진, 다른 운영체제는 검증하지 않았습니다.
-
-## 변경사항
-
-전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
-
-### 3.7.2
-
-- 패치 릴리스. 이전 의존성 업데이트로도 해결되지 않았던 `esbuild` low 취약점(GHSA-g7r4-m6w7-qqqr) 수정과 일상적 의존성 갱신(`dompurify`, `linkify-*`, 테스트 라이브러리 등) 포함. 공개 API 변경 없음. 자세한 내용은 [CHANGELOG.md](./CHANGELOG.md) 참조.
-
-### 3.7.1
-
-- 패치 릴리스. 라이브러리 코드(`dist/`)는 3.7.0과 동일 — `test:compat` 검증 도구 fix와 README 갱신만 포함. 자세한 내용은 [CHANGELOG.md](./CHANGELOG.md) 참조.
-
-### 3.7.0
-
-- `@emotion/react`, `@emotion/styled`, `react-inspector`를 `peerDependencies`로 이전 — 소비처가 이 패키지들을 직접 설치해야 합니다.
-- TypeScript `strict` 모드 활성화 — `tsconfig.json`을 `"strict": true` 한 줄로 통합. `HookedConsole.feed`가 옵셔널 프로퍼티(`feed?`)로 표기됨; 런타임 동작은 동일하지만 strict로 컴파일하는 소비처가 `console.feed`에 직접 접근하는 경우 옵셔널 가드가 필요할 수 있습니다.
-- `react-inline-center` 의존 제거 — `Message.tsx`의 단일 사용처를 인라인 flex 스타일로 대체.
-
-### 3.6.8 — 빌드 / 배포 형태
-
-- `tsdown` 기반의 ESM + CJS 듀얼 빌드 (기존 `tsc` CJS 단일 빌드 대체)
-- `exports` map의 root 및 모든 공개 subpath (`./component`, `./hook`, `./unhook`, `./transform`)에 `import` / `require` 조건 분기 추가
-- default 전용 subpath (`./hook`, `./unhook`, `./component`)은 `require('@cp949/console-feed/hook')`와 `import Hook from '@cp949/console-feed/hook'` 모두 함수 자체로 풀리도록 산출 — Next/Webpack 환경에서 `Hook`이 `{ default: fn }`로 들어오던 interop 문제를 해소
-
-### 이전 — 보안 취약점 수정
-
-- react-inspector 9.0.0 업그레이드: @babel/runtime 취약점 제거
-- Jest → Vitest 마이그레이션: 22개 의존성 체인 취약점 해결
-- Prototype pollution 방어: `__proto__`, `constructor`, `prototype` 키 필터링
-- DOM 정화: 서버 DOM 의존성 없이 DOMPurify 적용
-- 직렬화 깊이 제한 추가
-
-### 현재 스택
-
-- TypeScript ^6.0.3
-- React 18, 19 지원
-- Node 20+ 기준
-- Vitest ^5.0.1
 
 ## 기능
 

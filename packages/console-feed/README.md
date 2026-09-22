@@ -6,8 +6,6 @@ A React component that captures and displays browser console output in a user in
 
 This is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security vulnerability fixes.
 
-Current prepared release: `3.7.2`
-
 ## Installation
 
 ```sh
@@ -44,45 +42,6 @@ bash scripts/test-chrome75.sh
 ```
 
 The recorded exact smoke uses Docker on Linux and Node 24 with Chromium/HeadlessChrome `75.0.3770.90`; the packed consumer completed capture, decode, render, restoration, and style checks, with no fixture or CDP errors. The historical image downloads its snapshot over HTTPS and verifies the pinned Chromium deb SHA-1; `trusted=yes` applies only to that snapshot source. Podman and Node 22 have no equivalent execution record. This smoke verifies only the computed style checks in the fixture; broader CSS behavior, other browser engines, and other operating systems remain unverified.
-
-## Changes
-
-전체 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요. 아래는 최근 주요 변경의 요약입니다.
-
-### 3.7.2
-
-- Patch release. Fixes a low-severity `esbuild` vulnerability (GHSA-g7r4-m6w7-qqqr) left unresolved by prior dependency updates, plus routine dependency bumps (`dompurify`, `linkify-*`, testing libraries). No public API change. See [CHANGELOG.md](./CHANGELOG.md) for details.
-
-### 3.7.1
-
-- Patch release. Library code (`dist/`) is identical to 3.7.0 — fixes the `test:compat` matrix and updates the README. See [CHANGELOG.md](./CHANGELOG.md) for details.
-
-### 3.7.0
-
-- `@emotion/react`, `@emotion/styled`, `react-inspector` moved to `peerDependencies` — consumers must install these packages explicitly.
-- TypeScript `strict` mode enabled — `tsconfig.json` consolidated to `"strict": true`. `HookedConsole.feed` is now an optional property (`feed?`); runtime behavior unchanged but consumers compiling under strict may need an optional guard when accessing `console.feed` directly.
-- `react-inline-center` dependency removed — replaced by inline flex styles at the single call site.
-
-### 3.6.8 — Build / Distribution
-
-- Dual ESM + CJS build via `tsdown` (replaces the previous `tsc`-only CJS build)
-- `exports` map now branches on `import` / `require` for the root and every public subpath (`./component`, `./hook`, `./unhook`, `./transform`)
-- Default-only subpaths (`./hook`, `./unhook`, `./component`) are emitted so that `require('@cp949/console-feed/hook')` and `import Hook from '@cp949/console-feed/hook'` both resolve to the function directly — fixes Next/Webpack interop where `Hook` was being received as `{ default: fn }`
-
-### Earlier — Security Vulnerability Fixes
-
-- react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
-- Jest → Vitest migration: resolved 22 dependency chain vulnerabilities
-- Prototype pollution defense: `__proto__`, `constructor`, `prototype` key filtering
-- DOM sanitization: DOMPurify applied without server-side DOM dependencies
-- Serialization depth limits added
-
-### Current Stack
-
-- TypeScript ^6.0.3
-- React 18, 19 support
-- Node 20+ baseline
-- Vitest ^5.0.1
 
 ## Features
 
