@@ -17,6 +17,3 @@ minimumReleaseAgeExclude:
   - '@typescript-eslint/utils@8.70.1'
   - '@typescript-eslint/visitor-keys@8.70.1'
   - typescript-eslint@8.70.1
-
-overrides:
-  esbuild: ^0.28.2
