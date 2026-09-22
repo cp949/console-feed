@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsdown'
 
 export default defineConfig({
   entry: {
@@ -12,21 +12,23 @@ export default defineConfig({
   dts: false,
   sourcemap: true,
   clean: true,
-  splitting: false,
   treeshake: true,
+  platform: 'neutral',
   target: 'es2020',
   outDir: 'dist',
   tsconfig: './tsconfig.build.json',
-  external: [
-    'react',
-    'react-dom',
-    '@emotion/react',
-    '@emotion/styled',
-    'dompurify',
-    'linkify-html',
-    'linkify-react',
-    'linkifyjs',
-    'react-inline-center',
-    'react-inspector',
-  ],
+  deps: {
+    neverBundle: [
+      'react',
+      'react-dom',
+      '@emotion/react',
+      '@emotion/styled',
+      'dompurify',
+      'linkify-html',
+      'linkify-react',
+      'linkifyjs',
+      'react-inline-center',
+      'react-inspector',
+    ],
+  },
 })

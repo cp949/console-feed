@@ -55,7 +55,7 @@ const ErrorStackTraceExample: React.FC = () => {
 
       // RangeError
       try {
-        const arr = new Array(-1)
+        void new Array(-1)
       } catch (e) {
         console.error('RangeError (잘못된 배열 크기):', e)
       }

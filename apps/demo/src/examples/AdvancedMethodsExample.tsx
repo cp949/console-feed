@@ -56,7 +56,7 @@ const AdvancedMethodsExample: React.FC = () => {
       console.assert(true, '이것은 표시되지 않습니다 (true)')
       console.assert(false, '이것은 표시됩니다 (false)')
       console.assert(1 === 1, '이것도 표시되지 않습니다')
-      console.assert(1 === 2, '이것은 표시됩니다 (1 !== 2)')
+      console.assert(1 === Number(2), '이것은 표시됩니다 (1 !== 2)')
 
       // console.group 예제 (group은 직접 지원하지 않지만 log로 시뮬레이션)
       console.log('그룹 시작')

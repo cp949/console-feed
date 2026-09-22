@@ -34,7 +34,7 @@
   },
   "description": "A React component that displays console logs from the current page, an iframe or transported across a server",
   "scripts": {
-    "build": "tsup && tsc -p tsconfig.dts.json && node scripts/copy-dts.mjs",
+    "build": "tsdown && tsc -p tsconfig.dts.json && node scripts/copy-dts.mjs",
     "test": "vitest run --reporter=verbose",
     "test:dist": "node scripts/verify-dist-shapes.mjs",
     "test:watch": "vitest",
@@ -53,7 +53,7 @@
     "prepublishOnly": "pnpm build && pnpm test && pnpm test:dist"
   },
   "dependencies": {
-    "dompurify": "^3.4.13",
+    "dompurify": "^3.4.15",
     "linkify-html": "^4.3.3",
     "linkify-react": "^4.3.3",
     "linkifyjs": "^4.3.3"
@@ -66,18 +66,18 @@
     "react-inspector": "^9.0.0"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.4.1",
+    "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/react": "^16.3.2",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@vitest/ui": "^4.1.11",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
+    "tsdown": "^0.23.0",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   },
   "engines": {
-    "node": ">=20"
+    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
   },
   "publishConfig": {
     "access": "public"

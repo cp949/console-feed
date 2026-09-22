@@ -53,7 +53,7 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 
 ### 3.6.8 — 빌드 / 배포 형태
 
-- `tsup` 기반의 ESM + CJS 듀얼 빌드 (기존 `tsc` CJS 단일 빌드 대체)
+- `tsdown` 기반의 ESM + CJS 듀얼 빌드 (기존 `tsc` CJS 단일 빌드 대체)
 - `exports` map의 root 및 모든 공개 subpath (`./component`, `./hook`, `./unhook`, `./transform`)에 `import` / `require` 조건 분기 추가
 - default 전용 subpath (`./hook`, `./unhook`, `./component`)은 `require('@cp949/console-feed/hook')`와 `import Hook from '@cp949/console-feed/hook'` 모두 함수 자체로 풀리도록 산출 — Next/Webpack 환경에서 `Hook`이 `{ default: fn }`로 들어오던 interop 문제를 해소
 

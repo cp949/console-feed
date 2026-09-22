@@ -53,7 +53,7 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 
 ### 3.6.8 — Build / Distribution
 
-- Dual ESM + CJS build via `tsup` (replaces the previous `tsc`-only CJS build)
+- Dual ESM + CJS build via `tsdown` (replaces the previous `tsc`-only CJS build)
 - `exports` map now branches on `import` / `require` for the root and every public subpath (`./component`, `./hook`, `./unhook`, `./transform`)
 - Default-only subpaths (`./hook`, `./unhook`, `./component`) are emitted so that `require('@cp949/console-feed/hook')` and `import Hook from '@cp949/console-feed/hook'` both resolve to the function directly — fixes Next/Webpack interop where `Hook` was being received as `{ default: fn }`
 
