@@ -1,0 +1,10 @@
+node_modules
+.turbo
+coverage
+dist
+lib
+apps/*/dist
+packages/*/dist
+_works
+.worktrees
+pnpm-lock.yaml

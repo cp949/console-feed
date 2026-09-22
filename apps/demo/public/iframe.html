@@ -20,7 +20,7 @@
       console.time('Render time')
       console.log(
         `Console %cformatting https://example.com/linkified`,
-        'color: red'
+        'color: red',
       )
 
       console.log('Window', window)
@@ -29,7 +29,7 @@
         function a() {
           console.log(1)
         },
-        [function myFunc() {}]
+        [function myFunc() {}],
       )
 
       console.table([1, 2, 3])
@@ -40,7 +40,7 @@
         'Mixed types',
         { an: 'object' },
         [[[['Recursive types', new Promise(() => {})]]]],
-        'https://t.com'
+        'https://t.com',
       )
       console.log('Promise object', new Promise(() => {}))
       console.log('Funky numbers', 2.998e88, Infinity, -Infinity, NaN, -0, {

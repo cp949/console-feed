@@ -10,12 +10,12 @@
 
 ## 현재 취약점 묶음
 
-| 번호 | 패키지 | 심각도 | 유형 | 현재 상태 | 문서 |
-|------|--------|--------|------|-----------|------|
-| S-001 | `lodash` | high + moderate | 직접 의존성 업데이트 | 완료 | [S-001](./S-001-lodash-update.md) |
-| S-002 | `isomorphic-dompurify` / `dompurify` | high + moderate | 직접 의존성 업데이트 | 완료 | [S-002](./S-002-dompurify-update.md) |
-| S-003 | `vite` 계열 (`vite`, `rollup`, `flatted`, `picomatch`) | high + moderate | 직접 의존성 업데이트 + 전이 의존성 정리 | 완료 | [S-003](./S-003-vite-update.md) |
-| S-004 | `yaml` | moderate | 전이 의존성 잔여 여부 확인 | 완료 | [S-004](./S-004-yaml-review.md) |
+| 번호  | 패키지                                                 | 심각도          | 유형                                    | 현재 상태 | 문서                                 |
+| ----- | ------------------------------------------------------ | --------------- | --------------------------------------- | --------- | ------------------------------------ |
+| S-001 | `lodash`                                               | high + moderate | 직접 의존성 업데이트                    | 완료      | [S-001](./S-001-lodash-update.md)    |
+| S-002 | `isomorphic-dompurify` / `dompurify`                   | high + moderate | 직접 의존성 업데이트                    | 완료      | [S-002](./S-002-dompurify-update.md) |
+| S-003 | `vite` 계열 (`vite`, `rollup`, `flatted`, `picomatch`) | high + moderate | 직접 의존성 업데이트 + 전이 의존성 정리 | 완료      | [S-003](./S-003-vite-update.md)      |
+| S-004 | `yaml`                                                 | moderate        | 전이 의존성 잔여 여부 확인              | 완료      | [S-004](./S-004-yaml-review.md)      |
 
 ## 초기 분석
 
