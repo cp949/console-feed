@@ -8,6 +8,6 @@
   },
   "npm": {
     "publishPackageManager": "pnpm",
-    "publishArgs": ["--access", "public"]
+    "publishArgs": ["--access", "public", "--no-git-checks"]
   }
 }
