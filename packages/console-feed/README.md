@@ -443,31 +443,6 @@ git push
 pnpm publish:npm
 ```
 
-## Security
-
-- `pnpm audit`: 0 vulnerabilities
-- Tests: 29/29 passing
-
-Resolved vulnerabilities:
-
-- @babel/runtime (Moderate, 2 issues): removed via react-inspector 9.0.0 upgrade
-- Jest dependencies (22 issues): eliminated via Vitest migration
-
-Security mechanisms:
-
-- Prototype pollution defense
-- DOM sanitization (DOMPurify)
-- Serialization depth limits
-- Input filtering
-
-To verify locally:
-
-```bash
-pnpm --filter @cp949/console-feed test
-pnpm --filter @cp949/console-feed test:dist
-pnpm audit
-```
-
 ## License
 
 MIT

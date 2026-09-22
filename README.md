@@ -146,17 +146,6 @@ The recorded exact smoke uses Docker on Linux and Node 24 with Chromium/Headless
 - ESLint and Prettier lint/format workflow
 - Automated React 18/19 compatibility testing
 
-## Security Status
-
-- `pnpm audit`: 0 vulnerabilities
-- Tests: 29/29 passing
-- Audit notes: [docs/audit/20260420/README.md](docs/audit/20260420/README.md)
-
-Resolved vulnerabilities:
-
-- @babel/runtime (Moderate, 2 issues): removed via react-inspector 9.0.0 upgrade
-- Jest dependencies (22 issues): eliminated via Vitest migration
-
 ## Release Process
 
 Only the library package (`@cp949/console-feed`) is published to npm. The demo app is set to `private: true`.

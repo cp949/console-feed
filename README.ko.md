@@ -146,17 +146,6 @@ bash scripts/test-chrome75.sh
 - ESLint와 Prettier 기반 lint/format 워크플로우
 - React 18/19 호환성 자동 테스트
 
-## 보안 상태
-
-- `pnpm audit`: 취약점 0개
-- 테스트: 29/29 통과
-- 감사 기록: [docs/audit/20260420/README.md](docs/audit/20260420/README.md)
-
-해결된 취약점:
-
-- @babel/runtime (중간, 2건): react-inspector 9.0.0 업그레이드로 제거
-- Jest 의존성 (22건): Vitest 마이그레이션으로 제거
-
 ## 릴리스 프로세스
 
 라이브러리 패키지(`@cp949/console-feed`)만 npm에 배포됩니다. 데모 앱은 `private: true`로 설정되어 있습니다.

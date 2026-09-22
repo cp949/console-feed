@@ -443,31 +443,6 @@ git push
 pnpm publish:npm
 ```
 
-## 보안
-
-- `pnpm audit`: 취약점 0개
-- 테스트: 29/29 통과
-
-해결된 취약점:
-
-- @babel/runtime (중간, 2건): react-inspector 9.0.0 업그레이드로 제거
-- Jest 의존성 (22건): Vitest 마이그레이션으로 제거
-
-보안 메커니즘:
-
-- Prototype pollution 방어
-- DOM 정화 (DOMPurify)
-- 직렬화 깊이 제한
-- 입력 필터링
-
-로컬에서 직접 검증:
-
-```bash
-pnpm --filter @cp949/console-feed test
-pnpm --filter @cp949/console-feed test:dist
-pnpm audit
-```
-
 ## 라이선스
 
 MIT
