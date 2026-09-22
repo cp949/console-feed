@@ -420,28 +420,14 @@ Script: `packages/console-feed/scripts/test-react-compat.sh`
 
 Only the library package (`@cp949/console-feed`) is published to npm.
 
+Releases are always started by a human. Do not run this command from an agent or CI. Before releasing, update and commit `CHANGELOG.md`; `release-it` requires a clean working tree.
+
 ```bash
-# 1. Verify all tests and builds
-pnpm test
-pnpm build
-
-# 2. Navigate to packages/console-feed directory
-cd packages/console-feed
-
-# 3. Update version
-pnpm version patch  # or minor, major
-
-# 4. Inspect the tarball before publishing
-pnpm publish:dry-run
-
-# 5. Commit and push changes
-git add .
-git commit -m "Release vX.X.X"
-git push
-
-# 6. Publish to npm
-pnpm publish:npm
+# Starts the interactive release flow from the repository root.
+pnpm release-it
 ```
+
+The flow updates only this package's `package.json`, runs `prepublishOnly` (`build`, `test`, `test:dist`), publishes to npm, then interactively confirms the release commit, `v<version>` tag, and push. Use the prompts to choose the version and approve each external action.
 
 ## License
 

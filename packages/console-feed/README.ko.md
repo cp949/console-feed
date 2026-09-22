@@ -420,28 +420,14 @@ pnpm test:react19
 
 라이브러리 패키지(`@cp949/console-feed`)만 npm에 배포됩니다.
 
+배포는 항상 사람이 시작합니다. 에이전트나 CI에서는 이 명령을 실행하지 마세요. 배포 전 `CHANGELOG.md`를 갱신·커밋해야 합니다. `release-it`은 깨끗한 작업 트리를 요구합니다.
+
 ```bash
-# 1. 전체 테스트 및 빌드 검증
-pnpm test
-pnpm build
-
-# 2. packages/console-feed 디렉토리로 이동
-cd packages/console-feed
-
-# 3. 버전 업데이트
-pnpm version patch  # 또는 minor, major
-
-# 4. 배포 전에 tarball 내용 확인
-pnpm publish:dry-run
-
-# 5. 변경사항 커밋 및 푸시
-git add .
-git commit -m "Release vX.X.X"
-git push
-
-# 6. npm에 배포
-pnpm publish:npm
+# 저장소 최상위에서 대화형 배포 절차를 시작합니다.
+pnpm release-it
 ```
+
+이 절차는 이 패키지의 `package.json`만 버전 변경하고, `prepublishOnly`(`build`, `test`, `test:dist`)를 실행한 뒤 npm에 배포합니다. 이어서 릴리스 커밋, `v<version>` 태그, 푸시를 각각 대화형으로 확인합니다. 프롬프트에서 버전을 선택하고 각 외부 작업을 직접 승인하세요.
 
 ## 라이선스
 

@@ -150,25 +150,14 @@ The recorded exact smoke uses Docker on Linux and Node 24 with Chromium/Headless
 
 Only the library package (`@cp949/console-feed`) is published to npm. The demo app is set to `private: true`.
 
+Releases are always started by a human. Do not run this command from an agent or CI. Before releasing, update and commit `packages/console-feed/CHANGELOG.md`; `release-it` requires a clean working tree.
+
 ```bash
-# 1. Verify tests and builds
-pnpm test
-pnpm build
-
-# 2. Navigate to package directory
-cd packages/console-feed
-
-# 3. Update version
-pnpm version patch  # or minor, major
-
-# 4. Commit and push changes
-git add .
-git commit -m "Release vX.X.X"
-git push
-
-# 5. Publish to npm
-pnpm publish
+# Starts the interactive release flow from the repository root.
+pnpm release-it
 ```
+
+The flow updates only `packages/console-feed/package.json`, runs the package `prepublishOnly` gate (`build`, `test`, `test:dist`), publishes to npm, then interactively confirms the release commit, `v<version>` tag, and push. Use the prompts to choose the version and approve each external action.
 
 ## Contributing
 
