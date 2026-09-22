@@ -420,7 +420,7 @@ Script: `packages/console-feed/scripts/test-react-compat.sh`
 
 Only the library package (`@cp949/console-feed`) is published to npm.
 
-Releases are always started by a human. Do not run this command from an agent or CI. Before releasing, update and commit `CHANGELOG.md`; `release-it` requires a clean working tree.
+Before releasing, update and commit `CHANGELOG.md`; `release-it` requires a clean working tree.
 
 ```bash
 # Starts the interactive release flow from the repository root.

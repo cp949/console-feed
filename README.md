@@ -150,7 +150,7 @@ The recorded exact smoke uses Docker on Linux and Node 24 with Chromium/Headless
 
 Only the library package (`@cp949/console-feed`) is published to npm. The demo app is set to `private: true`.
 
-Releases are always started by a human. Do not run this command from an agent or CI. Before releasing, update and commit `packages/console-feed/CHANGELOG.md`; `release-it` requires a clean working tree.
+Before releasing, update and commit `packages/console-feed/CHANGELOG.md`; `release-it` requires a clean working tree.
 
 ```bash
 # Starts the interactive release flow from the repository root.
