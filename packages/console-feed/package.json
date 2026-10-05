@@ -54,7 +54,7 @@
     "prepublishOnly": "pnpm build && pnpm test && pnpm test:dist"
   },
   "dependencies": {
-    "dompurify": "^3.4.15",
+    "dompurify": "^3.4.16",
     "linkify-html": "^4.3.3",
     "linkify-react": "^4.3.3",
     "linkifyjs": "^4.3.3"
