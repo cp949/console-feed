@@ -4,3 +4,6 @@ packages:
 
 allowBuilds:
   esbuild: true
+
+overrides:
+  basic-ftp: ^6.2.3
