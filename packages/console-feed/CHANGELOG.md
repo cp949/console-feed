@@ -7,6 +7,27 @@
 
 ## [Unreleased]
 
+## [3.7.4] - 2026-10-16
+
+의존성 마이너·패치 갱신과 `pnpm audit` 취약점 해소. 라이브러리 공개 API 변경 없음.
+
+### Fixed
+
+- `pnpm audit` 12건(high 4, moderate 5, low 3) 해소. 모두 dev 의존성 경로이며 배포 산출물에는 영향이 없다.
+- `undici` 7.29.0 → 7.29.1. `jsdom` 하위 의존성이며 락파일만 갱신했다.
+- `source-map-js` 1.2.1 → 1.2.2. `css-tree` 하위 의존성이며 락파일만 갱신했다.
+- `basic-ftp` 5.3.1 → 6.2.3. `release-it > proxy-agent > pac-proxy-agent > get-uri`가 `^5.3.1`을 요구해 루트 `pnpm-workspace.yaml`에 `overrides: basic-ftp: ^6.2.3`을 추가했다.
+
+### Changed
+
+- `dompurify` `^3.4.15` → `^3.4.17` (런타임 dependencies).
+- `@vitest/ui`/`vitest` `^5.0.1` → `^5.0.4`, `tsdown` `^0.23.0` → `^0.23.1`, `eslint-plugin-es-x` `10.0.0` → `10.1.0` (devDependencies).
+- `apps/demo`: `react`/`react-dom` `^19.3.0` → `^19.3.1`, `vite` `^8.3.0` → `^8.3.4`, `@vitejs/plugin-react` `^6.1.1` → `^6.1.2`, `@types/node` `^26.6.2` → `^26.6.5`.
+- 루트: `eslint` `10.11.0` → `10.12.0`, `prettier` `3.9.8` → `3.9.10`, `typescript-eslint` `8.70.1` → `8.71.2`, `turbo` `^2.11.2` → `^2.11.8`, `release-it` `^21.1.0` → `^21.1.1`.
+- `pnpm-workspace.yaml`의 `minimumReleaseAgeExclude` 항목을 제거했다.
+
+검증: `pnpm test` 34/34, `pnpm test:dist` 통과, `pnpm check:chrome75` 16개 파일 통과, `pnpm build`, `pnpm lint`, `pnpm audit` 0 vulnerabilities, `pnpm publish:dry-run` (70 files, 362.1 kB unpacked).
+
 ## [3.7.2] - 2026-08-14
 
 `pnpm audit` low 취약점(esbuild) 정정과 의존성 갱신. 라이브러리 공개 API 변경 없음.
