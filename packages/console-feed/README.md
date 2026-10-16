@@ -2,7 +2,7 @@
 
 [한국어](README.ko.md) | English
 
-A React component that captures and displays browser console output in a user interface. Supports React 18 and 19.
+A React component that captures browser console output and displays it in the UI. Supports React 18 and 19.
 
 This is a fork of [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0 with security vulnerability fixes.
 
@@ -33,20 +33,14 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 
 ## Chrome 75 Library Artifacts
 
-The library artifacts target Chrome 75. The package neither injects global polyfills nor requires consumers to install `core-js`.
+The library artifacts target Chrome 75. The package does not inject global polyfills. Consumers do not need to install `core-js`.
 
-`pnpm --filter @cp949/console-feed check:chrome75` is a static audit of the built package output. `node fixtures/chrome75-consumer/scripts/build-packed.mjs` checks an installed tarball in a standalone consumer. Run the exact-browser smoke on Linux with Docker:
-
-```bash
-bash scripts/test-chrome75.sh
-```
-
-The recorded exact smoke uses Docker on Linux and Node 24 with Chromium/HeadlessChrome `75.0.3770.90`; the packed consumer completed capture, decode, render, restoration, and style checks, with no fixture or CDP errors. The historical image downloads its snapshot over HTTPS and verifies the pinned Chromium deb SHA-1; `trusted=yes` applies only to that snapshot source. Podman and Node 22 have no equivalent execution record. This smoke verifies only the computed style checks in the fixture; broader CSS behavior, other browser engines, and other operating systems remain unverified.
+For the verification commands and the recorded smoke test result, see the [repository README](https://github.com/cp949/console-feed/blob/master/README.md#chrome-75-library-artifacts).
 
 ## Features
 
 - Styled console entries (color substitution, clickable links)
-- Renders DOM nodes, tables, various console methods
+- Renders DOM nodes, tables, and other console methods
 - Serialization (functions, circular structures, DOM references)
 - Filtering and search
 - Error stack trace display
@@ -69,8 +63,8 @@ const LogsContainer = () => {
     const hookedConsole = Hook(
       window.console,
       (encoded, message) => {
-        // When encode is true: encoded is a serialized message, so Decode is required
-        // When encode is false: encoded is a parsed message, but using Decode is safe
+        // encode is true, so encoded is a serialized message: Decode is required
+        // If encode were false, encoded would already be parsed: do not call Decode
         const decoded = Decode(encoded)
         const logMessage: Message = {
           ...decoded,
@@ -106,10 +100,10 @@ A React component that displays log messages.
 - `styles?`: Custom style object
 - `filter?`: Method filter array (`Methods[]`) - Display only specified methods
 - `searchKeywords?`: Search keyword string - Regex search in log content
-- `logFilter?`: Log filtering function - Custom filtering logic when used with `searchKeywords`
-- `logGrouping?`: Enable log grouping (default: `true`) - Group identical logs and display with `amount`
+- `logFilter?`: Log filtering function - Replaces the default regex filter. Applied only when `searchKeywords` is set
+- `logGrouping?`: Enable log grouping (default: `true`) - Merge consecutive identical logs and show the count in `amount`
 - `linkifyOptions?`: linkifyjs options object - URL link handling options
-- `components?`: Component override object - Replace with custom components
+- `components?`: Component override object - Replace the default components with custom ones
 
 ### Hook Function
 
@@ -143,7 +137,7 @@ Hook(
 
 ### Unhook Function
 
-Restores a console wrapped by Hook to its original state. Must be called when the component unmounts.
+Restores a console wrapped by Hook to its original state. Call it when the component unmounts.
 
 ```tsx
 Unhook(hookedConsole: HookedConsole): boolean
@@ -168,21 +162,21 @@ Decode(data: any): Message
 
 **Encode:**
 
-- Converts log objects into JSON-serializable format
+- Converts a log object into a JSON-serializable form
 - Safely converts functions, circular references, DOM nodes, etc.
 - `limit`: Serialization depth limit (default: 100)
-- **Return Value**: Flat object structure that can be serialized to JSON
-  - Complex types (functions, DOM nodes, etc.) from the original object are converted with special type markers
-  - Can be safely serialized with `JSON.stringify()`
+- **Return Value**: A value that `JSON.stringify()` can serialize
+  - Complex types (functions, DOM nodes, `Map`, etc.) become objects with type markers
+  - Its structure is internal. Pass it to `Decode` instead of reading it directly
   - Suitable for network transfer, localStorage storage, etc.
 
 **Decode:**
 
-- Deserializes serialized logs into `Message` objects
+- Restores a serialized log to a `Message` object
 - Returns a complete log object including the `method` property
-- **Important**:
-  - When `encode` is `true`: The first argument (`encoded`) of the callback is a serialized message, so `Decode` must be called
-  - When `encode` is `false`: The first argument (`encoded`) of the callback is a parsed message, but calling `Decode` is recommended for safe usage
+- **Important**: Pass only `Encode` output to `Decode`.
+  - When `encode` is `true`: The first argument (`encoded`) of the callback is a serialized message, so call `Decode`
+  - When `encode` is `false`: The first argument (`encoded`) is already a parsed message. Do not call `Decode`; it throws a `TypeError`
 
 **Usage Example:**
 
@@ -194,7 +188,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.7.2' },
+    { name: 'console-feed', version: '1.0.0' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),
@@ -246,7 +240,7 @@ const receiveLogFromServer = async () => {
 
 ## Capturing Logs from iframe
 
-You can display console methods like `console.log()`, `console.error()` executed inside an iframe in the main window's console-feed.
+Logs from `console.log()`, `console.error()`, and other console methods inside an iframe can be shown in the console-feed of the parent window.
 
 **Simple Method:**
 
@@ -279,7 +273,7 @@ const IframeLogsContainer = () => {
       hookedConsole = Hook(
         iframeConsole,
         (encoded, message) => {
-          // encode is true, so use Decode to decode the log (required!)
+          // encode is true, so Decode is required
           const decoded = Decode(encoded)
           const logMessage: Message = {
             ...decoded,
@@ -295,7 +289,7 @@ const IframeLogsContainer = () => {
 
     iframe.addEventListener('load', handleLoad)
 
-    // Cleanup: Clean up when component unmounts
+    // Cleanup: Unhook when component unmounts
     return () => {
       if (hookedConsole && iframe.contentWindow) {
         Unhook(hookedConsole)
@@ -317,76 +311,11 @@ const IframeLogsContainer = () => {
 
 - Console must be hooked after the iframe loads (`load` event)
 - The iframe and main window must be same-origin to access `contentWindow.console`
-- Must call `Unhook` when the component unmounts to clean up
+- Call `Unhook` when the component unmounts
 
 ## Development
 
-### Project Structure
-
-```
-console-feed/
-├── apps/
-│   └── demo/              # Demo app (Vite + React)
-├── packages/
-│   └── console-feed/      # Library core
-├── turbo.json             # Turborepo configuration
-├── pnpm-workspace.yaml    # pnpm workspace setup
-└── package.json           # Root workspace
-```
-
-### Development Requirements
-
-- Node `^22.18.0` (CI baseline)
-- pnpm `11.27.1`
-
-### Development Commands
-
-```bash
-# Install dependencies
-pnpm install
-
-# Run development server for entire workspace
-pnpm dev
-
-# Build entire workspace
-pnpm build
-
-# Test entire workspace
-pnpm test
-
-# Run specific package only
-pnpm --filter @cp949/console-feed build    # Build library
-pnpm --filter demo dev                      # Run demo app only
-pnpm --filter @cp949/console-feed test     # Test library
-```
-
-### React 18/19 Compatibility Testing
-
-```bash
-# Test both React 18 and 19
-pnpm test:compat
-
-# Test React 18 only
-pnpm test:react18
-
-# Test React 19 only
-pnpm test:react19
-```
-
-Script: `packages/console-feed/scripts/test-react-compat.sh`
-
-## Release
-
-Only the library package (`@cp949/console-feed`) is published to npm.
-
-Before releasing, update and commit `CHANGELOG.md`; `release-it` requires a clean working tree.
-
-```bash
-# Starts the interactive release flow from the repository root.
-pnpm release-it
-```
-
-The flow updates only this package's `package.json`, runs `prepublishOnly` (`build`, `test`, `test:dist`), publishes to npm, then interactively confirms the release commit, `v<version>` tag, and push. Use the prompts to choose the version and approve each external action.
+For setup, tests, and the release process, see the [repository README](https://github.com/cp949/console-feed/blob/master/README.md).
 
 ## License
 

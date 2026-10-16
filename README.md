@@ -59,7 +59,7 @@ See the [package README](packages/console-feed/README.md) for usage documentatio
 
 **Requirements:**
 
-- Node `^22.18.0` (CI baseline)
+- Node `^22.18.0 || ^24.11.0 || >=26.0.0`
 - pnpm `11.27.1`
 
 **Setup:**
@@ -72,7 +72,7 @@ pnpm install
 **Development Commands:**
 
 ```bash
-# Run demo app (http://localhost:3000)
+# Run demo app (http://localhost:5173)
 pnpm dev
 
 # Build all packages
@@ -110,41 +110,30 @@ pnpm test:react19
 
 ### Chrome 75 library artifacts
 
-The library artifacts target Chrome 75. The package neither injects global polyfills nor requires consumers to install `core-js`.
+The library artifacts target Chrome 75. The package does not inject global polyfills. Consumers do not need to install `core-js`.
 
-`pnpm --filter @cp949/console-feed check:chrome75` is a static audit of the built package output. `node fixtures/chrome75-consumer/scripts/build-packed.mjs` checks an installed tarball in a standalone consumer. Run the exact-browser smoke on Linux with Docker:
+Verification commands:
 
-```bash
-bash scripts/test-chrome75.sh
-```
+- `pnpm --filter @cp949/console-feed check:chrome75`: statically audits the built package output.
+- `node fixtures/chrome75-consumer/scripts/build-packed.mjs`: checks the packed tarball installed in a standalone consumer project.
+- `bash scripts/test-chrome75.sh`: runs the exact-browser smoke test with Docker on Linux.
 
-The recorded exact smoke uses Docker on Linux and Node 24 with Chromium/HeadlessChrome `75.0.3770.90`; the packed consumer completed capture, decode, render, restoration, and style checks, with no fixture or CDP errors. The historical image downloads its snapshot over HTTPS and verifies the pinned Chromium deb SHA-1; `trusted=yes` applies only to that snapshot source. Podman and Node 22 have no equivalent execution record. This smoke verifies only the computed style checks in the fixture; broader CSS behavior, other browser engines, and other operating systems remain unverified.
+Recorded smoke test result:
+
+- Environment: Linux Docker, Node 24, Chromium/HeadlessChrome `75.0.3770.90`.
+- Result: the packed consumer passed the capture, decode, render, restoration, and style checks. There were no fixture or CDP errors.
+- Image: installs Chromium from a pinned 2019 Debian snapshot over HTTPS and verifies the deb SHA-1. `trusted=yes` applies only to that snapshot source.
+- Not run: Podman and Node 22.
+- Scope: only the computed style checks in the fixture. Broader CSS behavior, other browser engines, and other operating systems remain unverified.
 
 ## Development Stack
 
 - **Build System**: Turborepo
 - **Package Manager**: pnpm workspace
-- **Language**: TypeScript ^6.0.3
-- **Testing**: Vitest ^5.0.1
+- **Language**: TypeScript
+- **Testing**: Vitest
 - **Code Quality**: ESLint and Prettier
 - **React Support**: 18, 19
-
-## Key Changes (from original)
-
-### Security Vulnerability Fixes
-
-- react-inspector 9.0.0 upgrade: removed @babel/runtime vulnerabilities
-- Jest → Vitest migration: resolved 22 dependency chain vulnerabilities
-- Prototype pollution defense: `__proto__`, `constructor`, `prototype` key filtering
-- DOM sanitization: DOMPurify applied without server-side DOM dependencies
-- Serialization depth limits added
-
-### Development Environment Improvements
-
-- Turborepo integration for optimized build/test pipeline
-- pnpm workspace for efficient dependency management
-- ESLint and Prettier lint/format workflow
-- Automated React 18/19 compatibility testing
 
 ## Release Process
 

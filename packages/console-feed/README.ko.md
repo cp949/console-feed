@@ -4,7 +4,7 @@
 
 브라우저 콘솔 출력을 캡처하여 사용자 인터페이스에 렌더링하는 React 컴포넌트입니다. React 18과 19를 지원합니다.
 
-[samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
+이 패키지는 [samdenty/console-feed](https://github.com/samdenty/console-feed) v3.6.0을 포크하여 보안 취약점을 수정한 버전입니다.
 
 ## 설치
 
@@ -16,14 +16,14 @@ npm install @cp949/console-feed
 
 ## Import 경로
 
-패키지 root는 호환성을 위해 기존 public API를 그대로 유지합니다:
+패키지 루트는 호환성을 위해 기존 공개 API를 그대로 제공합니다:
 
 ```tsx
 import { Console, Hook, Decode, Unhook } from '@cp949/console-feed'
 import type { Message, HookedConsole, Methods } from '@cp949/console-feed'
 ```
 
-UI가 필요 없는 유틸리티는 안정적인 subpath에서도 import할 수 있습니다:
+UI 없이 쓰는 유틸리티는 별도 경로(subpath)로도 import할 수 있습니다:
 
 ```tsx
 import Hook from '@cp949/console-feed/hook'
@@ -33,15 +33,9 @@ import { Decode, Encode } from '@cp949/console-feed/transform'
 
 ## Chrome 75 라이브러리 산출물
 
-라이브러리 산출물은 Chrome 75를 대상으로 합니다. 패키지는 전역 polyfill을 주입하지 않으며 소비자에게 `core-js` 설치를 요구하지 않습니다.
+라이브러리 산출물은 Chrome 75를 대상으로 합니다. 패키지는 전역 polyfill을 주입하지 않습니다. 사용하는 쪽에서 `core-js`를 설치할 필요도 없습니다.
 
-`pnpm --filter @cp949/console-feed check:chrome75`는 빌드한 패키지 산출물을 정적으로 검사합니다. `node fixtures/chrome75-consumer/scripts/build-packed.mjs`는 독립 소비자에서 설치형 tarball을 검사합니다. Linux Docker에서 실제 브라우저 smoke를 실행하려면 다음 명령을 사용합니다.
-
-```bash
-bash scripts/test-chrome75.sh
-```
-
-기록된 정확한 smoke는 Linux Docker와 Node 24에서 Chromium/HeadlessChrome `75.0.3770.90`으로 실행했습니다. 설치형 소비자는 캡처·decode·render·복원·스타일 검사를 모두 완료했고 fixture/CDP 오류가 없었습니다. historical image는 HTTPS로 snapshot을 내려받고 고정 Chromium deb SHA-1을 검증하며, `trusted=yes`는 이 snapshot source에만 적용합니다. Podman과 Node 22 실행 증거는 없습니다. 이 smoke는 fixture의 계산 스타일 검사 항목만 확인하며, 그 밖의 전반적인 CSS 동작, 다른 브라우저 엔진, 다른 운영체제는 검증하지 않았습니다.
+검증 명령과 기록된 smoke 테스트 결과는 [저장소 README](https://github.com/cp949/console-feed/blob/master/README.ko.md#chrome-75-라이브러리-산출물)를 참조하세요.
 
 ## 기능
 
@@ -69,8 +63,8 @@ const LogsContainer = () => {
     const hookedConsole = Hook(
       window.console,
       (encoded, message) => {
-        // encode가 true인 경우: encoded는 직렬화된 메시지이므로 Decode 필수
-        // encode가 false인 경우: encoded는 파싱된 메시지이지만 Decode를 사용하면 안전
+        // encode가 true이므로 encoded는 직렬화된 메시지: Decode 필수
+        // encode가 false였다면 encoded는 이미 파싱된 메시지: Decode를 호출하지 않음
         const decoded = Decode(encoded)
         const logMessage: Message = {
           ...decoded,
@@ -83,7 +77,7 @@ const LogsContainer = () => {
       100, // limit: 100 - 직렬화 깊이 제한
     )
 
-    // Cleanup: 컴포넌트 언마운트 시 Hook 해제
+    // Cleanup: 컴포넌트 언마운트 시 Unhook
     return () => {
       Unhook(hookedConsole)
     }
@@ -106,14 +100,14 @@ const LogsContainer = () => {
 - `styles?`: 커스텀 스타일 객체
 - `filter?`: 메서드 필터 배열 (`Methods[]`) - 지정된 메서드만 표시
 - `searchKeywords?`: 검색 키워드 문자열 - 로그 내용에서 정규식 검색
-- `logFilter?`: 로그 필터링 함수 - `searchKeywords`와 함께 사용 시 커스텀 필터링 로직
-- `logGrouping?`: 로그 그룹화 활성화 여부 (기본값: `true`) - 동일한 로그를 그룹화하여 `amount`로 표시
+- `logFilter?`: 로그 필터링 함수 - 기본 정규식 필터를 대체합니다. `searchKeywords`가 있을 때만 적용됩니다
+- `logGrouping?`: 로그 그룹화 활성화 여부 (기본값: `true`) - 연속된 동일 로그를 하나로 합치고 횟수를 `amount`에 표시
 - `linkifyOptions?`: linkifyjs 옵션 객체 - URL 링크 처리 옵션
 - `components?`: 컴포넌트 오버라이드 객체 - 커스텀 컴포넌트로 교체
 
 ### Hook 함수
 
-`window.console` 또는 콘솔과 유사한 객체를 래핑하여 로그를 캡처합니다.
+`window.console` 또는 콘솔과 유사한 객체를 감싸서 로그를 캡처합니다.
 
 ```tsx
 Hook(
@@ -126,7 +120,7 @@ Hook(
 
 **매개변수:**
 
-- `console`: Hook할 Console 객체
+- `console`: 훅을 걸 Console 객체
 - `callback`: 로그가 캡처될 때 호출되는 콜백 함수
   - `encoded`: 로그 메시지 (첫 번째 인자)
     - `encode`가 `true`인 경우: 직렬화된 메시지 (네트워크 전송/저장에 적합)
@@ -139,11 +133,11 @@ Hook(
 
 **반환값:**
 
-- `HookedConsole`: Hook된 Console 객체 (Unhook에 전달 가능)
+- `HookedConsole`: 훅이 걸린 Console 객체 (Unhook에 전달 가능)
 
 ### Unhook 함수
 
-Hook으로 래핑된 콘솔을 원래 상태로 복원합니다. 컴포넌트 언마운트 시 반드시 호출해야 합니다.
+Hook으로 감싼 콘솔을 원래 상태로 복원합니다. 컴포넌트가 언마운트될 때 호출하세요.
 
 ```tsx
 Unhook(hookedConsole: HookedConsole): boolean
@@ -151,7 +145,7 @@ Unhook(hookedConsole: HookedConsole): boolean
 
 **매개변수:**
 
-- `hookedConsole`: Hook으로 래핑된 Console 객체
+- `hookedConsole`: Hook으로 감싼 Console 객체
 
 **반환값:**
 
@@ -168,21 +162,21 @@ Decode(data: any): Message
 
 **Encode:**
 
-- 로그 객체를 JSON으로 직렬화 가능한 형태로 변환합니다
+- 로그 객체를 JSON으로 직렬화할 수 있는 형태로 변환합니다
 - 함수, 순환 참조, DOM 노드 등을 안전하게 변환합니다
 - `limit`: 직렬화 깊이 제한 (기본값: 100)
-- **반환값**: JSON으로 직렬화 가능한 평면적인 객체 구조
-  - 원본 객체의 복잡한 타입(함수, DOM 노드 등)은 특별한 타입 마커와 함께 변환됩니다
-  - `JSON.stringify()`로 안전하게 직렬화할 수 있습니다
+- **반환값**: `JSON.stringify()`로 직렬화할 수 있는 값
+  - 복잡한 타입(함수, DOM 노드, `Map` 등)은 타입 마커가 붙은 객체로 바뀝니다
+  - 내부 구조는 공개 규격이 아닙니다. 직접 읽지 말고 `Decode`에 전달하세요
   - 네트워크 전송, localStorage 저장 등에 적합합니다
 
 **Decode:**
 
-- 직렬화된 로그를 역직렬화하여 `Message` 객체로 변환합니다
+- 직렬화된 로그를 `Message` 객체로 복원합니다
 - `method` 속성을 포함한 완전한 로그 객체를 반환합니다
-- **중요**:
-  - `encode`가 `true`인 경우: callback의 첫 번째 인자(`encoded`)는 직렬화된 메시지이므로 반드시 `Decode`를 호출해야 합니다
-  - `encode`가 `false`인 경우: callback의 첫 번째 인자(`encoded`)는 이미 파싱된 메시지이지만, 안전하게 사용하려면 `Decode`를 호출하는 것을 권장합니다
+- **중요**: `Decode`에는 `Encode`의 출력만 전달하세요.
+  - `encode`가 `true`인 경우: callback의 첫 번째 인자(`encoded`)는 직렬화된 메시지이므로 `Decode`를 호출해야 합니다
+  - `encode`가 `false`인 경우: 첫 번째 인자(`encoded`)는 이미 파싱된 메시지입니다. `Decode`를 호출하지 마세요. `TypeError`가 발생합니다
 
 **사용 예제:**
 
@@ -194,7 +188,7 @@ const logMessage = {
   method: 'log' as const,
   data: [
     'Hello World',
-    { name: 'console-feed', version: '3.7.2' },
+    { name: 'console-feed', version: '1.0.0' },
     [1, 2, 3],
   ],
   timestamp: new Date().toISOString(),
@@ -246,11 +240,11 @@ const receiveLogFromServer = async () => {
 
 ## iframe에서 로그 캡처하기
 
-iframe 내부에서 실행되는 `console.log()`, `console.error()` 등의 콘솔 메서드를 메인 윈도우의 console-feed에 표시할 수 있습니다.
+iframe 안에서 실행한 `console.log()`, `console.error()` 등의 로그를 부모 윈도우의 console-feed에 표시할 수 있습니다.
 
 **간단한 방법:**
 
-iframe이 로드된 후, iframe의 `contentWindow.console`을 Hook하면 됩니다.
+iframe이 로드된 뒤 iframe의 `contentWindow.console`에 훅을 걸면 됩니다.
 
 ```tsx
 import React, { useState, useEffect, useRef } from 'react'
@@ -274,12 +268,12 @@ const IframeLogsContainer = () => {
         return
       }
 
-      // iframe의 console을 Hook
+      // iframe의 console에 훅을 걸기
       const iframeConsole = iframe.contentWindow.console
       hookedConsole = Hook(
         iframeConsole,
         (encoded, message) => {
-          // encode가 true이므로 Decode를 사용하여 로그를 디코딩 (필수!)
+          // encode가 true이므로 Decode 필수
           const decoded = Decode(encoded)
           const logMessage: Message = {
             ...decoded,
@@ -295,7 +289,7 @@ const IframeLogsContainer = () => {
 
     iframe.addEventListener('load', handleLoad)
 
-    // Cleanup: 컴포넌트 언마운트 시 정리
+    // Cleanup: 컴포넌트 언마운트 시 Unhook
     return () => {
       if (hookedConsole && iframe.contentWindow) {
         Unhook(hookedConsole)
@@ -315,78 +309,13 @@ const IframeLogsContainer = () => {
 
 **주의사항:**
 
-- iframe이 로드된 후(`load` 이벤트)에 console을 Hook해야 합니다
+- iframe이 로드된 뒤(`load` 이벤트)에 console에 훅을 걸어야 합니다
 - iframe과 메인 윈도우가 같은 origin이어야 `contentWindow.console`에 접근할 수 있습니다
-- 컴포넌트 언마운트 시 반드시 `Unhook`을 호출하여 정리해야 합니다
+- 컴포넌트가 언마운트될 때 `Unhook`을 호출하세요
 
 ## 개발
 
-### 프로젝트 구조
-
-```
-console-feed/
-├── apps/
-│   └── demo/              # 데모 앱 (Vite + React)
-├── packages/
-│   └── console-feed/      # 라이브러리 코어
-├── turbo.json             # Turborepo 설정
-├── pnpm-workspace.yaml    # pnpm workspace 설정
-└── package.json           # 루트 workspace
-```
-
-### 개발 환경 요구사항
-
-- Node `^22.18.0` (CI 기준)
-- pnpm `11.27.1`
-
-### 개발 명령어
-
-```bash
-# 의존성 설치
-pnpm install
-
-# 전체 워크스페이스 개발 서버 실행
-pnpm dev
-
-# 전체 워크스페이스 빌드
-pnpm build
-
-# 전체 워크스페이스 테스트
-pnpm test
-
-# 특정 패키지만 실행
-pnpm --filter @cp949/console-feed build    # 라이브러리 빌드
-pnpm --filter demo dev                      # 데모 앱만 실행
-pnpm --filter @cp949/console-feed test     # 라이브러리 테스트
-```
-
-### React 18/19 호환성 테스트
-
-```bash
-# React 18과 19 모두 테스트
-pnpm test:compat
-
-# React 18만 테스트
-pnpm test:react18
-
-# React 19만 테스트
-pnpm test:react19
-```
-
-스크립트: `packages/console-feed/scripts/test-react-compat.sh`
-
-## 릴리스
-
-라이브러리 패키지(`@cp949/console-feed`)만 npm에 배포됩니다.
-
-배포 전 `CHANGELOG.md`를 갱신·커밋해야 합니다. `release-it`은 깨끗한 작업 트리를 요구합니다.
-
-```bash
-# 저장소 최상위에서 대화형 배포 절차를 시작합니다.
-pnpm release-it
-```
-
-이 절차는 이 패키지의 `package.json`만 버전 변경하고, `prepublishOnly`(`build`, `test`, `test:dist`)를 실행한 뒤 npm에 배포합니다. 이어서 릴리스 커밋, `v<version>` 태그, 푸시를 각각 대화형으로 확인합니다. 프롬프트에서 버전을 선택하고 각 외부 작업을 직접 승인하세요.
+개발 환경 설정, 테스트, 릴리스 절차는 [저장소 README](https://github.com/cp949/console-feed/blob/master/README.ko.md)를 참조하세요.
 
 ## 라이선스
 
