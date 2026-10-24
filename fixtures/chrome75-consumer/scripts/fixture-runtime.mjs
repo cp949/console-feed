@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
+import { pathToFileURL } from 'node:url'
 import { runInNewContext } from 'node:vm'
 
 // 실제 React와 빌드한 패키지를 사용하고, render 제출 시점만 지연시킨다.
@@ -18,20 +18,31 @@ Object.assign(globalThis, {
 
 const React = require('react')
 const { createRoot } = require('react-dom/client')
-const ts = require('typescript')
 const frames = []
 let pendingRender
 let root
 const scenario = process.argv[2]
 const originalLog = dom.window.console.log
-const source = readFileSync(new URL('../src/main.tsx', import.meta.url), 'utf8')
-const compiled = ts.transpileModule(source, {
-  compilerOptions: {
-    module: ts.ModuleKind.CommonJS,
-    jsx: ts.JsxEmit.ReactJSX,
-    target: ts.ScriptTarget.ES2019,
-  },
-}).outputText
+// TypeScript 7에는 transpileModule이 없어 vite가 쓰는 rolldown으로 CJS 변환한다.
+const viteRequire = createRequire(require.resolve('vitest/package.json'))
+const { rolldown } = await import(
+  pathToFileURL(
+    createRequire(viteRequire.resolve('vite/package.json')).resolve('rolldown'),
+  ).href
+)
+const bundle = await rolldown({
+  input: new URL('../src/main.tsx', import.meta.url).pathname,
+  // 상대 경로 polyfills와 bare import는 아래 require 훅이 제공한다.
+  external: (id) =>
+    !id.startsWith('/') && (!id.startsWith('.') || id === './polyfills'),
+  transform: { jsx: { runtime: 'automatic' }, target: 'es2019' },
+  platform: 'node',
+  logLevel: 'warn',
+})
+const {
+  output: [{ code: compiled }],
+} = await bundle.generate({ format: 'cjs' })
+await bundle.close()
 
 function flushFrames() {
   for (const callback of frames.splice(0)) callback(0)

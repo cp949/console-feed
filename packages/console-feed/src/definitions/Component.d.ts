@@ -27,7 +27,7 @@ export interface Props {
   filter?: Methods[]
   searchKeywords?: string
   logFilter?: Function
-  logGrouping?: Boolean
+  logGrouping?: boolean
   linkifyOptions?: Opts
   components?: ComponentOverrides
 }

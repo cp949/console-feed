@@ -62,6 +62,7 @@ const ErrorStackTraceExample: React.FC = () => {
 
       // SyntaxError (일반적으로는 파싱 시 발생하지만, 예제로 시뮬레이션)
       try {
+        // oxlint-disable-next-line no-eval -- 문법 오류를 일부러 발생시킨다
         eval('const x = {')
       } catch (e) {
         console.error('SyntaxError (문법 오류):', e)

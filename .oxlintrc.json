@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "oxc"],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "builtin": true,
+    "browser": true,
+    "es2024": true
+  },
+  "ignorePatterns": [
+    "**/coverage/**",
+    "**/dist/**",
+    "**/lib/**",
+    "**/.turbo/**",
+    "**/node_modules/**",
+    "_works/**",
+    ".worktrees/**"
+  ],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.config.{js,mjs,ts,mts}", "**/scripts/**"],
+      "env": {
+        "node": true
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "19.3.1"
+    }
+  }
+}

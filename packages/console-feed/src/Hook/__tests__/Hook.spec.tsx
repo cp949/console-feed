@@ -40,7 +40,7 @@ it('correctly encodes a HTMLElement', async () => {
 })
 
 it('correctly encodes Functions', async () => {
-  // prettier-ignore
+  // oxfmt-ignore
   const result = await Log('error', function myFunc() {
     /* body */
   })

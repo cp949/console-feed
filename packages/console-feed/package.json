@@ -44,10 +44,6 @@
     "test:compat": "bash scripts/test-react-compat.sh both",
     "test:react18": "bash scripts/test-react-compat.sh 18",
     "test:react19": "bash scripts/test-react-compat.sh 19",
-    "lint": "eslint src --max-warnings 0",
-    "lint:fix": "eslint src --fix",
-    "format": "prettier --write src",
-    "format:check": "prettier --check src",
     "clean": "rm -rf dist",
     "publish:dry-run": "npm pack --dry-run",
     "publish:npm": "npm publish --access public",
@@ -75,11 +71,11 @@
     "@vitest/ui": "^5.0.5",
     "eslint-plugin-es-x": "10.1.0",
     "tsdown": "^0.23.2",
-    "typescript": "^6.0.3",
+    "typescript": "7.0.2",
     "vitest": "^5.0.5"
   },
   "engines": {
-    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+    "node": ">=24.18.0"
   },
   "publishConfig": {
     "access": "public"

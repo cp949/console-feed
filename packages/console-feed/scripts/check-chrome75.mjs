@@ -1,53 +1,69 @@
-import { existsSync, readdirSync, realpathSync } from 'node:fs'
-import { join, relative, resolve } from 'node:path'
+import { execFile } from 'node:child_process'
+import {
+  existsSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
+import { createRequire } from 'node:module'
+import { tmpdir } from 'node:os'
+import { basename, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { promisify } from 'node:util'
 
-import { ESLint } from 'eslint'
 import esX from 'eslint-plugin-es-x'
 
-const packageRoot = resolve(import.meta.dirname, '..')
+const execFileAsync = promisify(execFile)
+const require = createRequire(import.meta.url)
 
-const allowedChrome75Rules = {
-  'es-x/no-bigint': 'off',
-  'es-x/no-dynamic-import': 'off',
-  'es-x/no-export-ns-from': 'off',
-  'es-x/no-global-this': 'off',
-  'es-x/no-import-meta': 'off',
-  'es-x/no-numeric-separators': 'off',
-  'es-x/no-string-prototype-matchall': 'off',
-  'es-x/no-symbol-matchall': 'off',
-}
+const packageRoot = resolve(import.meta.dirname, '..')
+const oxlintBin = join(
+  resolve(require.resolve('oxlint/package.json'), '..'),
+  'bin/oxlint',
+)
+const esXPluginPath = fileURLToPath(import.meta.resolve('eslint-plugin-es-x'))
+const webApiPluginPath = resolve(
+  import.meta.dirname,
+  'chrome75-web-api-plugin.mjs',
+)
+
+const allowedChrome75Rules = new Set([
+  'es-x/no-bigint',
+  'es-x/no-dynamic-import',
+  'es-x/no-export-ns-from',
+  'es-x/no-global-this',
+  'es-x/no-import-meta',
+  'es-x/no-numeric-separators',
+  'es-x/no-string-prototype-matchall',
+  'es-x/no-symbol-matchall',
+])
 
 const collisionPronePattern = /^es-x\/no-(?:iterator|set)-prototype-/
 
-const collisionRuleOverrides = Object.fromEntries(
-  Object.keys(esX.configs['flat/restrict-to-es2019'].rules ?? {})
-    .filter((ruleId) => collisionPronePattern.test(ruleId))
-    .map((ruleId) => [ruleId, 'off']),
+// oxlint는 인라인 지시 주석을 끌 수 없어서 직접 막는다.
+const inlineDirectivePattern = /\b(?:eslint|oxlint)-(?:disable|enable)/
+
+const es2019Rules = Object.keys(
+  esX.configs['flat/restrict-to-es2019'].rules ?? {},
+).filter(
+  (ruleId) =>
+    !allowedChrome75Rules.has(ruleId) && !collisionPronePattern.test(ruleId),
 )
 
-const unsupportedChrome75WebApis = [
-  {
-    selector: "CallExpression[callee.name='structuredClone']",
-    message: 'structuredClone은 Chrome 98부터 지원한다.',
+const oxlintConfig = {
+  plugins: [],
+  categories: { correctness: 'off' },
+  jsPlugins: [esXPluginPath, webApiPluginPath],
+  settings: { 'es-x': { aggressive: true } },
+  rules: {
+    ...Object.fromEntries(es2019Rules.map((ruleId) => [ruleId, 'error'])),
+    'chrome75/no-unsupported-web-api': 'error',
   },
-  {
-    selector:
-      "CallExpression[callee.object.name='globalThis'][callee.property.name='structuredClone']",
-    message: 'globalThis.structuredClone은 Chrome 98부터 지원한다.',
-  },
-  {
-    selector:
-      "CallExpression[callee.object.name='crypto'][callee.property.name='randomUUID']",
-    message: 'crypto.randomUUID는 Chrome 92부터 지원한다.',
-  },
-  {
-    selector:
-      "CallExpression[callee.object.object.name='globalThis'][callee.object.property.name='crypto'][callee.property.name='randomUUID']",
-    message: 'globalThis.crypto.randomUUID는 Chrome 92부터 지원한다.',
-  },
-]
+}
 
 export function listArtifacts(root) {
   const dist = resolve(root, 'dist')
@@ -64,24 +80,89 @@ export function listArtifacts(root) {
   return js
 }
 
+function toMessage(diagnostic) {
+  const span = diagnostic.labels?.[0]?.span
+  return {
+    ruleId: diagnostic.code.replace(/\(([^)]*)\)$/, '/$1'),
+    message: diagnostic.message,
+    line: span?.line ?? 0,
+    column: span?.column ?? 0,
+  }
+}
+
+// oxlint CLI로 파일을 검사하고 파일마다 { filePath, errorCount, warningCount, messages }를 돌려준다.
+async function lintPaths(filePaths) {
+  const workDir = mkdtempSync(join(tmpdir(), 'console-feed-chrome75-'))
+  try {
+    const configPath = join(workDir, 'oxlintrc.json')
+    writeFileSync(configPath, JSON.stringify(oxlintConfig))
+
+    let stdout
+    try {
+      ;({ stdout } = await execFileAsync(
+        process.execPath,
+        [oxlintBin, '-c', configPath, '-f', 'json', ...filePaths],
+        { cwd: packageRoot, maxBuffer: 64 * 1024 * 1024 },
+      ))
+    } catch (error) {
+      // 진단이 있으면 exit code 1이다. 그 외 실패는 설정·실행 오류다.
+      if (error.code !== 1 || !error.stdout) throw error
+      stdout = error.stdout
+    }
+
+    const { diagnostics } = JSON.parse(stdout)
+    return filePaths.map((filePath) => {
+      const messages = diagnostics
+        .filter((diagnostic) => resolve(diagnostic.filename) === filePath)
+        .map(toMessage)
+      if (inlineDirectivePattern.test(readFileSync(filePath, 'utf8'))) {
+        messages.push({
+          ruleId: 'chrome75/no-inline-directive',
+          message: 'lint 지시 주석은 허용하지 않는다.',
+          line: 0,
+          column: 0,
+        })
+      }
+      return {
+        filePath,
+        errorCount: messages.length,
+        warningCount: 0,
+        messages,
+      }
+    })
+  } finally {
+    rmSync(workDir, { force: true, recursive: true })
+  }
+}
+
 export function createAuditor() {
-  return new ESLint({
-    cwd: packageRoot,
-    overrideConfigFile: true,
-    allowInlineConfig: false,
-    baseConfig: [
-      esX.configs['flat/restrict-to-es2019'],
-      {
-        languageOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-        settings: { 'es-x': { aggressive: true } },
-        rules: {
-          ...collisionRuleOverrides,
-          ...allowedChrome75Rules,
-          'no-restricted-syntax': ['error', ...unsupportedChrome75WebApis],
-        },
-      },
-    ],
-  })
+  return {
+    lintFiles: (filePaths) => lintPaths(filePaths.map((p) => resolve(p))),
+    async lintText(text, { filePath }) {
+      const workDir = mkdtempSync(join(tmpdir(), 'console-feed-chrome75-'))
+      try {
+        const probePath = join(workDir, basename(filePath))
+        writeFileSync(probePath, text)
+        return await lintPaths([probePath])
+      } finally {
+        rmSync(workDir, { force: true, recursive: true })
+      }
+    },
+  }
+}
+
+function formatResults(results) {
+  return results
+    .filter((result) => result.messages.length > 0)
+    .map((result) =>
+      [
+        relative(packageRoot, result.filePath),
+        ...result.messages.map(
+          (m) => `  ${m.line}:${m.column}  ${m.ruleId}  ${m.message}`,
+        ),
+      ].join('\n'),
+    )
+    .join('\n\n')
 }
 
 const run = async () => {
@@ -91,16 +172,14 @@ const run = async () => {
     console.log(`[check:chrome75] ${relative(packageRoot, artifact)}`)
   }
 
-  const auditor = createAuditor()
-  const results = await auditor.lintFiles(artifacts)
+  const results = await createAuditor().lintFiles(artifacts)
   const diagnosticCount = results.reduce(
     (count, result) => count + result.errorCount + result.warningCount,
     0,
   )
 
   if (diagnosticCount > 0) {
-    const formatter = await auditor.loadFormatter('stylish')
-    console.error(await formatter.format(results))
+    console.error(formatResults(results))
     console.error(`[check:chrome75] Chrome 75 미지원 사용 ${diagnosticCount}건`)
     process.exitCode = 1
     return

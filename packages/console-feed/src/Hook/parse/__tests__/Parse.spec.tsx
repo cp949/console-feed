@@ -1,7 +1,9 @@
 import Parse from '..'
 
 it('asserts values', () => {
+  // oxlint-disable-next-line no-constant-binary-expression -- 비교식의 평가 결과를 인자로 넘기는 테스트
   expect(Parse('assert', [2 > 1], 'assert-true')).toBe(false)
+  // oxlint-disable-next-line no-constant-binary-expression -- 비교식의 평가 결과를 인자로 넘기는 테스트
   expect(Parse('assert', [1 > 2], 'assert-false')).toMatchSnapshot(
     'assertion failed',
   )

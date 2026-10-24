@@ -59,7 +59,7 @@ import { Decode as DecodeOnly } from '@cp949/console-feed/transform'
 
 **요구사항:**
 
-- Node `^22.18.0 || ^24.11.0 || >=26.0.0`
+- Node `>=24.18.0`
 - pnpm `11.27.1`
 
 **설정:**
@@ -123,7 +123,7 @@ pnpm test:react19
 - 환경: Linux Docker, Node 24, Chromium/HeadlessChrome `75.0.3770.90`.
 - 결과: 설치한 소비자 프로젝트가 캡처, decode, render, 복원, 스타일 검사를 모두 통과했습니다. fixture와 CDP 오류는 없었습니다.
 - 이미지: 2019년 Debian snapshot에서 Chromium을 HTTPS로 내려받고 deb의 SHA-1을 검증합니다. `trusted=yes`는 이 snapshot 저장소에만 적용합니다.
-- 실행하지 않음: Podman, Node 22.
+- 실행하지 않음: Podman.
 - 범위: fixture의 계산 스타일 검사 항목만 확인합니다. 그 밖의 CSS 동작, 다른 브라우저 엔진, 다른 운영체제는 검증하지 않았습니다.
 
 ## 개발 스택
@@ -132,7 +132,7 @@ pnpm test:react19
 - **패키지 관리**: pnpm workspace
 - **언어**: TypeScript
 - **테스트**: Vitest
-- **코드 품질**: ESLint와 Prettier
+- **코드 품질**: oxlint와 oxfmt
 - **React 지원**: 18, 19
 
 ## 릴리스 프로세스

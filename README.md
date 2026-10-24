@@ -59,7 +59,7 @@ See the [package README](packages/console-feed/README.md) for usage documentatio
 
 **Requirements:**
 
-- Node `^22.18.0 || ^24.11.0 || >=26.0.0`
+- Node `>=24.18.0`
 - pnpm `11.27.1`
 
 **Setup:**
@@ -123,7 +123,7 @@ Recorded smoke test result:
 - Environment: Linux Docker, Node 24, Chromium/HeadlessChrome `75.0.3770.90`.
 - Result: the packed consumer passed the capture, decode, render, restoration, and style checks. There were no fixture or CDP errors.
 - Image: installs Chromium from a pinned 2019 Debian snapshot over HTTPS and verifies the deb SHA-1. `trusted=yes` applies only to that snapshot source.
-- Not run: Podman and Node 22.
+- Not run: Podman.
 - Scope: only the computed style checks in the fixture. Broader CSS behavior, other browser engines, and other operating systems remain unverified.
 
 ## Development Stack
@@ -132,7 +132,7 @@ Recorded smoke test result:
 - **Package Manager**: pnpm workspace
 - **Language**: TypeScript
 - **Testing**: Vitest
-- **Code Quality**: ESLint and Prettier
+- **Code Quality**: oxlint and oxfmt
 - **React Support**: 18, 19
 
 ## Release Process

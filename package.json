@@ -6,10 +6,10 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint": "oxlint --max-warnings 0",
+    "lint:fix": "oxlint --fix --max-warnings 0",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "clean": "./clean.sh",
     "release-it": "cd packages/console-feed && pnpm exec release-it",
     "publish": "cd packages/console-feed && pnpm publish:npm",
@@ -18,15 +18,14 @@
     "test:react19": "bash packages/console-feed/scripts/test-react-compat.sh 19"
   },
   "devDependencies": {
-    "eslint": "10.13.0",
-    "eslint-plugin-react-hooks": "7.1.1",
-    "prettier": "3.9.10",
+    "oxfmt": "0.74.0",
+    "oxlint": "1.89.0",
     "release-it": "^21.1.1",
     "turbo": "^2.11.10",
-    "typescript-eslint": "8.72.0"
+    "typescript": "7.0.2"
   },
   "engines": {
-    "node": "^22.18.0 || ^24.11.0 || >=26.0.0",
+    "node": ">=24.18.0",
     "pnpm": ">=9"
   },
   "packageManager": "pnpm@11.27.1"

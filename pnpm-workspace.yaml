@@ -7,3 +7,18 @@ allowBuilds:
 
 overrides:
   basic-ftp: ^6.2.3
+
+# eslint-plugin-es-x는 oxlint JS plugin으로만 실행한다. eslint는 설치하지 않는다.
+packageExtensions:
+  eslint-plugin-es-x:
+    peerDependenciesMeta:
+      eslint:
+        optional: true
+  '@eslint-community/eslint-utils':
+    peerDependenciesMeta:
+      eslint:
+        optional: true
+  eslint-type-tracer:
+    peerDependenciesMeta:
+      eslint:
+        optional: true

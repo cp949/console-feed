@@ -40,7 +40,9 @@ describe('Chrome 75 배포 산출물 검사', () => {
 
     const [result] = await auditor.lintText(
       'const values = []; values.findLast(() => true)',
-      { filePath: 'probe.mjs' },
+      {
+        filePath: 'probe.mjs',
+      },
     )
 
     expect(result.errorCount).toBeGreaterThan(0)
