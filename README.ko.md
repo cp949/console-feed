@@ -60,7 +60,7 @@ import { Decode as DecodeOnly } from '@cp949/console-feed/transform'
 **요구사항:**
 
 - Node `>=24.18.0`
-- pnpm `11.27.1`
+- pnpm `12.15.0`
 
 **설정:**
 

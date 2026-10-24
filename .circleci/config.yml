@@ -20,7 +20,7 @@ jobs:
       - checkout
 
       # Setup pnpm
-      - run: npm install -g pnpm@11.27.1
+      - run: npm install -g pnpm@12.15.0
 
       # Download and cache dependencies
       - restore_cache:

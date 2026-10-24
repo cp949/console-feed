@@ -60,7 +60,7 @@ See the [package README](packages/console-feed/README.md) for usage documentatio
 **Requirements:**
 
 - Node `>=24.18.0`
-- pnpm `11.27.1`
+- pnpm `12.15.0`
 
 **Setup:**
 
