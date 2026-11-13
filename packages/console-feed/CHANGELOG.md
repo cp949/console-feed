@@ -7,6 +7,24 @@
 
 ## [Unreleased]
 
+## [3.7.5] - 2026-11-13
+
+개발 도구 교체와 의존성 갱신. 런타임 로직 변경 없음. 공개 타입 1건과 `engines.node` 하한이 바뀌었다.
+
+### Changed
+
+- `engines.node` `^22.18.0 || ^24.11.0 || >=26.0.0` → `>=24.18.0`. Node 22에서 설치하면 engines 경고가 나오고, `engine-strict`를 켠 환경에서는 설치가 실패한다.
+- `Props.logGrouping` 타입 `Boolean` → `boolean` (`src/definitions/Component.d.ts`). `new Boolean()` 같은 래퍼 객체를 넘기던 코드는 타입 오류가 난다.
+- `linkify-html`/`linkify-react`/`linkifyjs` `^4.3.3` → `^4.4.0` (런타임 dependencies).
+- ESLint·Prettier를 oxlint·oxfmt로 교체했다. `eslint-plugin-es-x`는 oxlint JS plugin으로 실행한다. 루트 `lint`/`format` 스크립트가 `oxlint`/`oxfmt`를 직접 호출한다.
+- TypeScript `^6.0.3` → `7.0.2`, pnpm `11.27.1` → `12.15.0`.
+- `vitest`/`@vitest/ui` `^5.0.4` → `^5.1.0`, `tsdown` `^0.23.1` → `^0.23.7`, `jsdom` `31.0.0`을 devDependencies에 명시했다.
+- 루트: `release-it` `^21.1.1` → `^21.1.2`, `turbo` `^2.11.8` → `^2.11.11`.
+- `apps/demo`: `@types/node` `^26.6.6`, `@vitejs/plugin-react` `^6.3.0`, `vite` `^8.3.8`.
+- README·ADR 0001 문장 정비와 사실 오류 수정.
+
+검증: `pnpm lint`, `pnpm format:check`, `pnpm --filter @cp949/console-feed test` 34/34, `pnpm build`, `test:dist`, `check:chrome75` 16개 파일 통과, `pnpm audit --audit-level high` 취약점 없음, `pnpm publish:dry-run` (70 files, 351.3 kB unpacked), `pnpm test:compat` (React 18·19 각 34/34), `scripts/test-chrome75.sh` (Docker, HeadlessChrome 75.0.3770.90, capture·decode·render·restore·style 통과, 오류 0건).
+
 ## [3.7.4] - 2026-10-16
 
 의존성 마이너·패치 갱신과 `pnpm audit` 취약점 해소. 라이브러리 공개 API 변경 없음.
@@ -111,7 +129,9 @@ npm install @emotion/react @emotion/styled react-inspector
 
 - 직전 배포된 안정 버전. 자세한 이력은 git log를 참조하세요.
 
-[Unreleased]: https://github.com/cp949/console-feed/compare/v3.7.2...HEAD
+[Unreleased]: https://github.com/cp949/console-feed/compare/v3.7.5...HEAD
+[3.7.5]: https://github.com/cp949/console-feed/compare/v3.7.4...v3.7.5
+[3.7.4]: https://github.com/cp949/console-feed/compare/v3.7.3...v3.7.4
 [3.7.2]: https://github.com/cp949/console-feed/compare/v3.7.1...v3.7.2
 [3.7.1]: https://github.com/cp949/console-feed/compare/v3.7.0...v3.7.1
 [3.7.0]: https://github.com/cp949/console-feed/compare/v3.6.8...v3.7.0
